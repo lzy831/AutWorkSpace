@@ -1,0 +1,58 @@
+_schema: test_case_spec_v1
+id: Ethernet_new_function_006
+name: Auto MDIX 交叉线自动适配
+priority: P1
+domain: ethernet
+environment: ethernet_router_lan
+description: 验证Auto MDIX功能在交叉线和直通线连接下均能正常工作
+defaults:
+  gateway: ${custom_params.gateway_ip}
+  dhcp_timeout: 30
+preconditions: []
+steps:
+- operation:
+    description: DHCP 模式获取 IP
+    manual:
+      actor: QA
+      target: DUT
+      action: DHCP 模式获取 IP
+    automation:
+      api: step_connect_ethernet_dhcp
+      params: {}
+      wait_after: 5
+  check:
+    description: 确认 Auto MDIX 下 DHCP 获取 IP 成功
+    manual:
+      actor: QA
+      target: DUT屏幕
+      action: 在系统网络设置中确认已获取到IPv4地址
+    automation:
+      api: check_network_connected
+      params:
+        type: ethernet
+      timeout: 30
+      on_failure: abort
+- operation:
+    description: 确认DUT能与路由器网关通信
+    manual:
+      actor: QA
+      target: DUT
+      action: 确认DUT能与路由器网关通信
+    automation:
+      api: step_ping_gateway
+      params:
+        gateway_ip: ${custom_params.gateway_ip}
+      wait_after: 2
+  check:
+    description: 确认交叉线连接下网络可通
+    manual:
+      actor: QA
+      target: DUT屏幕
+      action: 确认DUT能成功访问路由器网关
+    automation:
+      api: check_network_accessible
+      params:
+        target: ${custom_params.gateway_ip}
+        source: dut
+      timeout: 10
+      on_failure: abort

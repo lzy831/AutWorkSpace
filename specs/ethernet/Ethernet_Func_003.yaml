@@ -1,0 +1,38 @@
+domain: ethernet
+id: Ethernet_Func_003
+name: DHCP模式下重启后网络自动恢复
+testbed: ethernet_router_lan
+description: 验证DUT在DHCP模式下重启后, 能自动重新获取IPv4地址并恢复网络连接
+
+preconditions:
+  - description: DUT以太网物理链路已连通
+    operation:
+      api: step_ensure_ethernet_link
+      params:
+        router_id: main_router
+    check:
+      api: check_ethernet_connected
+
+  - description: DUT已通过DHCP获取IPv4地址
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+
+procedure:
+  - operation:
+      description: 重启DUT
+      action: 手动断电后再上电（物理断电重启）
+      automation:
+        api: step_reboot_dut
+        params:
+          mode: normal
+          timeout: 120
+        wait_after: 30
+    check:
+      description: 重启后DUT通过DHCP恢复网络连接
+      action: 观察 Settings → Network & Internet 中 ETHERNET section 恢复显示 Connected
+      automation:
+        api: check_ethernet_connected
+        timeout: 30
+        on_failure: abort

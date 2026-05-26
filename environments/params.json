@@ -1,0 +1,23 @@
+{
+  "device_id": "qurradc1816d12f3c1a",
+  "routers": {
+    "main_router": {
+      "model": "asus_rt_ax86u",
+      "ip": "192.168.50.1",
+      "ssh": {
+        "username": "AX86U",
+        "password": "New!123456"
+      }
+    }
+  },
+  "wifi": {
+    "target_ssid": "AX86U",
+    "target_password": "Home1357",
+    "iface": "wlan0"
+  },
+  "ethernet": {
+    "iface": "eth0",
+    "router_gateway": "192.168.50.1",
+    "dhcp_timeout": 30
+  }
+}

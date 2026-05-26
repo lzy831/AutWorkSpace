@@ -1,0 +1,58 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_106
+name: IPTV场景下播放在线高清直播频道并验证音画正常
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  IPTV
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_106
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 断开网络连接(wifi/ethernet)
+      manual:
+        actor: QA
+        target: DUT
+        action: 断开网络连接(wifi/ethernet)
+      automation:
+        api: step_disconnect_network
+        params: {}
+  - operation:
+      description: 验证设备已烧录中国移动MAC和序列号
+      manual:
+        actor: QA
+        target: DUT
+        action: 验证设备已烧录中国移动MAC和序列号
+      automation:
+        api: step_verify_device_provisioned
+        params: {}
+  - operation:
+      description: 启动IPTV/直播应用并完成登录与进入播放前置
+      manual:
+        actor: QA
+        target: DUT
+        action: 启动IPTV/直播应用并完成登录与进入播放前置
+      automation:
+        api: step_start_iptv
+        params: {}
+    check:
+      description: 检查在线视频画面和声音播放正常(网络可达性检查)
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查在线视频画面和声音播放正常(网络可达性检查)
+      automation:
+        api: check_network_accessible
+        params: {}
+

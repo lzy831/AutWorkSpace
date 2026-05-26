@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_027
+name: 在 Connect AP 场景下执行 Unhide SSID, 验证平台可搜索并连接 AP
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_027
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 取消隐藏 SSID, 使 AP 可被搜索到
+      manual:
+        actor: QA
+        target: DUT
+        action: 取消隐藏 SSID, 使 AP 可被搜索到
+      automation:
+        api: step_configure_ap_hide_ssid
+        params: {}
+    check:
+      description: 检查网络已连接(wifi/ethernet)
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络已连接(wifi/ethernet)
+      automation:
+        api: check_network_connected
+        params: {}
+

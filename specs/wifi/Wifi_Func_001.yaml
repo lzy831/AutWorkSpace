@@ -1,0 +1,93 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_001
+name: WiFi默认开关状态检查
+priority: P0
+domain: wifi
+environment: wifi_router_lan
+description: |
+  验证系统初始状态下WiFi处于开启(ON)状态.
+
+  系统初始状态指烧录升级完成后或者factory reset操作后, 进入系统时的状态.
+
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_001
+
+preconditions:
+  - description: 确认 DUT 未连接以太网线(Android TV 连以太网时自动禁用 WiFi, 环境不匹配则判定 FAIL)
+    manual: QA确认DUT未插网线
+    automation:
+      api: check_ethernet_disconnected
+      params:
+        method: cmd
+
+  - operation:
+      description: 触发 factory reset, 设备将重启并清除用户数据
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入 Settings → Device Preferences → Factory reset, 确认执行, 等待设备重启
+      automation:
+        api: factory_reset
+        params: {}
+    check:
+      description: 等待 factory reset 完成, 设备重启并上线
+      manual:
+        actor: QA
+        target: DUT
+        action: 等待设备重启完成, 确认进入系统界面
+      automation:
+        api: check_factory_reset_completed
+        params:
+          timeout: 300
+        timeout: 300
+
+  - operation:
+      description: 跳过 OOBE 向导(WiFi 模块内部版本)
+      manual:
+        actor: QA
+        target: DUT
+        action: 按遥控器跳过 OOBE 设置向导
+      automation:
+        api: step_skip_oobe
+        params: {}
+    check:
+      description: 确认 OOBE 已跳过
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 观察已进入系统主界面
+      automation:
+        api: check_oobe_status
+        params:
+          expected: false
+        timeout: 10
+
+steps:
+  - operation:
+      description: 查询 WiFi 默认状态
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入 Settings → Network & Internet, 查看 WiFi 开关
+      automation:
+        api: step_wait_seconds
+        params:
+          seconds: 3
+    check:
+      description: 确认 WiFi 默认状态为 ON
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: WiFi 开关为 ON
+      automation:
+        api: check_wifi_state
+        params:
+          expected: true
+          method: cmd
+        timeout: 10
+        on_failure: abort
+

@@ -1,0 +1,68 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_006
+name: WiFi密码界面隐藏密码默认选中验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  验证进入WiFi密码输入界面后, 隐藏密码选项默认已勾选,
+  AP列表正常显示
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_006
+
+preconditions:
+  - description: 确保WiFi已开启且AP列表可见（若WiFi未开则自动开启）
+    manual: QA进入WiFi设置页面确认WiFi开关ON且AP列表可见
+    semantic: ensure
+    operation:
+      description: 开启WiFi
+      automation:
+        api: step_enable_wifi
+        params:
+          method: cmd
+    check:
+      description: 确认AP列表可见
+      automation:
+        api: check_wifi_ap_list
+      params:
+        expected_present: true
+
+  - description: 断开已有WiFi连接, 确保未连接任何AP
+    manual: QA在WiFi设置页面中断开所有已保存的AP连接
+    operation:
+      description: 断开当前WiFi连接
+      automation:
+        api: step_disconnect_network
+        params:
+          type: wifi
+          method: cmd
+    check:
+      description: 确认WiFi已断开
+      automation:
+        api: check_wifi_disconnected
+        params:
+          method: cmd
+
+steps:
+  - operation:
+      description: 选择目标AP, 进入密码输入界面
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入 Settings -> Network & Internet -> WiFi, 选择目标AP, 进入密码输入界面
+      automation:
+        api: step_open_wifi_settings
+        params: {}
+    check:
+      description: 确认AP列表可见且隐藏密码选项默认已勾选
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 观察AP列表可见, 进入目标AP密码输入界面后确认Hide password checkbox默认已勾选
+      automation:
+        api: check_hide_password_optionswas_cli
+        params: {}

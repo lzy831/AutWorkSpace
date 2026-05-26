@@ -1,0 +1,69 @@
+domain: ethernet
+id: Ethernet_Func_002
+name: DHCP拔插网线重连测试
+testbed: ethernet_router_lan
+description: 验证DUT在DHCP模式下, 拔掉网线后IP消失, 重新插上网线后能通过DHCP恢复IP地址
+
+preconditions:
+  - description: DUT以太网物理链路已连通
+    operation:
+      api: step_ensure_ethernet_link
+      params:
+        router_id: main_router
+    check:
+      api: check_ethernet_connected
+
+  - description: DUT已通过DHCP获取IPv4地址
+    operation:
+      api: step_set_ip_settings_to_dhcp
+      wait_after: 5
+    check:
+      api: check_ethernet_connected
+      timeout: 15
+
+procedure:
+  - operation:
+      description: 采集当前以太网适配器信息（MAC/IP/网关等），供后续步骤使用
+      action: 进入 Settings → Network & Internet → Ethernet 查看 MAC 和 IP 地址
+      automation:
+        api: step_discover_network_info
+        wait_after: 3
+    check:
+      description: 确认网络信息采集完成
+      action: 确认 IP 和 MAC 地址已在 UI 中显示
+      automation:
+        api: check_ethernet_connected
+
+  - operation:
+      description: 断开DUT的以太网物理链路
+      action: 拔掉路由器端连接 DUT 的网线（或关闭对应 LAN 口）
+      automation:
+        api: step_disconnect_ethernet
+        params:
+          mac: ${step_discover_network_info.data.mac}
+          router_id: main_router
+        wait_after: 3
+    check:
+      description: DUT以太网断开
+      action: 观察 Settings → Network & Internet 中 ETHERNET section 消失
+      automation:
+        api: check_ethernet_disconnected
+        on_failure: abort
+
+  - operation:
+      description: 恢复DUT的以太网物理链路
+      action: 插回路由器端连接 DUT 的网线（或开启对应 LAN 口）
+      automation:
+        api: step_connect_ethernet
+        params:
+          port: ${step_disconnect_ethernet.data.port}
+          mac: ${step_discover_network_info.data.mac}
+          router_id: main_router
+        wait_after: 5
+    check:
+      description: DUT以太网重新连接并获取IP
+      action: 观察 Settings → Network & Internet 中 ETHERNET section 恢复显示 Connected 且有 IP
+      automation:
+        api: check_ethernet_connected
+        timeout: 30
+        on_failure: abort

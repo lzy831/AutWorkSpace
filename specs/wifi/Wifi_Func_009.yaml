@@ -1,0 +1,113 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_009
+name: WiFi设置静态IP验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  验证WiFi连接状态下配置静态IP地址功能正常
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_009
+
+preconditions:
+  - description: 确保WiFi已开启且AP列表可见
+    manual: QA进入WiFi设置页面确认WiFi开关ON且AP列表可见
+    semantic: ensure
+    operation:
+      description: 开启WiFi
+      automation:
+        api: step_enable_wifi
+        params:
+          method: cmd
+    check:
+      description: 确认AP列表可见
+      automation:
+        api: check_wifi_ap_list
+      params:
+        expected_present: true
+
+  - description: 确保以太网已断开（Android TV连以太网时WiFi设置不可用）
+    manual: QA确认网线已拔出
+    semantic: ensure
+    operation:
+      description: 断开以太网连接
+      automation:
+        api: step_disable_ethernet
+        params: {}
+    check:
+      description: 确认以太网已断开
+      automation:
+        api: check_ethernet_disconnected
+        params:
+          method: ui
+
+  - description: 确保WiFi已连接到目标AP
+    manual: QA确认WiFi已连接
+    semantic: ensure
+    operation:
+      description: 连接目标WiFi AP
+      automation:
+        api: step_connect_wifi
+        params:
+          ssid: ${custom_params.target_ssid}
+          password: ${custom_params.target_password}
+          method: cmd
+    check:
+      description: 确认WiFi已连接
+      automation:
+        api: check_wifi_connected
+        params:
+          method: cmd
+
+steps:
+  - operation:
+      description: 采集当前WiFi网络信息（网关/子网/静态IP）
+      manual:
+        actor: QA
+        target: DUT
+        action: 记录当前DHCP分配的IP地址、网关、子网掩码
+      automation:
+        api: step_discover_wifi_network_info
+        params: {}
+    check:
+      description: 确认网络信息采集完成
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 确认采集到有效的网关和IP信息
+      automation:
+        api: check_wifi_connected
+        params:
+          method: cmd
+
+  - operation:
+      description: 设置WiFi静态IP
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入 Settings -> Network & Internet -> WiFi -> IP settings, 选择Static, 填入IP/Gateway/Prefix
+      automation:
+        api: step_set_wifi_static_ip
+        params:
+          ip: ${step_discover_wifi_network_info.data.static_ip}
+          gateway: ${step_discover_wifi_network_info.data.gateway}
+          prefix: 24
+          method: ui
+    check:
+      description: |
+        确认静态IP设置成功, IP模式为静态.
+        通过 Settings -> WiFi -> IP Settings -> Static UI 导航完成配置.
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 观察系统IP模式显示为Static, IP地址为配置的静态IP
+      automation:
+        api: check_wifi_ip_mode
+        params:
+          expected_mode: static
+      timeout: 15
+      on_failure: abort

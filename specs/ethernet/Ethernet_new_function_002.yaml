@@ -1,0 +1,59 @@
+_schema: test_case_spec_v1
+id: Ethernet_new_function_002
+name: 10M FDX 模式下 DUT 与 Controller 互 Ping
+priority: P1
+domain: ethernet
+environment: ethernet_router_lan
+description: 验证DUT在不同双工模式下能与Controller正常通信
+defaults:
+  dut_ip: ${custom_params.dut_static_ip}
+  pc_ip: ${custom_params.controller_ip}
+  speed: '10'
+  duplex: full
+preconditions:
+- description: 确认 DUT 可 ping 通 PC
+  manual: QA 人工确认
+  automation:
+    api: check_network_accessible
+    params:
+      target: ${custom_params.controller_ip}
+      source: dut
+steps:
+- operation:
+    description: DUT配置静态IP
+    manual:
+      actor: QA
+      target: DUT
+      action: DUT配置静态IP
+    automation:
+      api: step_set_static_ip
+      params:
+        ip_address: ${custom_params.dut_static_ip}
+        gateway: ${custom_params.gateway_ip}
+        dns: ${custom_params.dns_server}
+        prefix: 24
+      wait_after: 3
+      alternatives:
+      - method: step_set_pc_ethernet_mode
+        api: step_set_pc_ethernet_mode
+        params:
+          speed: '10'
+          duplex: full
+        description: 设置 Controller 网卡为 10M FDX 模式
+      - method: step_wait_seconds
+        api: step_wait_seconds
+        params:
+          seconds: 5
+        description: 等待网卡模式切换生效
+  check:
+    description: 确认 DUT 静态 IP 已生效
+    manual:
+      actor: QA
+      target: DUT屏幕
+      action: 在系统网络设置中确认静态IP已生效
+    automation:
+      api: check_network_connected
+      params:
+        type: ethernet
+      timeout: 10
+      on_failure: abort

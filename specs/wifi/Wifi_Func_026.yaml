@@ -1,0 +1,58 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_026
+name: 隐藏SSID后验证AP不可搜索及手动连接成功
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_026
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 在路由器设置中隐藏SSID, 完成Hide SSID测试操作
+      manual:
+        actor: QA
+        target: DUT
+        action: 在路由器设置中隐藏SSID, 完成Hide SSID测试操作
+      automation:
+        api: step_configure_ap_hide_ssid
+        params: {}
+    check:
+      description: 验证平台无法搜索到隐藏SSID的AP
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证平台无法搜索到隐藏SSID的AP
+      automation:
+        api: check_ap_not_visible
+        params: {}
+  - operation:
+      description: 平台手动输入SSID和密码连接隐藏SSID的AP
+      manual:
+        actor: QA
+        target: DUT
+        action: 平台手动输入SSID和密码连接隐藏SSID的AP
+      automation:
+        api: step_connect_wifi
+        params: {"ssid": "${custom_params.target_ssid}", "pwd": "${custom_params.target_password}"}
+    check:
+      description: 验证平台已成功连接网络(WiFi)
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证平台已成功连接网络(WiFi)
+      automation:
+        api: check_network_connected
+        params: {}
+

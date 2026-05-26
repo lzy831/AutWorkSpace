@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_076
+name: Connect AP with WPS method 测试
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_076
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 通过WPS方法连接AP: 按下路由器上的WPS按钮
+      manual:
+        actor: QA
+        target: DUT
+        action: 通过WPS方法连接AP: 按下路由器上的WPS按钮
+      automation:
+        api: step_connect_wifi_wps
+        params: {}
+    check:
+      description: 检查网络已连接(wifi/ethernet), 验证平台成功连接AP
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络已连接(wifi/ethernet), 验证平台成功连接AP
+      automation:
+        api: check_network_connected
+        params: {}
+

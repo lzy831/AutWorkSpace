@@ -1,0 +1,66 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_099
+name: 在线视频播放测试(iYiqi/YouTube)
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Play video online
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_099
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 断开网络连接(wifi/ethernet).
+
+      manual:
+        actor: QA
+        target: DUT
+        action: 断开网络连接(wifi/ethernet).
+
+      automation:
+        api: step_disconnect_network
+        params: {}
+  - operation:
+      description: 启动YouTube在线视频播放(对应iYiQi或YouTube在线播放).
+
+      manual:
+        actor: QA
+        target: DUT
+        action: 启动YouTube在线视频播放(对应iYiQi或YouTube在线播放).
+
+      automation:
+        api: step_start_playback
+        params: {"playback_format": "auto"}
+    check:
+      description: 检查在线视频画面和声音正常播放, 可进行seek, 暂停/播放等操作.
+
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查在线视频画面和声音正常播放, 可进行seek, 暂停/播放等操作.
+
+      automation:
+        api: check_video_playback_normal
+        params: {"playback_format": "auto"}
+  - operation:
+      description: 停止YouTube播放, 清理测试资源.
+
+      manual:
+        actor: QA
+        target: DUT
+        action: 停止YouTube播放, 清理测试资源.
+
+      automation:
+        api: step_stop_playback
+        params: {}
+

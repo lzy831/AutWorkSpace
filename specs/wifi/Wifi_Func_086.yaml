@@ -1,0 +1,44 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_086
+name: WiFi热点设置加密方式为Open并验证免密连接
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Wifi hotspot
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_086
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 设置WiFi热点加密方式为Open(无密码), 用于验证免密连接场景.
+
+      manual:
+        actor: QA
+        target: DUT
+        action: 设置WiFi热点加密方式为Open(无密码), 用于验证免密连接场景.
+
+      automation:
+        api: step_set_hotspot_security
+        params: {}
+    check:
+      description: 验证当热点加密方式设置为Open时, 客户端连接无需密码即可成功连接.
+
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证当热点加密方式设置为Open时, 客户端连接无需密码即可成功连接.
+
+      automation:
+        api: check_wifi_connection_time
+        params: {}
+

@@ -1,0 +1,54 @@
+domain: ethernet
+id: Ethernet_Func_006
+name: DHCP待机唤醒后网络自动恢复
+testbed: ethernet_router_lan
+description: 验证DUT在DHCP模式下休眠再唤醒后, 能自动重新获取IPv4地址并恢复网络连接
+
+preconditions:
+  - description: DUT以太网物理链路已连通
+    operation:
+      api: step_ensure_ethernet_link
+      params:
+        router_id: main_router
+    check:
+      api: check_ethernet_connected
+
+  - description: DUT已通过DHCP获取IPv4地址
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+
+procedure:
+  - operation:
+      description: DUT进入休眠
+      action: 按遥控器电源键使DUT进入待机
+      automation:
+        api: power_control_dut
+        params:
+          action: "off"
+        wait_after: 5
+    check:
+      description: 等待DUT完全休眠
+      action: 观察DUT指示灯确认进入休眠状态
+      automation:
+        api: check_ethernet_disconnected
+        params:
+          method: cmd
+        on_failure: continue
+
+  - operation:
+      description: 唤醒DUT
+      action: 按遥控器电源键唤醒DUT
+      automation:
+        api: power_control_dut
+        params:
+          action: "on"
+        wait_after: 60
+    check:
+      description: 唤醒后DUT通过DHCP恢复网络连接
+      action: 观察 Settings 中 ETHERNET section 恢复显示 Connected
+      automation:
+        api: check_ethernet_connected
+        timeout: 30
+        on_failure: abort

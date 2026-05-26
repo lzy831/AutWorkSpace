@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_085
+name: WiFi热点场景下设置SSID并验证31位长度限制
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Wifi hotspot
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_085
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 配置热点SSID和密码, 输入32位SSID名称以测试长度限制
+      manual:
+        actor: QA
+        target: DUT
+        action: 配置热点SSID和密码, 输入32位SSID名称以测试长度限制
+      automation:
+        api: step_configure_hotspot_ssid_password
+        params: {"ssid": "${custom_params.hotspot_ssid}", "pwd": "${custom_params.hotspot_password}"}
+    check:
+      description: 验证SSID最多只能输入31位, 检查32位输入是否被限制
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证SSID最多只能输入31位, 检查32位输入是否被限制
+      automation:
+        api: check_wifi_ssid_or_password_length_limit
+        params: {}
+

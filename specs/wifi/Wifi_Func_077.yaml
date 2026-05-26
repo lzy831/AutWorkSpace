@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_077
+name: Connecting time场景下验证WiFi连接时间
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connecting time
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_077
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 连接加密方式为Open的AP, 完成WiFi连接操作
+      manual:
+        actor: QA
+        target: DUT
+        action: 连接加密方式为Open的AP, 完成WiFi连接操作
+      automation:
+        api: step_connect_wifi
+        params: {}
+    check:
+      description: 验证WiFi连接时间在5~10秒范围内
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证WiFi连接时间在5~10秒范围内
+      automation:
+        api: check_wifi_connection_time
+        params: {}
+

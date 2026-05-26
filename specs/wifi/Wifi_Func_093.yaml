@@ -1,0 +1,49 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_093
+name: WiFi热点场景下重启并验证平台功能正常
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Wifi hotspot
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_093
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 开启WiFi热点, 用于后续reboot with hotspot测试
+      manual:
+        actor: QA
+        target: DUT
+        action: 开启WiFi热点, 用于后续reboot with hotspot测试
+      automation:
+        api: step_enable_wifi_hotspot
+        params: {}
+  - operation:
+      description: 执行DUT重启操作, 验证reboot with hotspot场景
+      manual:
+        actor: QA
+        target: DUT
+        action: 执行DUT重启操作, 验证reboot with hotspot场景
+      automation:
+        api: step_reboot_dut
+        params: {}
+    check:
+      description: 检查设备正常启动, 确认重启后系统正常
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查设备正常启动, 确认重启后系统正常
+      automation:
+        api: check_boot_normal
+        params: {}
+

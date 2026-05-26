@@ -1,0 +1,33 @@
+domain: ethernet
+id: Ethernet_Func_043
+name: 双栈网络下路由器重启后 IP 恢复
+testbed: ethernet_router_lan
+description: 验证双栈网络下路由器重启后DUT能重新获取IPv4和IPv6地址
+
+preconditions:
+  - description: DUT以太网物理链路已连通
+    operation:
+      api: step_ensure_ethernet_link
+      params:
+        router_id: main_router
+    check:
+      api: check_ethernet_connected
+
+  - description: DUT已获取双栈IP（IPv4 + global IPv6）
+    automation:
+      api: check_ethernet_dual_stack_ip_obtained
+
+procedure:
+  - operation:
+      description: 断电并重启路由器
+      action: 断开路由器电源, 等待10秒, 重新接通电源
+      automation:
+        api: step_power_off_ap
+        wait_after: 10
+    check:
+      description: 确认路由器重启后DUT恢复双栈IP
+      action: 在系统网络设置中确认恢复显示Connected且包含IPv4和IPv6地址
+      automation:
+        api: check_ethernet_dual_stack_ip_obtained
+        timeout: 120
+        on_failure: abort

@@ -1,0 +1,83 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_004
+name: WiFi连接成功验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  验证DUT能成功连接到指定的WiFi AP, 连接后确认连接状态正常
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_004
+
+preconditions:
+  - description: 确认 DUT 未连接以太网线
+    manual: QA确认DUT未插网线
+    automation:
+      api: check_ethernet_disconnected
+      params:
+        method: cmd
+
+  - description: 确保WiFi已开启且AP列表可见（若WiFi未开则自动开启）
+    manual: QA进入WiFi设置页面确认WiFi开关ON且AP列表可见
+    semantic: ensure
+    operation:
+      description: 开启WiFi
+      automation:
+        api: step_enable_wifi
+        params:
+          method: cmd
+    check:
+      description: 确认AP列表可见
+      automation:
+        api: check_wifi_ap_list
+      params:
+        expected_present: true
+
+  - description: 断开已有WiFi连接, 确保从干净状态开始连接测试
+    manual: QA在WiFi设置页面中断开所有已保存的AP连接
+    operation:
+      description: 断开当前WiFi连接
+      automation:
+        api: step_disconnect_network
+        params:
+          type: wifi
+          method: cmd
+    check:
+      description: 确认WiFi已断开(Wifi is not connected)
+      automation:
+        api: check_wifi_disconnected
+        params:
+          method: cmd
+
+steps:
+  - operation:
+      description: 连接指定的WiFi AP
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入 Settings -> Network & Internet -> WiFi, 选择目标AP, 输入密码并连接
+      automation:
+        api: step_connect_wifi
+        params:
+          ssid: ${custom_params.target_ssid}
+          password: ${custom_params.target_password}
+          method: cmd
+      wait_after: 10
+    check:
+      description: 确认WiFi已连接, 连接成功提示显示, 已连AP显示在列表首位
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 观察连接成功提示, 已连AP显示在AP列表首位且标记为Connected
+      automation:
+        api: check_wifi_connected
+        params:
+          method: cmd
+        timeout: 15
+        on_failure: abort
+
+

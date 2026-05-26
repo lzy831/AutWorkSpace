@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_025
+name: 在Connect AP场景下执行switch DHCP and static, 验证Switch IP successful
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_025
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: switch DHCP and static: Switching IP between DHCP and static
+      manual:
+        actor: QA
+        target: DUT
+        action: switch DHCP and static: Switching IP between DHCP and static
+      automation:
+        api: step_switch_wifi_ip_mode
+        params: {}
+    check:
+      description: 验证switch DHCP and static: Switch IP successful
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证switch DHCP and static: Switch IP successful
+      automation:
+        api: check_switch_ip_successful
+        params: {}
+

@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_063
+name: Connect AP bandwidth mix & channel 165
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_063
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 连接一个带宽20M, 信道165的AP
+      manual:
+        actor: QA
+        target: DUT
+        action: 连接一个带宽20M, 信道165的AP
+      automation:
+        api: step_configure_ap_channel
+        params: {"bandwidth": 20, "channel": 165}
+    check:
+      description: 检查网络已连接(wifi/ethernet), 验证Platform connect the AP successful
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络已连接(wifi/ethernet), 验证Platform connect the AP successful
+      automation:
+        api: check_network_connected
+        params: {}
+

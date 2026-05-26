@@ -1,0 +1,66 @@
+domain: ethernet
+id: Ethernet_Func_041
+name: 双栈网络下热插拔网线后 IP 恢复
+testbed: ethernet_router_lan
+description: 验证双栈网络下热插拔网线后DUT能重新获取IPv4和IPv6地址
+
+preconditions:
+  - description: DUT以太网物理链路已连通
+    operation:
+      api: step_ensure_ethernet_link
+      params:
+        router_id: main_router
+    check:
+      api: check_ethernet_connected
+
+  - description: DUT已获取双栈IP（IPv4 + global IPv6）
+    automation:
+      api: check_ethernet_dual_stack_ip_obtained
+
+procedure:
+  - operation:
+      description: 采集当前以太网适配器信息（MAC/IP等），供后续步骤使用
+      action: 进入 Settings → Network & Internet → Ethernet 查看 MAC 和 IP 地址
+      automation:
+        api: step_discover_network_info
+        wait_after: 3
+    check:
+      description: 确认网络信息采集完成
+      automation:
+        api: check_ethernet_dual_stack_ip_obtained
+
+  - operation:
+      description: 断开DUT的以太网物理链路
+      action: 拔掉路由器端连接 DUT 的网线
+      automation:
+        api: step_disconnect_ethernet
+        params:
+          mac: ${step_discover_network_info.data.mac}
+          router_id: main_router
+        wait_after: 3
+    check:
+      description: 确认 IP 消失
+      action: 在系统网络设置中确认已断开且无IP地址
+      automation:
+        api: check_network_disconnected
+        params:
+          type: ethernet
+        on_failure: abort
+
+  - operation:
+      description: 恢复DUT的以太网物理链路
+      action: 插回路由器端连接 DUT 的网线
+      automation:
+        api: step_connect_ethernet
+        params:
+          port: ${step_disconnect_ethernet.data.port}
+          mac: ${step_discover_network_info.data.mac}
+          router_id: main_router
+        wait_after: 10
+    check:
+      description: 确认重新获取双栈 IP
+      action: 在系统网络设置中确认恢复显示Connected且包含IPv4和IPv6地址
+      automation:
+        api: check_ethernet_dual_stack_ip_obtained
+        timeout: 60
+        on_failure: abort

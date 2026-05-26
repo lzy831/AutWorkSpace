@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_090
+name: WiFi热点场景下设置AP频段为2.4G优先并验证连接
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Wifi hotspot
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_090
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 设置AP频段为2.4G优先
+      manual:
+        actor: QA
+        target: DUT
+        action: 设置AP频段为2.4G优先
+      automation:
+        api: step_set_hotspot_band
+        params: {}
+    check:
+      description: 检查网络已连接(wifi/ethernet), 验证其他设备可以使用正确密码连接
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络已连接(wifi/ethernet), 验证其他设备可以使用正确密码连接
+      automation:
+        api: check_network_connected
+        params: {}
+

@@ -1,0 +1,44 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_092
+name: WiFi热点在以太网连接下的工作验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Wifi hotspot
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_092
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 将网络源切换为以太网连接, 用于测试热点在以太网下的工作状态.
+
+      manual:
+        actor: QA
+        target: DUT
+        action: 将网络源切换为以太网连接, 用于测试热点在以太网下的工作状态.
+
+      automation:
+        api: step_network_source_from_ethernet
+        params: {}
+    check:
+      description: 检查WiFi状态, 验证当平台连接以太网时, WiFi热点可被连接并访问网站.
+
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查WiFi状态, 验证当平台连接以太网时, WiFi热点可被连接并访问网站.
+
+      automation:
+        api: check_wifi_state
+        params: {}
+

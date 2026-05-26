@@ -1,0 +1,77 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_008
+name: WiFi忘记密码验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  验证忘记网络功能能正确删除已保存的WiFi密码,
+  遗忘后网络不再出现在已保存列表中
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_008
+
+preconditions:
+  - description: 确保WiFi已开启且AP列表可见（若WiFi未开则自动开启）
+    manual: QA进入WiFi设置页面确认WiFi开关ON且AP列表可见
+    semantic: ensure
+    operation:
+      description: 开启WiFi
+      automation:
+        api: step_enable_wifi
+        params:
+          method: cmd
+    check:
+      description: 确认AP列表可见
+      automation:
+        api: check_wifi_ap_list
+      params:
+        expected_present: true
+
+  - description: 确保WiFi已连接到目标AP
+    manual: QA确认WiFi已连接
+    semantic: ensure
+    operation:
+      description: 连接目标WiFi AP
+      automation:
+        api: step_connect_wifi
+        params:
+          ssid: ${custom_params.target_ssid}
+          password: ${custom_params.target_password}
+          method: cmd
+    check:
+      description: 确认WiFi已连接
+      automation:
+        api: check_wifi_connected
+        params:
+          method: cmd
+
+steps:
+  - operation:
+      description: 忘记当前连接的WiFi网络
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入 Settings -> Network & Internet -> WiFi, 选择已连接的AP, 点击忘记网络
+      automation:
+        api: step_disconnect_network
+        params:
+          type: wifi
+          method: cmd
+          forget: true
+    check:
+      description: 确认WiFi密码已被删除, 网络不会自动重连
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 确认该AP不再出现在已保存网络列表, WiFi未自动重连
+      automation:
+        api: check_wifi_password_forgotten
+        params:
+          ssid: ${custom_params.target_ssid}
+          method: cmd
+      timeout: 10
+      on_failure: abort

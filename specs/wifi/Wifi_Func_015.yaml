@@ -1,0 +1,67 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_015
+name: Connect AP场景下AP断电/上电测试
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_015
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 连接指定WiFi AP
+      manual:
+        actor: QA
+        target: DUT
+        action: 连接指定WiFi AP
+      automation:
+        api: step_connect_wifi
+        params: {}
+  - operation:
+      description: 断开AP电源
+      manual:
+        actor: QA
+        target: DUT
+        action: 断开AP电源
+      automation:
+        api: step_power_off_ap
+        params: {}
+    check:
+      description: 检查网络已断开
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络已断开
+      automation:
+        api: check_network_disconnected
+        params: {}
+  - operation:
+      description: 恢复AP电源
+      manual:
+        actor: QA
+        target: DUT
+        action: 恢复AP电源
+      automation:
+        api: step_power_on_ap
+        params: {}
+    check:
+      description: 检查网络已连接(wifi/ethernet)
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络已连接(wifi/ethernet)
+      automation:
+        api: check_network_connected
+        params: {}
+

@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_014
+name: WiFi设置场景下Country Code验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  WIFI setting
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_014
+preconditions:
+  - description: 1. 平台已正常启动并进入系统 2. WiFi 模块已初始化
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 进入网络设置界面查看当前Country Code, 并完成country code设置操作
+      manual:
+        actor: QA
+        target: DUT
+        action: 进入网络设置界面查看当前Country Code, 并完成country code设置操作
+      automation:
+        api: step_set_country_code
+        params: {}
+    check:
+      description: 验证country code与设置的国家一致
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 验证country code与设置的国家一致
+      automation:
+        api: check_country_code
+        params: {}
+

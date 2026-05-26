@@ -1,0 +1,60 @@
+domain: ethernet
+id: Ethernet_Func_011
+name: 静态IP模式下路由器重启后DUT恢复网络
+testbed: ethernet_router_lan
+description: >
+  验证DUT配置静态IP后, 路由器重启期间DUT检测到断网,
+  路由器恢复后DUT自动恢复网络连接且保持静态IP配置不变
+
+preconditions:
+  - description: 确保以太网物理链路连通
+    operation:
+      api: step_ensure_ethernet_link
+      params:
+        router_id: main_router
+    check:
+      api: check_ethernet_connected
+
+  - description: 将DUT IP设置模式切换为DHCP
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+
+procedure:
+  - operation:
+      description: 采集当前网络信息供后续步骤使用
+      automation:
+        api: step_discover_network_info
+    check:
+      description: 确认网络信息已采集且连接正常
+      automation:
+        api: check_ethernet_connected
+
+  - operation:
+      description: 通过Settings UI配置静态IP
+      automation:
+        api: step_set_static_ip
+        params:
+          ip_address: ${step_discover_network_info.data.static_ip}
+          gateway: ${step_discover_network_info.data.gateway}
+          prefix: ${step_discover_network_info.data.prefix}
+    check:
+      description: 确认静态IP已生效
+      automation:
+        api: check_ethernet_connected
+
+  - operation:
+      description: SSH重启路由器并等待恢复上线
+      automation:
+        api: step_reboot_router
+        params:
+          router_id: main_router
+          timeout: 120
+    check:
+      description: 确认DUT网络恢复且静态IP配置未变
+      automation:
+        api: check_ethernet_ip_mode
+        params:
+          expected_mode: static
+          expected_ip: ${step_discover_network_info.data.static_ip}

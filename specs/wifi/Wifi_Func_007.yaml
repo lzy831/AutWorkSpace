@@ -1,0 +1,111 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_007
+name: WiFi与以太网自动切换验证
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  验证以太网连接后WiFi自动断开, 以太网断开后WiFi自动恢复的切换行为
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_007
+
+preconditions:
+  - description: 确保WiFi已开启且AP列表可见（若WiFi未开则自动开启）
+    manual: QA进入WiFi设置页面确认WiFi开关ON且AP列表可见
+    semantic: ensure
+    operation:
+      description: 开启WiFi
+      automation:
+        api: step_enable_wifi
+        params:
+          method: cmd
+    check:
+      description: 确认AP列表可见
+      automation:
+        api: check_wifi_ap_list
+      params:
+        expected_present: true
+
+  - description: 确保以太网已断开（必须先断开局域网, WiFi才能成为主连接）
+    manual: QA确认网线已拔出
+    semantic: ensure
+    operation:
+      description: 断开以太网连接
+      automation:
+        api: step_disable_ethernet
+        params: {}
+    check:
+      description: 确认以太网已断开
+      automation:
+        api: check_ethernet_disconnected
+        params:
+          method: ui
+
+  - description: 确保WiFi已连接到目标AP
+    manual: QA确认WiFi已连接
+    semantic: ensure
+    operation:
+      description: 连接目标WiFi AP
+      automation:
+        api: step_connect_wifi
+        params:
+          ssid: ${custom_params.target_ssid}
+          password: ${custom_params.target_password}
+          method: cmd
+    check:
+      description: 确认WiFi已连接
+      automation:
+        api: check_wifi_connected
+        params:
+          method: cmd
+
+steps:
+  - operation:
+      description: 连接以太网
+      manual:
+        actor: QA
+        target: DUT
+        action: 物理插入盒子端网线
+      automation:
+        api: step_enable_ethernet
+        params: {}
+      wait_after: 15
+    check:
+      description: 确认以太网已连接, 网络切换为以太网
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 观察以太网恢复连接, 网络正常工作
+      automation:
+        api: check_ethernet_connected
+        params:
+          method: ui
+      timeout: 30
+      on_failure: abort
+
+  - operation:
+      description: 断开以太网连接
+      manual:
+        actor: QA
+        target: DUT
+        action: 物理拔掉盒子端网线
+      automation:
+        api: step_disable_ethernet
+        params: {}
+      wait_after: 10
+    check:
+      description: 确认WiFi自动恢复连接
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 观察WiFi恢复连接
+      automation:
+        api: check_wifi_connected
+        params:
+          method: cmd
+      timeout: 30
+      on_failure: abort

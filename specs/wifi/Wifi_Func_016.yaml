@@ -1,0 +1,40 @@
+_schema: test_case_spec_v1
+
+id: Wifi_Func_016
+name: Connect AP场景下AP2失败自动回切AP1
+priority: P1
+domain: wifi
+environment: wifi_router_lan
+description: |
+  Connect AP
+
+_source:
+  file: wifi&BT_testcase_v1.1.xlsx
+  sheet: Wifi_function
+  case_id: Wifi_Func_016
+preconditions:
+  - description: Multiple APs
+    manual: QA 人工确认
+    automation:
+      api: check_wifi_connected
+
+steps:
+  - operation:
+      description: 使用错误密码连接AP2, 触发连接失败, 验证自动回切到AP1
+      manual:
+        actor: QA
+        target: DUT
+        action: 使用错误密码连接AP2, 触发连接失败, 验证自动回切到AP1
+      automation:
+        api: step_connect_wifi
+        params: {"ssid": "${custom_params.target_ssid}", "pwd": "${custom_params.target_password}"}
+    check:
+      description: 检查网络是否已连接(验证自动切换到AP1成功)
+      manual:
+        actor: QA
+        target: DUT屏幕
+        action: 检查网络是否已连接(验证自动切换到AP1成功)
+      automation:
+        api: check_network_connected
+        params: {}
+
