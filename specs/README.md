@@ -45,5 +45,7 @@ specs/
 ```bash
 cd /home/zhiyuan.liu/AutoTestRes/scripts/python
 source .venv/bin/activate
-python3 tsuite/tools/compile_workflow.py tsuite/specs/<domain>/<case>.yaml -o atomic/workflows/auto_generate/<path>/<case>.json
+python3 tsuite/tools/compile_workflow.py \
+  ClaudeWorkSpace/specs/<domain>/<case>.yaml \
+  -o atomic/workflows/auto_generate/<path>/<case>.json
 ```

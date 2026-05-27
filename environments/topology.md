@@ -1,5 +1,52 @@
 # 网络拓扑
 
+> Mermaid 图预览: VS Code 装 `Markdown Preview Mermaid Support` 插件，
+> 或复制代码到 https://mermaid.live
+
+## ethernet_router_lan（标准以太网测试拓扑）
+
+```mermaid
+graph LR
+    cloud(("AUT 云端")) -.->|"以太网(公司内网)"| ctrl
+    subgraph desk["测试台架"]
+        ctrl["Controller<br/>USB-ADB → DUT<br/>WiFi → Router"]
+        dut["DUT<br/>GTV/ATV<br/>eth0"]
+        rtr["Router<br/>ASUS AX86U<br/>192.168.50.1"]
+        rcu["遥控器<br/>(Controller 模拟蓝牙)"]
+    end
+    dut -->|"以太网"| rtr
+    ctrl -->|"USB-ADB"| dut
+    ctrl -->|"WiFi"| rtr
+    rtr -->|"WAN"| net((互联网))
+    rcu -.->|"蓝牙"| dut
+```
+
+### 设备角色表
+
+| 设备 | 类型 | 角色 | 环境参数来源 |
+|------|------|------|-------------|
+| DUT | android_ott | 被测设备 | `ethernet_router_lan.yaml` devices.dut.params |
+| Controller | android_device (debug: linux_pc) | 测试执行器 | devices.controller.params / profile_debug |
+| Router | wifi_router | 网络服务 + 测试辅助 | devices.router.params |
+| Remote | bluetooth_rcu | 遥控输入 | Controller 模拟 (provided_by) |
+| AUT Cloud | web_service | 用例调度 | aut_cloud |
+
+## ethernet_direct_pc（直连互 Ping 拓扑，002 专用）
+
+```mermaid
+graph LR
+    subgraph desk["测试台架"]
+        ctrl["Controller<br/>(WiFi 连 Router)"]
+        dut["DUT<br/>GTV/ATV<br/>eth0"]
+        peer["Peer PC<br/>Linux<br/>enp0s31f6"]
+        rtr["Router<br/>192.168.50.1"]
+    end
+    dut -->|"以太网(直连)"| peer
+    ctrl -->|"USB-ADB"| dut
+    ctrl -->|"WiFi"| rtr
+    ctrl -.->|"SSH"| peer
+```
+
 ## 角色定义
 
 ```

@@ -1,0 +1,34 @@
+id: wifi_router_lan
+description: |
+  DUT通过WiFi连接路由器, Controller通过USB-ADB连接DUT,
+  适用于WiFi相关功能测试.
+  DUT不得同时连接以太网线, 否则Android TV自动禁用WiFi.
+
+devices:
+  - id: dut
+    type: android_ott
+  - id: controller
+    type: linux_pc
+  - id: router
+    type: wifi_router
+  - id: remote
+    type: bluetooth_rcu
+
+connections:
+  - from: dut
+    to: controller
+    link: usb_adb
+  - from: dut
+    to: router
+    link: wifi
+  - from: router
+    to: internet
+    link: wan
+
+capabilities:
+  wifi_band_5ghz: true
+
+defaults:
+  dut_wifi_iface: wlan0
+  router_lan_ip: 192.168.50.1
+  dhcp_timeout: 30

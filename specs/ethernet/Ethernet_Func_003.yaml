@@ -22,7 +22,6 @@ preconditions:
 procedure:
   - operation:
       description: 重启DUT
-      action: 手动断电后再上电（物理断电重启）
       automation:
         api: step_reboot_dut
         params:
@@ -31,7 +30,6 @@ procedure:
         wait_after: 30
     check:
       description: 重启后DUT通过DHCP恢复网络连接
-      action: 观察 Settings → Network & Internet 中 ETHERNET section 恢复显示 Connected
       automation:
         api: check_ethernet_connected
         timeout: 30

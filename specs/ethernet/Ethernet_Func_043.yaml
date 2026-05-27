@@ -13,21 +13,53 @@ preconditions:
     check:
       api: check_ethernet_connected
 
-  - description: DUT已获取双栈IP（IPv4 + global IPv6）
-    automation:
+  - description: DUT 设为 DHCP 模式
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+
+  - description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
+    operation:
+      api: step_enable_router_ipv6
+      params:
+        router_id: main_router
+    check:
       api: check_ethernet_dual_stack_ip_obtained
 
 procedure:
   - operation:
-      description: 断电并重启路由器
-      action: 断开路由器电源, 等待10秒, 重新接通电源
+      description: 采集当前网络信息供后续验证比对
       automation:
-        api: step_power_off_ap
+        api: step_discover_network_info
+    check:
+      description: 确认网络正常
+      automation:
+        api: check_ethernet_connected
+
+  - operation:
+      description: SSH重启路由器并等待恢复上线
+      automation:
+        api: step_reboot_router
+        params:
+          router_id: main_router
+          timeout: 120
+    check:
+      description: 确认路由器已恢复且以太网已重连
+      automation:
+        api: check_ethernet_connected
+
+  # 路由器重启后 RA 需重发，原因同 041: SLAAC 被动机制，需新 RA 触发 DUT 重新生成 IPv6 地址
+  - operation:
+      description: 重新发送RA使DUT通过SLAAC获取IPv6
+      automation:
+        api: step_enable_router_ipv6
+        params:
+          router_id: main_router
         wait_after: 10
     check:
-      description: 确认路由器重启后DUT恢复双栈IP
-      action: 在系统网络设置中确认恢复显示Connected且包含IPv4和IPv6地址
+      description: 确认重新获取双栈 IP
       automation:
         api: check_ethernet_dual_stack_ip_obtained
-        timeout: 120
+        timeout: 60
         on_failure: abort

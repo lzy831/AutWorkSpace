@@ -1,18 +1,18 @@
 domain: ethernet
-id: Ethernet_new_function_006
-name: Auto MDIX 交叉线自动适配
-testbed: ethernet_router_lan_crossover
+id: Ethernet_new_function_007
+name: Auto MDIX 直连线正常连接
+testbed: ethernet_router_lan
 description: >
-  验证 Auto MDIX 功能在交叉线连接下能正常工作。
-  测试前需将 DUT 连接路由器的网线更换为交叉线；
+  验证 Auto MDIX 功能在直连线连接下能正常工作。
+  测试前需确认 DUT 连接路由器使用标准直连线（straight-through cable）；
   Auto MDIX 应自动适配，链路协商成功并正常通信。
 
-# 物理环境要求: DUT ↔ Router 使用交叉线（crossover cable）
+# 物理环境要求: DUT ↔ Router 使用直连线（straight-through cable）
 # 当前 DUT (meson8b-dwmac) 和 Router (Broadcom 交换芯片) 均无法通过 ethtool/sysfs 检测 MDI-X 状态，
 # 因此无法从软件侧验证网线类型，仅通过链路连通性间接验证 Auto MDIX 功能
 
 preconditions:
-  - description: 确保以太网物理链路连通（使用交叉线）
+  - description: 确保以太网物理链路连通（使用直连线）
     operation:
       api: step_ensure_ethernet_link
       params:
@@ -26,7 +26,7 @@ procedure:
       automation:
         api: step_discover_network_info
     check:
-      description: 确认交叉线下 DHCP 成功获取 IP
+      description: 确认直连线下 DHCP 成功获取 IP
       automation:
         api: check_ethernet_ip_assigned
 
@@ -37,7 +37,7 @@ procedure:
         params:
           gateway_ip: ${step_discover_network_info.data.gateway}
     check:
-      description: 确认交叉线下网络通信正常
+      description: 确认直连线下网络通信正常
       automation:
         api: check_network_accessible
         params:

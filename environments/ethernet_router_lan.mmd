@@ -1,0 +1,12 @@
+graph LR
+    cloud(("AUT 云端")) -.->|"以太网"| ctrl
+    subgraph desk["测试台架"]
+        ctrl["Controller<br/>+ Remote"]
+        dut["DUT"]
+        rtr["Router"]
+    end
+    dut -->|"以太网"| rtr
+    ctrl -->|"USB-ADB"| dut
+    ctrl -->|"WiFi"| rtr
+    ctrl -.->|"蓝牙"| dut
+    rtr -->|"WAN"| net((互联网))

@@ -2,7 +2,7 @@ domain: ethernet
 id: Ethernet_Func_040
 name: 双栈网络（IPv4 + IPv6）地址获取
 testbed: ethernet_router_lan
-description: 验证DUT在支持IPv6的路由器环境下, 通过DHCP同时获取IPv4地址和global IPv6地址
+description: 验证DUT在DHCP模式下, 同时获取IPv4地址和global IPv6地址
 
 preconditions:
   - description: DUT以太网物理链路已连通
@@ -13,32 +13,28 @@ preconditions:
     check:
       api: check_ethernet_connected
 
-  - description: 路由器IPv6功能已启用
-    automation:
+  - description: DUT IP设置模式为DHCP
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+
+  - description: 路由器 IPv6 LAN 侧功能已启用
+    operation:
+      api: step_enable_router_ipv6
+      params:
+        router_id: main_router
+    check:
       api: check_ethernet_connected
 
 procedure:
   - operation:
-      description: 确保DUT IP设置模式为DHCP并连接
-      action: 进入 Settings → Network & Internet → Ethernet → IP settings, 选择 DHCP
+      description: 等待 SLAAC 分配 IPv6 地址
       automation:
-        api: step_set_ip_settings_to_dhcp
-        wait_after: 3
-    check:
-      description: 确认DHCP模式已生效
-      action: 观察 Settings 中 ETHERNET section 显示 Connected
-      automation:
-        api: check_ethernet_connected
-
-  - operation:
-      description: 启用以太网接口并等待DHCP分配IP（含IPv6 SLAAC/DHCPv6）
-      action: 等待DUT自动获取IPv4和IPv6地址
-      automation:
-        api: step_connect_ethernet_dhcp
-        wait_after: 15
+        api: step_discover_network_info
+        wait_after: 10
     check:
       description: 确认同时获取到IPv4和global IPv6地址
-      action: 在系统网络设置中确认同时有IPv4和Global IPv6地址
       automation:
         api: check_ethernet_dual_stack_ip_obtained
         timeout: 60

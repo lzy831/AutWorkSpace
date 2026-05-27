@@ -1,0 +1,10 @@
+graph LR
+    cloud(("AUT 云端")) -.->|"以太网"| ctrl
+    subgraph desk["测试台架"]
+        ctrl["Controller<br/>+ Remote"]
+        dut["DUT"]
+        peer["Peer PC"]
+    end
+    dut -->|"以太网(直连)"| peer
+    ctrl -->|"USB-ADB"| dut
+    ctrl -.->|"SSH"| peer

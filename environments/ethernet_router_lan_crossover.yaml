@@ -1,0 +1,66 @@
+# =============================================================================
+# Ethernet Router LAN 测试环境（交叉线变体）
+# =============================================================================
+
+id: ethernet_router_lan_crossover
+description: |
+  与 ethernet_router_lan 拓扑相同，但 DUT ↔ Router 使用交叉线（crossover cable）。
+  仅用于 Auto MDIX 交叉线适配测试，不可与直连线用例混合执行。
+topology_diagram: ethernet_router_lan.mmd          # 拓扑相同
+
+# ── 物理环境要求 ──
+physical_requirements:
+  cable_dut_to_router: crossover
+
+# ── 设备清单 ──
+
+devices:
+
+  dut:
+    type: android_ott
+    role: 被测设备
+    params:
+      device_id:    {type: str, description: adb devices 中显示的设备标识}
+      eth_iface:    {type: str, description: 以太网接口名, default: eth0}
+
+  controller:
+    type: android_device
+    role: 测试执行器 + 遥控器
+    params:
+      device_id:    {type: str, description: adb devices 中显示的设备标识}
+      eth_iface:    {type: str, description: 以太网接口名, default: eth0}
+      wifi_iface:   {type: str, description: WiFi 接口名, default: wlan0}
+    profile_debug:
+      type_override: linux_pc
+      params:
+        eth_host:   {type: str, description: 有线 IP（公司内网）}
+        wifi_host:  {type: str, description: WiFi IP（路由器管理）}
+        ssh:        {type: object, description: "SSH 登录凭据 (username, password)"}
+        eth_iface:  {type: str, description: 有线网口名}
+        wifi_iface: {type: str, description: WiFi 网口名}
+
+  router:
+    type: wifi_router
+    role: 网络服务 + 测试辅助
+    params:
+      ip:          {type: str, description: LAN IP 地址}
+      ssh:         {type: object, description: "SSH 登录凭据 (username, password)"}
+      model:       {type: str, description: 型号标识, 如 asus_rt_ax86u}
+      wifi_ssid:   {type: str, description: WiFi SSID}
+      wifi_password: {type: str, description: WiFi 密码}
+
+  remote:
+    type: bluetooth_rcu
+    role: 遥控输入
+    provided_by: controller
+
+aut_cloud:
+  type: web_service
+  role: 用例调度 + 结果收集
+
+capabilities:
+  ipv4_dhcp: true
+  ipv4_static: true
+  router_ssh: true
+  wifi_band_5ghz: true
+  bluetooth_rcu_simulate: true

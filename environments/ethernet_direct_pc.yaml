@@ -1,0 +1,49 @@
+# =============================================================================
+# Ethernet DUT ↔ PC 直连测试环境
+# =============================================================================
+
+id: ethernet_direct_pc
+description: |
+  DUT 与 PC 以太网直连拓扑。
+  DUT 从路由器拔下，改为直连 Peer PC 的以太网口。
+  Controller 通过 USB-ADB 控制 DUT，同时 WiFi 连路由器保持管理。
+topology_diagram: ethernet_direct_pc.mmd
+
+# ── 设备清单（仅定义每个设备需要哪些参数，实际值见 params.json）──
+
+devices:
+
+  dut:
+    type: android_ott
+    role: 被测设备
+    params:
+      device_id:    {type: str, description: adb devices 中显示的设备标识}
+      eth_iface:    {type: str, description: 以太网接口名, default: eth0}
+
+  controller:
+    type: android_device
+    role: 测试执行器 + 遥控器
+    params:
+      device_id:    {type: str, description: adb devices 中显示的设备标识}
+      eth_iface:    {type: str, description: 以太网接口名, default: eth0}
+      wifi_iface:   {type: str, description: WiFi 接口名, default: wlan0}
+    profile_debug:
+      type_override: linux_pc
+      params:
+        eth_host:   {type: str, description: 有线 IP（公司内网）}
+        wifi_host:  {type: str, description: WiFi IP（路由器管理）}
+        ssh:        {type: object, description: "SSH 登录凭据 (username, password)"}
+        eth_iface:  {type: str, description: 有线网口名}
+        wifi_iface: {type: str, description: WiFi 网口名}
+
+  peer_pc:
+    type: linux_pc
+    role: 直连对端（降速互 Ping）
+    params:
+      ssh:         {type: object, description: "SSH 登录凭据 (username, password)"}
+      eth_iface:   {type: str, description: 连接 DUT 的以太网口名}
+      eth_host:    {type: str, description: 有线 IP（公司内网）}
+
+aut_cloud:
+  type: web_service
+  role: 用例调度 + 结果收集

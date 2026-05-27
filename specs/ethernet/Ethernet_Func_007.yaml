@@ -22,19 +22,16 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息（gateway/subnet/dns/static_ip）供后续步骤使用
-      action: 通过DHCP获取IP后记录gateway和subnet信息
       automation:
         api: step_discover_network_info
         wait_after: 3
     check:
       description: 确认网络信息已采集
-      action: 确认获取到gateway和subnet
       automation:
         api: check_ethernet_connected
 
   - operation:
       description: 通过Settings UI配置静态IP（参数自动派生）
-      action: 进入 Settings → Network & Internet → Ethernet → IP settings → Static, 依次填入IP/Gateway/Prefix/DNS1
       automation:
         api: step_set_static_ip
         params:
@@ -45,7 +42,6 @@ procedure:
         wait_after: 3
     check:
       description: 确认静态IP配置成功且以太网已连接
-      action: 观察 Settings → Network & Internet 中 ETHERNET section 显示 Connected
       automation:
         api: check_ethernet_connected
         on_failure: abort
