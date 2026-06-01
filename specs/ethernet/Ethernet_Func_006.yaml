@@ -2,7 +2,7 @@ domain: ethernet
 id: Ethernet_Func_006
 name: DHCP待机唤醒后网络自动恢复
 testbed: ethernet_router_lan
-description: 验证DUT在DHCP模式下休眠(深待机)再唤醒后, 能自动重新获取IPv4地址并恢复网络连接
+description: 验证DUT在DHCP模式下深度睡眠后通过蓝牙遥控器唤醒, 能自动重新获取IPv4地址并恢复网络连接
 
 preconditions:
   - description: DUT以太网物理链路已连通
@@ -19,32 +19,59 @@ preconditions:
     check:
       api: check_ethernet_connected
 
+  - description: 蓝牙遥控器已配对并连接
+    operation:
+      api: step_init_bt_env
+
+  - description: 创建蓝牙遥控器设备句柄
+    operation:
+      api: step_create_rc_by_device_id
+
+  - description: 触发遥控器配对模式
+    operation:
+      api: step_trigger_rc_pairing_mode
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+
+  - description: 配对蓝牙遥控器
+    operation:
+      api: step_pair_bt_device
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+    check:
+      api: check_bt_device_connected
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+
 procedure:
   - operation:
-      description: DUT进入休眠
+      description: DUT进入深度睡眠
       automation:
-        api: power_control_dut
-        params:
-          action: "off"
-        wait_after: 5
+        api: enter_deep_sleep
+      wait_after: 20
     check:
-      description: 等待DUT完全休眠
+      description: 确认DUT已进入深度睡眠
       automation:
-        api: check_ethernet_disconnected
-        params:
-          method: cmd
-        on_failure: continue
+        api: check_dut_in_standby
 
   - operation:
-      description: 唤醒DUT
+      description: 发送遥控器Power键唤醒DUT
       automation:
-        api: power_control_dut
+        api: step_input_rc_key_power
         params:
-          action: "on"
-        wait_after: 60
+          bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+      wait_after: 30
+
+  - operation:
+      description: 通过ADB发送Power键确保屏幕点亮
+      automation:
+        api: keyevent
+        params:
+          keycode: KEYCODE_POWER
+      wait_after: 10
     check:
-      description: 唤醒后DUT通过DHCP恢复网络连接
+      description: 确认DUT唤醒后通过DHCP恢复网络连接
       automation:
         api: check_ethernet_connected
-        timeout: 30
-        on_failure: abort
+        params:
+          method: cmd

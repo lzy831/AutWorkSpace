@@ -112,14 +112,14 @@ def build_nodes(spec: dict[str, Any], unique_apis: dict[str, dict[str, Any]]) ->
     #                             check:    {description, automation: {api, params}}}
     for precond in spec.get("preconditions", []):
         if "operation" in precond:
-            # Format B: step + check pair — actively fix the precondition
+            # Format B: step (+ optional check)
             op = precond["operation"]
             op_api = _get_auto(op)["api"]
             op_id = unique_id(op_api)
             op_schema = lookup_params(op_api, unique_apis)
             op_values = _get_auto(op).get("params", {})
 
-            node = {
+            nodes.append({
                 "id": op_id,
                 "type": "step",
                 "label": op_id,
@@ -128,28 +128,27 @@ def build_nodes(spec: dict[str, Any], unique_apis: dict[str, dict[str, Any]]) ->
                 "params": op_values,
                 "param_config": op_schema,
                 "step_id": op_api,
-            }
-
-            chk = precond["check"]
-            chk_api = _get_auto(chk)["api"]
-            chk_schema = lookup_params(chk_api, unique_apis)
-            chk_values = _get_auto(chk).get("params", {})
-
-            nodes.append(node)
-            x += 200
-
-            chk_id = unique_id(chk_api)
-            nodes.append({
-                "id": chk_id,
-                "type": "check",
-                "label": chk_id,
-                "description": chk.get("description", precond.get("description", "")),
-                "position": {"x": x, "y": 200},
-                "params": chk_values,
-                "param_config": chk_schema,
-                "check_id": chk_api,
             })
             x += 200
+
+            if "check" in precond:
+                chk = precond["check"]
+                chk_api = _get_auto(chk)["api"]
+                chk_schema = lookup_params(chk_api, unique_apis)
+                chk_values = _get_auto(chk).get("params", {})
+
+                chk_id = unique_id(chk_api)
+                nodes.append({
+                    "id": chk_id,
+                    "type": "check",
+                    "label": chk_id,
+                    "description": chk.get("description", precond.get("description", "")),
+                    "position": {"x": x, "y": 200},
+                    "params": chk_values,
+                    "param_config": chk_schema,
+                    "check_id": chk_api,
+                })
+                x += 200
 
         else:
             # Format A: check-only
@@ -171,63 +170,67 @@ def build_nodes(spec: dict[str, Any], unique_apis: dict[str, dict[str, Any]]) ->
             })
             x += 200
 
-    # Operation -> Check pair nodes
+    # Procedure items: supports step-only, check-only, and step+check pair
     for step_item in spec.get("procedure", spec.get("steps", [])):
-        op = step_item["operation"]
-        chk = step_item["check"]
+        has_op = "operation" in step_item
+        has_chk = "check" in step_item
 
-        op_api = _get_auto(op)["api"]
-        op_id = unique_id(op_api)
-        op_schema = lookup_params(op_api, unique_apis)   # param schema from unique_apis
-        op_values = _get_auto(op).get("params", {})   # actual values from spec YAML
+        # ── Step node (if operation present) ──
+        if has_op:
+            op = step_item["operation"]
+            op_api = _get_auto(op)["api"]
+            op_id = unique_id(op_api)
+            op_schema = lookup_params(op_api, unique_apis)
+            op_values = _get_auto(op).get("params", {})
 
-        node = {
-            "id": op_id,
-            "type": "step",
-            "label": op_id,
-            "description": op["description"],
-            "position": {"x": x, "y": 200},
-            "params": op_values,
-            "param_config": op_schema,
-            "step_id": op_api,
-        }
-
-        chk_api = _get_auto(chk)["api"]
-        chk_schema = lookup_params(chk_api, unique_apis)
-        chk_values = _get_auto(chk).get("params", {})
-
-        nodes.append(node)
-        x += 200
-
-        # Insert wait node if wait_after specified
-        wait_after = _get_auto(op).get("wait_after")
-        if wait_after and wait_after > 0:
-            wait_id = unique_id("step_wait_seconds")
-            wait_schema = lookup_params("step_wait_seconds", unique_apis)
             nodes.append({
-                "id": wait_id,
+                "id": op_id,
                 "type": "step",
-                "label": wait_id,
-                "description": f"等待 {wait_after}s",
+                "label": op_id,
+                "description": op.get("description", ""),
                 "position": {"x": x, "y": 200},
-                "params": {"seconds": wait_after},
-                "param_config": wait_schema,
-                "step_id": "step_wait_seconds",
+                "params": op_values,
+                "param_config": op_schema,
+                "step_id": op_api,
             })
             x += 200
 
-        chk_id = unique_id(chk_api)
-        nodes.append({
-            "id": chk_id,
-            "type": "check",
-            "label": chk_id,
-            "description": chk["description"],
-            "position": {"x": x, "y": 200},
-            "params": chk_values,
-            "param_config": chk_schema,
-            "check_id": chk_api,
-        })
-        x += 200
+            # Insert wait node if wait_after specified (check both operation and automation level)
+            wait_after = op.get("wait_after") or _get_auto(op).get("wait_after")
+            if wait_after and wait_after > 0:
+                wait_id = unique_id("step_wait_seconds")
+                wait_schema = lookup_params("step_wait_seconds", unique_apis)
+                nodes.append({
+                    "id": wait_id,
+                    "type": "step",
+                    "label": wait_id,
+                    "description": f"等待 {wait_after}s",
+                    "position": {"x": x, "y": 200},
+                    "params": {"seconds": wait_after},
+                    "param_config": wait_schema,
+                    "step_id": "step_wait_seconds",
+                })
+                x += 200
+
+        # ── Check node (if check present) ──
+        if has_chk:
+            chk = step_item["check"]
+            chk_api = _get_auto(chk)["api"]
+            chk_id = unique_id(chk_api)
+            chk_schema = lookup_params(chk_api, unique_apis)
+            chk_values = _get_auto(chk).get("params", {})
+
+            nodes.append({
+                "id": chk_id,
+                "type": "check",
+                "label": chk_id,
+                "description": chk.get("description", ""),
+                "position": {"x": x, "y": 200},
+                "params": chk_values,
+                "param_config": chk_schema,
+                "check_id": chk_api,
+            })
+            x += 200
 
     return nodes
 
@@ -298,8 +301,11 @@ def build_precondition_text(spec: dict[str, Any]) -> str:
     for p in preconds:
         if "operation" in p:
             op_desc = p["operation"].get("description", "")
-            chk_desc = p["check"].get("description", "")
-            parts.append(f"{op_desc} → {chk_desc}")
+            if "check" in p:
+                chk_desc = p["check"].get("description", "")
+                parts.append(f"{op_desc} → {chk_desc}")
+            else:
+                parts.append(op_desc)
         else:
             parts.append(p.get("description", ""))
     return "; ".join(parts)
