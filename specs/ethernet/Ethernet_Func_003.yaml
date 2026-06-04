@@ -8,8 +8,6 @@ preconditions:
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -32,5 +30,3 @@ procedure:
       description: 重启后DUT通过DHCP恢复网络连接
       automation:
         api: check_ethernet_connected
-        timeout: 30
-        on_failure: abort

@@ -3,14 +3,13 @@ id: Ethernet_Func_013
 name: 输入无效静态IP时系统报错
 testbed: ethernet_router_lan
 description: 验证通过Settings UI配置静态IP时, 输入无效IP地址后系统应显示 'IP settings not valid' 错误提示并阻止保存
+
 # TODO: 后续增加前置条件确保系统语言为英语, 否则 check_prompt_invalid_ip 中硬编码的英文错误提示文本会匹配失败
 
 preconditions:
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 

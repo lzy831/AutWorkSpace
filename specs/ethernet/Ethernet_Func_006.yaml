@@ -8,8 +8,6 @@ preconditions:
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -52,7 +50,7 @@ procedure:
     check:
       description: 确认DUT已进入深度睡眠
       automation:
-        api: check_dut_in_standby
+        api: check_dut_in_deep_sleep
 
   - operation:
       description: 发送遥控器Power键唤醒DUT

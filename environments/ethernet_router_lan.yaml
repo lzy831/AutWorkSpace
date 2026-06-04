@@ -12,6 +12,7 @@ topology_diagram: ethernet_router_lan.mmd
 # ── 物理环境要求 ──
 physical_requirements:
   cable_dut_to_router: straight_through
+  router_binary_send_ra: /jffs/send_ra  # 需手动预置, 来源: router/bin/send_ra_arm64
 
 # ── 设备清单（仅定义每个设备需要哪些参数，实际值见 params.json）──
 
@@ -67,6 +68,24 @@ devices:
 aut_cloud:
   type: web_service
   role: 用例调度 + 结果收集
+
+env_params:
+  router_ip:
+    description: 路由器控制端口 IP; 来源:custom_params(router_ip) / 全局ENV(ROUTER_IP)
+    type: str
+  router_ssh_user:
+    description: 路由器 SSH 账号; 来源:custom_params(router_ssh_user) / 全局ENV(ROUTER_SSH_USER)
+    type: str
+  router_ssh_pwd:
+    description: 路由器 SSH 密码; 来源:custom_params(router_ssh_pwd) / 全局ENV(ROUTER_SSH_PWD)
+    type: str
+  router_controller_aux_id:
+    description: AUX Router Client 设备号; 来源:custom_params(router_controller_aux_id) / 全局ENV(ROUTER_CONTROLLER_AUX_ID) / --aux_devices(router)
+    type: str
+  router_model:
+    description: 路由器型号; 来源:custom_params(router_model) / 全局ENV(ROUTER_MODEL)
+    type: str
+    default: asus_rt_ax86u
 
 capabilities:
   ipv4_dhcp: true

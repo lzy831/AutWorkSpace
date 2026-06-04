@@ -58,6 +58,24 @@ aut_cloud:
   type: web_service
   role: 用例调度 + 结果收集
 
+env_params:
+  router_ip:
+    description: 路由器控制端口 IP; 来源:custom_params(router_ip) / 全局ENV(ROUTER_IP)
+    type: str
+  router_ssh_user:
+    description: 路由器 SSH 账号; 来源:custom_params(router_ssh_user) / 全局ENV(ROUTER_SSH_USER)
+    type: str
+  router_ssh_pwd:
+    description: 路由器 SSH 密码; 来源:custom_params(router_ssh_pwd) / 全局ENV(ROUTER_SSH_PWD)
+    type: str
+  router_controller_aux_id:
+    description: AUX Router Client 设备号; 来源:custom_params(router_controller_aux_id) / 全局ENV(ROUTER_CONTROLLER_AUX_ID) / --aux_devices(router)
+    type: str
+  router_model:
+    description: 路由器型号; 来源:custom_params(router_model) / 全局ENV(ROUTER_MODEL)
+    type: str
+    default: asus_rt_ax86u
+
 capabilities:
   ipv4_dhcp: true
   ipv4_static: true

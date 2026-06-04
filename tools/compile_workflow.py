@@ -322,8 +322,27 @@ def build_steps_text(spec: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+_CN_PUNCT_MAP = {
+    '；': ';', '（': '(', '）': ')', '，': ',',
+    '：': ':', '。': '.', '、': ', ',
+}
+
+
+def _sanitize_punctuation(obj: Any) -> Any:
+    """Recursively replace Chinese punctuation with ASCII in all string values."""
+    if isinstance(obj, str):
+        for cn, en in _CN_PUNCT_MAP.items():
+            obj = obj.replace(cn, en)
+        return obj
+    if isinstance(obj, dict):
+        return {k: _sanitize_punctuation(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize_punctuation(v) for v in obj]
+    return obj
+
+
 def compile_workflow(spec_path: str) -> dict[str, Any]:
-    """Compile a single spec YAML into a workflow JSON dict."""
+    """Compile a spec YAML into a workflow JSON dict."""
     spec = load_spec(spec_path)
     env_id = spec.get("testbed") or spec.get("environment")
     if not env_id:
@@ -344,8 +363,8 @@ def compile_workflow(spec_path: str) -> dict[str, Any]:
         "id": f"auto_generate/{Path(infer_output_path(spec)).relative_to(WORKFLOWS_BASE).as_posix().replace('.json', '')}",
         "name": spec["id"],
         "display_name": spec["name"],
-        "_environment": f"../environments/{env_id}.yaml",
-        "_topology_diagram": f"../environments/{mmd_file}" if mmd_file else "",
+        "environment": f"../environments/{env_id}.yaml",
+        "topology_diagram": f"../environments/{mmd_file}" if mmd_file else "",
         "description": spec.get("description", "").strip(),
         "category": "network",
         "module": "network",
@@ -366,7 +385,7 @@ def compile_workflow(spec_path: str) -> dict[str, Any]:
             "case_id": spec["id"],
         },
     }
-    return workflow
+    return _sanitize_punctuation(workflow)
 
 
 # --- CLI ---

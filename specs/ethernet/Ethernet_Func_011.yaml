@@ -2,16 +2,12 @@ domain: ethernet
 id: Ethernet_Func_011
 name: 静态IP模式下路由器重启后DUT恢复网络
 testbed: ethernet_router_lan
-description: >
-  验证DUT配置静态IP后, 路由器重启期间DUT检测到断网,
-  路由器恢复后DUT自动恢复网络连接且保持静态IP配置不变
+description: 验证DUT配置静态IP后, 路由器重启, 期间DUT检测到断网, 路由器恢复后, DUT自动恢复网络连接且保持静态IP配置不变
 
 preconditions:
   - description: 确保以太网物理链路连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -49,7 +45,6 @@ procedure:
       automation:
         api: step_reboot_router
         params:
-          router_id: main_router
           timeout: 120
     check:
       description: 确认DUT网络恢复且静态IP配置未变

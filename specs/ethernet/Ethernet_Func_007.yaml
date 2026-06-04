@@ -8,8 +8,6 @@ preconditions:
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -21,7 +19,7 @@ preconditions:
 
 procedure:
   - operation:
-      description: 采集当前网络信息（gateway/subnet/dns/static_ip）供后续步骤使用
+      description: 采集当前网络信息(gateway/subnet/dns/static_ip)供后续步骤使用
       automation:
         api: step_discover_network_info
         wait_after: 3
@@ -31,7 +29,7 @@ procedure:
         api: check_ethernet_connected
 
   - operation:
-      description: 通过Settings UI配置静态IP（参数自动派生）
+      description: 通过Settings UI配置静态IP(参数自动派生)
       automation:
         api: step_set_static_ip
         params:

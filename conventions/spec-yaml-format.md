@@ -71,4 +71,4 @@ ${step_disconnect_ethernet.data.port}        # 前序 step 的 data 输出
 - 具体 IP 地址、SSID、密码 — 用 `${custom_params.xxx}`
 - `cmd wifi status` 等实现命令 — 宏观看"WiFi 已连接"
 - `Supplicant state COMPLETED` 等技术细节 — 用 check 封装
-- 中文标点符号
+- 中文标点符号 — 一律使用 ASCII 标点（`;` 替代 `；`，`()` 替代 `（）`，`,` 替代 `，` 等），确保 workflow JSON 和 YAML 在任何环境下兼容

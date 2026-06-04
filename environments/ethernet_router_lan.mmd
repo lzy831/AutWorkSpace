@@ -1,12 +1,17 @@
 graph LR
-    cloud(("AUT 云端")) -.->|"以太网"| ctrl
-    subgraph desk["测试台架"]
-        ctrl["Controller<br/>+ Remote"]
-        dut["DUT"]
+    cloud(("AUT 云端<br/>(测试调度/结果收集)"))
+    subgraph aux["AUX 设备（公司内网）"]
+        ctrl["Controller<br/>+ Remote<br/>(USB-ADB → DUT)"]
+        rcli["Router Client<br/>(SSH → Router)"]
+    end
+    subgraph desk["测试台架（Router 网络）"]
+        dut["DUT<br/>GTV/ATV"]
         rtr["Router"]
     end
+    cloud -.->|"公司内网"| ctrl
+    cloud -.->|"公司内网"| rcli
     dut -->|"以太网"| rtr
     ctrl -->|"USB-ADB"| dut
-    ctrl -->|"WiFi"| rtr
+    rcli -->|"SSH"| rtr
     ctrl -.->|"蓝牙"| dut
     rtr -->|"WAN"| net((互联网))

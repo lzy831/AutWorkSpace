@@ -1,6 +1,6 @@
 domain: ethernet
 id: Ethernet_Func_040
-name: 双栈网络（IPv4 + IPv6）地址获取
+name: 双栈网络(IPv4 + IPv6)地址获取
 testbed: ethernet_router_lan
 description: 验证DUT在DHCP模式下, 同时获取IPv4地址和global IPv6地址
 
@@ -8,8 +8,6 @@ preconditions:
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -22,8 +20,6 @@ preconditions:
   - description: 路由器 IPv6 LAN 侧功能已启用
     operation:
       api: step_enable_router_ipv6
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -39,3 +35,13 @@ procedure:
         api: check_ethernet_dual_stack_ip_obtained
         timeout: 60
         on_failure: abort
+  - operation:
+      description: 清理路由器 IPv6 ULA 前缀, 恢复测试前状态
+      automation:
+        api: step_disable_router_ipv6
+      wait_after: 5
+    check:
+      description: 确认以太网已连接(DUT 不受 IPv6 清理影响)
+      automation:
+        api: check_ethernet_connected
+

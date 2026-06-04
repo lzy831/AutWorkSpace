@@ -2,10 +2,7 @@ domain: ethernet
 id: Ethernet_new_function_002
 name: 10M FDX 模式下 DUT 与 PC 互 Ping
 testbed: ethernet_direct_pc
-description: >
-  验证 10M FDX 速率下 DUT 能与对端设备正常通信。
-  测试前需人工将 DUT 网线从路由器拔下，直连到 Peer PC 的以太网口；
-  测试后 PC 以太网自动恢复为自协商模式。
+description: 验证 10M FDX 速率下 DUT 能与对端设备(通常使用PC) 正常通信.
 
 preconditions:
   - description: Peer PC 配置静态 IP 到直连网段
@@ -14,9 +11,9 @@ preconditions:
       params:
         ip_address: 192.168.100.1
         prefix: 24
-        # iface 优先取 env params，未指定时自动侦测
+        # iface 优先取 env params,未指定时自动侦测
     check:
-      api: check_ethernet_link_up        # 直连有 carrier 但无 IP，仅验链路 UP
+      api: check_ethernet_link_up        # 直连有 carrier 但无 IP,仅验链路 UP
 
   - description: Peer PC 以太网设为 10M FDX
     operation:
@@ -25,10 +22,10 @@ preconditions:
         speed: 10
         duplex: full
     check:
-      api: check_ethernet_link_up        # 速率变更后重新协商，验证链路仍 UP
+      api: check_ethernet_link_up        # 速率变更后重新协商,验证链路仍 UP
 
 procedure:
-  # 直连无 DHCP，无法走 Settings UI 配置 IP，使用 CMD 方式
+  # 直连无 DHCP,无法走 Settings UI 配置 IP,使用 CMD 方式
   - operation:
       description: DUT 通过 CMD 配置静态 IP
       automation:
@@ -46,7 +43,7 @@ procedure:
           method: cmd
 
   - operation:
-      description: DUT 与 Peer PC 同时互 Ping（验证全双工）
+      description: DUT 与 Peer PC 同时互 Ping(验证全双工)
       automation:
         api: step_duplex_ping_test
         params:
@@ -60,9 +57,9 @@ procedure:
         params:
           target: 192.168.100.1
 
-  # 恢复步骤放末尾，不加 on_failure: abort，确保中途失败也执行
+  # 恢复步骤放末尾,不加 on_failure: abort,确保中途失败也执行
   # 见 decisions/2026-05-26-workflow-no-teardown.md
-  # ⚠️ step_restore_peer_pc_ethernet 尚未完全验证，后续环境允许后补测
+  # ⚠️ step_restore_peer_pc_ethernet 尚未完全验证,后续环境允许后补测
   - operation:
       description: 恢复 Peer PC 以太网为自协商模式
       automation:

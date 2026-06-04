@@ -8,8 +8,6 @@ preconditions:
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
-      params:
-        router_id: main_router
     check:
       api: check_ethernet_connected
 
@@ -19,11 +17,11 @@ preconditions:
       wait_after: 5
     check:
       api: check_ethernet_connected
-      timeout: 15
+      # timeout: 15  (not supported by check_ethernet_connected)
 
 procedure:
   - operation:
-      description: 采集当前以太网适配器信息（MAC/IP/网关等），供后续步骤使用
+      description: 采集当前以太网适配器信息(MAC/IP/网关等),供后续步骤使用
       automation:
         api: step_discover_network_info
         wait_after: 3
@@ -38,13 +36,12 @@ procedure:
         api: step_disconnect_ethernet
         params:
           mac: ${step_discover_network_info.data.mac}
-          router_id: main_router
         wait_after: 3
     check:
       description: DUT以太网断开
       automation:
         api: check_ethernet_disconnected
-        on_failure: abort
+        # on_failure: abort  (not supported)
 
   - operation:
       description: 恢复DUT的以太网物理链路
@@ -53,11 +50,10 @@ procedure:
         params:
           port: ${step_disconnect_ethernet.data.port}
           mac: ${step_discover_network_info.data.mac}
-          router_id: main_router
         wait_after: 5
     check:
       description: DUT以太网重新连接并获取IP
       automation:
         api: check_ethernet_connected
-        timeout: 30
-        on_failure: abort
+        # timeout: 30  (not supported)
+        # on_failure: abort  (not supported)
