@@ -5,6 +5,12 @@ testbed: ethernet_router_lan
 description: 验证DUT在DHCP模式下深度睡眠后通过蓝牙遥控器唤醒, 能自动重新获取IPv4地址并恢复网络连接
 
 preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
@@ -45,7 +51,7 @@ procedure:
   - operation:
       description: DUT进入深度睡眠
       automation:
-        api: enter_deep_sleep
+        api: step_enter_deep_sleep
       wait_after: 20
     check:
       description: 确认DUT已进入深度睡眠
@@ -53,20 +59,20 @@ procedure:
         api: check_dut_in_deep_sleep
 
   - operation:
-      description: 发送遥控器Power键唤醒DUT
+      description: 发送遥控器Power键, DUT离开深睡眠
       automation:
         api: step_input_rc_key_power
         params:
           bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
-      wait_after: 30
+      wait_after: 10
 
   - operation:
-      description: 通过ADB发送Power键确保屏幕点亮
+      description: 确保DUT完全唤醒(ADB已恢复, 自动发送POWER直至Awake)
       automation:
-        api: keyevent
+        api: step_ensure_awake
         params:
-          keycode: KEYCODE_POWER
-      wait_after: 10
+          max_retries: 5
+      wait_after: 30
     check:
       description: 确认DUT唤醒后通过DHCP恢复网络连接
       automation:

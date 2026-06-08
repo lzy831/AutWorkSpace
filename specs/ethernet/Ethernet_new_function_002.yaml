@@ -5,6 +5,12 @@ testbed: ethernet_direct_pc
 description: 验证 10M FDX 速率下 DUT 能与对端设备(通常使用PC) 正常通信.
 
 preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
   - description: Peer PC 配置静态 IP 到直连网段
     operation:
       api: step_set_peer_pc_static_ip

@@ -5,6 +5,12 @@ testbed: ethernet_router_lan
 description: 验证DUT配置静态IP后, 路由器重启, 期间DUT检测到断网, 路由器恢复后, DUT自动恢复网络连接且保持静态IP配置不变
 
 preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
   - description: 确保以太网物理链路连通
     operation:
       api: step_ensure_ethernet_link

@@ -9,6 +9,12 @@ description: 验证 Auto MDIX 功能在直连线连接下能正常工作.
 # 因此无法从软件侧验证网线类型,仅通过链路连通性间接验证 Auto MDIX 功能
 
 preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
   - description: 确保以太网物理链路连通(使用直连线)
     operation:
       api: step_ensure_ethernet_link

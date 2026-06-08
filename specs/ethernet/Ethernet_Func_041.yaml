@@ -5,6 +5,12 @@ testbed: ethernet_router_lan
 description: 验证双栈网络下热插拔网线后DUT能重新获取IPv4和IPv6地址
 
 preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
@@ -43,9 +49,7 @@ procedure:
     check:
       description: 确认以太网已断开
       automation:
-        api: check_network_disconnected
-        params:
-          type: ethernet
+        api: check_ethernet_disconnected
         on_failure: abort
 
   - operation:

@@ -5,6 +5,12 @@ testbed: ethernet_router_lan
 description: 验证DUT在网线物理连通情况下, IP地址模式设置为DHCP后, 可以正常获取到IPv4网络地址
 
 preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
   - description: DUT以太网物理链路已连通
     operation:
       api: step_ensure_ethernet_link
