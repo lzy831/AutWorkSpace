@@ -30,7 +30,7 @@
 | Func_041 | IPv6 | 双栈网络下热插拔网线后 IP 恢复 | `step_disconnect/connect_router_lan` | AUT Server, Controller, Router, Aux | ✅ |
 | Func_042 | IPv6 | IPv6 双栈下 DUT 重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | |
 | Func_043 | IPv6 | 双栈网络下路由器重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | ✅ |
-| new_006 | MDIX | Auto MDIX 交叉线自动适配 | — | AUT Server, Controller, Router, Aux | |
+| new_007 | MDIX | Auto MDIX 直连线正常连接 | — | AUT Server, Controller, Router, Aux | |
 
 ## pending (待实现) — 14 个
 
@@ -52,4 +52,4 @@
 | Throughout_010 | Performance | UDP 100M TX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
 
 ## manual (不实现) — 38 个
-PPPOE 015-039 (25), Network switching 015-019 含 PPPOE, Compatibility (6), new_function_002 peer PC, new_function_007 MDIX
+PPPOE 015-039 (25), Network switching 015-019 含 PPPOE, Compatibility (6), new_function_002 peer PC, new_function_006 MDIX crossover

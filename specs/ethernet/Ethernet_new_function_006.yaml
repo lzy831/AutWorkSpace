@@ -1,6 +1,6 @@
 domain: ethernet
 id: Ethernet_new_function_006
-auto_status: auto
+auto_status: manual  # manual: 交叉线不常用，需特殊物理环境
 name: Auto MDIX 交叉线自动适配
 testbed: ethernet_router_lan_crossover
 description: 验证 Auto MDIX 功能在交叉线连接下能正常获取 IP 地址并通信
