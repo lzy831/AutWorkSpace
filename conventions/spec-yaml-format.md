@@ -12,6 +12,23 @@
 | `testbed` | ✅ | 引用 `tsuite/environments/<id>.yaml` | — |
 | `description` | ✅ | 测试目的和场景的宏观描述 | SSID、密码、IP、cmd wifi status、Supplicant、错误字符串、实现方式 |
 
+## hooks
+
+`setup_hooks` 和 `teardown_hooks` 放在 `description` 之后、`preconditions` 之前，与 `description` 用空行分隔。两个字段必须同时存在，无内容时写空数组 `[]`，保持结构完整性。
+
+```yaml
+description: xxx
+
+setup_hooks: []
+teardown_hooks:
+  - step_disable_router_ipv6
+
+preconditions:
+  ...
+```
+
+属于概述部分（description）和流程部分（preconditions/procedure）之间的桥梁。
+
 ## preconditions
 
 每个 precondition 支持两种格式：

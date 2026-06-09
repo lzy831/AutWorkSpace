@@ -377,7 +377,10 @@ def compile_workflow(spec_path: str) -> dict[str, Any]:
         "author": "compile_workflow",
         "nodes": nodes,
         "edges": edges,
-        "metadata": {},
+        "metadata": {
+            "setup_hooks": spec.get("setup_hooks", []),
+            "teardown_hooks": spec.get("teardown_hooks", []),
+        },
         "_excel_metadata": {
             "source_file": str(source.get("file", "")),
             "source_sheet": str(source.get("sheet", "")),

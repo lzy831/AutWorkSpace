@@ -1,0 +1,9 @@
+domain: ethernet
+id: Ethernet_Comp_023
+auto_status: manual  # requires hardware switching, not automatable
+name: Network cable compatibility Serial port ping external network
+testbed: ethernet_router_lan
+description: Network cable compatibility Serial port ping external network
+# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+preconditions: []
+procedure: []

@@ -1,46 +1,13 @@
 domain: ethernet
 id: Ethernet_new_function_007
+auto_status: manual  # manual: special cabling required, low automation value
 name: Auto MDIX 直连线正常连接
 testbed: ethernet_router_lan
 description: 验证 Auto MDIX 功能在直连线连接下能正常工作.
+# Auto MDIX crossover/straight-through cable testing requires physical cable changes.
+# Not worth automating due to special environment requirements.
 
-# 物理环境要求: DUT ↔ Router 使用直连线(straight-through cable)
-# 当前 DUT (meson8b-dwmac) 和 Router (Broadcom 交换芯片) 均无法通过 ethtool/sysfs 检测 MDI-X 状态,
-# 因此无法从软件侧验证网线类型,仅通过链路连通性间接验证 Auto MDIX 功能
-
-preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: 确保以太网物理链路连通(使用直连线)
-    operation:
-      api: step_ensure_ethernet_link
-    check:
-      api: check_ethernet_connected
-
-procedure:
-  - operation:
-      description: 采集网络信息
-      automation:
-        api: step_discover_network_info
-    check:
-      description: 确认直连线下 DHCP 成功获取 IP
-      automation:
-        api: check_ethernet_ip_assigned
-
-  - operation:
-      description: Ping 路由器网关验证连通性
-      automation:
-        api: step_ping_gateway
-        params:
-          gateway_ip: ${step_discover_network_info.data.gateway}
-    check:
-      description: 确认直连线下网络通信正常
-      automation:
-        api: check_network_accessible
-        params:
-          target: ${step_discover_network_info.data.gateway}
-          # on_failure: abort  (disabled: check_network_accessible 不接受此参数)
+setup_hooks: []
+teardown_hooks: []
+preconditions: []
+procedure: []

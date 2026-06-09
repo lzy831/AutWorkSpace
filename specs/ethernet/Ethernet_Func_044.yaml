@@ -1,0 +1,51 @@
+domain: ethernet
+id: Ethernet_Func_044
+auto_status: pending  # pending
+name: DHCP IPV6 DUT connect with IPV6 route and suspend the DUT
+testbed: ethernet_router_lan
+description: （概要）
+
+setup_hooks: []
+teardown_hooks: []
+验证 DUT 连接 IPv6 路由器后待机唤醒能重新获取双栈 IP，验证：唤醒后 IPv4 和 IPv6 地址均恢复。
+
+Preconditions（前置条件/环境准备）
+1. DUT 已连接至支持 IPv6 的路由器并获取双栈 IP。
+
+Steps（操作步骤）
+Step 1：DUT 进入深度待机状态
+目的：触发待机，测试双栈 IP 恢复能力。
+对应函数：step_enter_stand
+
+# Excel raw data for review:
+#   Test_Item: DHCP IPV6
+#   Test_SubItem: DUT connect with IPV6 route and suspend the DUT
+#   Priority: P0
+#   Preset: DUT connect with IPV6 route
+#   Steps: 1. DUT connect with route which support IPV6
+2.Press power key on DUT's remote 
+3.When  DUT  enter  sleep  status,press power key on DUT's remote to  wake  up the  DUT
+#   Expected: After  DUT  wake up,DUT  can get the IPV4 and IPV6 IP address
+#   API_Summary: [{"kind": "step", "function_name": "step_enter_standby", "description": "使 DUT 进入完全待机/深度休眠。", "category": "ethernet_ipv6", "tags": ["kind:step", "domain:ethernet_ipv6"], "params": {}, "pre_conditions"
+
+preconditions:
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
+  - description: DUT以太网物理链路已连通
+    operation:
+      api: step_ensure_router_lan_up
+    check:
+      api: check_ethernet_connected
+
+  - description: TODO - based on test preset: DUT connect with IPV6 route
+
+procedure:
+  # TODO - review and implement based on Excel steps
+  - operation:
+      description: TODO
+      automation:
+        api: TODO

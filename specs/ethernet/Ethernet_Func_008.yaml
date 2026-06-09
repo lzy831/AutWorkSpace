@@ -1,9 +1,9 @@
 domain: ethernet
-id: Ethernet_Func_002
+id: Ethernet_Func_008
 auto_status: auto
-name: DHCP模式下DUT侧拔插网线后IP恢复
+name: Static模式下DUT侧拔插网线后IP恢复
 testbed: ethernet_router_lan
-description: 验证DUT在DHCP模式下，通过ip link down模拟拔掉DUT端网线后IP消失，ip link up后能通过DHCP恢复IP地址
+description: 验证 Static 模式下通过 ip link down 模拟拔掉 DUT 端网线后 IP 消失，ip link up 后静态 IP 恢复
 
 setup_hooks: []
 teardown_hooks: []
@@ -29,22 +29,28 @@ preconditions:
 
 procedure:
   - operation:
-      description: 确保 DUT 使用 DHCP 模式
-      automation:
-        api: step_set_ip_settings_to_dhcp
-    check:
-      description: 确认 DHCP 模式生效
-      automation:
-        api: check_ethernet_connected
-
-  - operation:
-      description: 采集当前以太网网络信息，确认网络状态良好
+      description: 采集当前以太网网络信息
       automation:
         api: step_discover_network_info
     check:
       description: 确认网络信息采集完成
       automation:
         api: check_ethernet_connected
+
+  - operation:
+      description: 为 DUT 配置静态 IP 地址
+      automation:
+        api: step_set_static_ip
+        params:
+          ip_address: ${step_discover_network_info.data.static_ip}
+          gateway: ${step_discover_network_info.data.gateway}
+          dns: ${step_discover_network_info.data.dns}
+    check:
+      description: 确认静态 IP 模式已生效
+      automation:
+        api: check_ethernet_ip_mode
+        params:
+          expected_mode: static
 
   - operation:
       description: 禁用 DUT 以太网接口（模拟拔掉 DUT 端网线）
@@ -60,8 +66,8 @@ procedure:
       description: 启用 DUT 以太网接口（模拟重新插上网线）
       automation:
         api: step_enable_ethernet
-        wait_after: 5
+        wait_after: 10
     check:
-      description: DUT 重新通过 DHCP 获取 IP 地址
+      description: DUT 恢复网络连接（静态 IP 仍有效）
       automation:
         api: check_ethernet_connected

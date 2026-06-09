@@ -3,6 +3,7 @@
 ## 代码风格
 
 - **Python 源文件中禁止使用中文标点符号。** 所有注释、docstring、日志消息中的标点一律使用 ASCII：`;` 替代 `；`，`()` 替代 `（）`，`,` 替代 `，`，`:` 替代 `：`，`.` 替代 `。`，`-` 替代 `—`。中文文字内容可以使用，但标点必须是 ASCII，确保在任何终端、CI 环境和编码下兼容。
+- **新增/删除/改名 step 或 check 时，必须同步更新** `scripts/python/lib/common/peripheral/network/ethernet/__init__.py`（模块 manifest）。
 
 ## 命名规范
 

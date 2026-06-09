@@ -1,9 +1,9 @@
 domain: ethernet
-id: Ethernet_Func_040
-auto_status: auto  # auto
-name: 双栈网络(IPv4 + IPv6)地址获取
+id: Ethernet_Func_042
+auto_status: auto
+name: IPv6双栈下DUT重启后IP恢复
 testbed: ethernet_router_lan
-description: 验证DUT在DHCP模式下, 同时获取IPv4地址和global IPv6地址
+description: 验证 IPv6 双栈模式下 DUT 重启后能重新获取 IPv4 和 IPv6 地址
 
 setup_hooks: []
 teardown_hooks:
@@ -25,7 +25,7 @@ preconditions:
       params:
         method: cmd
 
-  - description: DUT IP设置模式为DHCP
+  - description: DUT 设为 DHCP 模式
     operation:
       api: step_set_ip_settings_to_dhcp
     check:
@@ -33,23 +33,27 @@ preconditions:
       params:
         method: cmd
 
-  - description: 路由器 IPv6 LAN 侧功能已启用
+  - description: 启用路由器 IPv6 并确认 DUT 获取双栈 IP
     operation:
       api: step_enable_router_ipv6
     check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
+      api: check_ethernet_dual_stack_ip_obtained
 
 procedure:
   - operation:
-      description: 等待 SLAAC 分配 IPv6 地址
+      description: 重启 DUT
       automation:
-        api: step_discover_network_info
-        wait_after: 10
+        api: step_reboot_dut
+        params:
+          timeout: 180
+
+  - operation:
+      description: 等待 DUT 启动完成并重新获取双栈 IP
+      automation:
+        api: step_wait_seconds
+        params:
+          seconds: 60
     check:
-      description: 确认同时获取到IPv4和global IPv6地址
+      description: 确认 DUT 重启后重新获取双栈 IP
       automation:
         api: check_ethernet_dual_stack_ip_obtained
-        timeout: 60
-        on_failure: abort

@@ -1,8 +1,12 @@
 domain: ethernet
 id: Ethernet_Func_001
+auto_status: auto  # auto
 name: DHCP模式下获取IPv4地址
 testbed: ethernet_router_lan
 description: 验证DUT在网线物理连通情况下, IP地址模式设置为DHCP后, 可以正常获取到IPv4网络地址
+
+setup_hooks: []
+teardown_hooks: []
 
 preconditions:
   - description: 确保 DUT 处于唤醒状态再开始测试
@@ -13,9 +17,11 @@ preconditions:
 
   - description: DUT以太网物理链路已连通
     operation:
-      api: step_ensure_ethernet_link
+      api: step_ensure_router_lan_up
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
 procedure:
   - operation:

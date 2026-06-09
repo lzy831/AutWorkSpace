@@ -1,8 +1,12 @@
 domain: ethernet
 id: Ethernet_Func_011
+auto_status: auto  # auto
 name: 静态IP模式下路由器重启后DUT恢复网络
 testbed: ethernet_router_lan
 description: 验证DUT配置静态IP后, 路由器重启, 期间DUT检测到断网, 路由器恢复后, DUT自动恢复网络连接且保持静态IP配置不变
+
+setup_hooks: []
+teardown_hooks: []
 
 preconditions:
   - description: 确保 DUT 处于唤醒状态再开始测试
@@ -13,15 +17,19 @@ preconditions:
 
   - description: 确保以太网物理链路连通
     operation:
-      api: step_ensure_ethernet_link
+      api: step_ensure_router_lan_up
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
   - description: 将DUT IP设置模式切换为DHCP
     operation:
       api: step_set_ip_settings_to_dhcp
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
 procedure:
   - operation:

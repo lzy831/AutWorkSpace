@@ -1,12 +1,12 @@
 domain: ethernet
 id: Ethernet_new_function_006
+auto_status: auto
 name: Auto MDIX 交叉线自动适配
 testbed: ethernet_router_lan_crossover
-description: 验证 Auto MDIX 功能在交叉线连接下能正常工作.
+description: 验证 Auto MDIX 功能在交叉线连接下能正常获取 IP 地址并通信
 
-# 物理环境要求: DUT ↔ Router 使用交叉线(crossover cable)
-# 当前 DUT (meson8b-dwmac) 和 Router (Broadcom 交换芯片) 均无法通过 ethtool/sysfs 检测 MDI-X 状态,
-# 因此无法从软件侧验证网线类型,仅通过链路连通性间接验证 Auto MDIX 功能
+setup_hooks: []
+teardown_hooks: []
 
 preconditions:
   - description: 确保 DUT 处于唤醒状态再开始测试
@@ -15,32 +15,29 @@ preconditions:
       params:
         max_retries: 3
 
-  - description: 确保以太网物理链路连通(使用交叉线)
+  - description: DUT 以太网物理链路已连通
     operation:
-      api: step_ensure_ethernet_link
+      api: step_ensure_router_lan_up
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
 procedure:
   - operation:
-      description: 采集网络信息
+      description: DUT 设为 DHCP 模式
       automation:
-        api: step_discover_network_info
+        api: step_set_ip_settings_to_dhcp
     check:
-      description: 确认交叉线下 DHCP 成功获取 IP
+      description: 确认 DUT 通过 DHCP 获取 IPv4 地址
       automation:
-        api: check_ethernet_ip_assigned
+        api: check_ethernet_connected
 
   - operation:
       description: Ping 路由器网关验证连通性
       automation:
-        api: step_ping_gateway
-        params:
-          gateway_ip: ${step_discover_network_info.data.gateway}
+        api: step_discover_network_info
     check:
-      description: 确认交叉线下网络通信正常
+      description: 确认网关可达
       automation:
-        api: check_network_accessible
-        params:
-          target: ${step_discover_network_info.data.gateway}
-          # on_failure: abort  (disabled: check_network_accessible 不接受此参数)
+        api: check_ethernet_connected

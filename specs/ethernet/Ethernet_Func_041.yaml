@@ -1,8 +1,14 @@
 domain: ethernet
 id: Ethernet_Func_041
+auto_status: auto  # auto
 name: 双栈网络下热插拔网线后 IP 恢复
 testbed: ethernet_router_lan
 description: 验证双栈网络下热插拔网线后DUT能重新获取IPv4和IPv6地址
+
+setup_hooks: []
+teardown_hooks:
+  - step_disable_router_ipv6
+
 
 preconditions:
   - description: 确保 DUT 处于唤醒状态再开始测试
@@ -13,15 +19,19 @@ preconditions:
 
   - description: DUT以太网物理链路已连通
     operation:
-      api: step_ensure_ethernet_link
+      api: step_ensure_router_lan_up
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
   - description: DUT 设为 DHCP 模式
     operation:
       api: step_set_ip_settings_to_dhcp
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
   - description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
     operation:
@@ -42,7 +52,7 @@ procedure:
   - operation:
       description: 断开DUT以太网物理链路
       automation:
-        api: step_disconnect_ethernet
+        api: step_disconnect_router_lan
         params:
           mac: ${step_discover_network_info.data.mac}
         wait_after: 5
@@ -55,9 +65,9 @@ procedure:
   - operation:
       description: 恢复DUT以太网物理链路
       automation:
-        api: step_connect_ethernet
+        api: step_connect_router_lan
         params:
-          port: ${step_disconnect_ethernet.data.port}
+          port: ${step_disconnect_router_lan.data.port}
           mac: ${step_discover_network_info.data.mac}
     check:
       description: 确认以太网已恢复
@@ -77,13 +87,3 @@ procedure:
         api: check_ethernet_dual_stack_ip_obtained
         timeout: 60
         on_failure: abort
-  - operation:
-      description: 清理路由器 IPv6 ULA 前缀, 恢复测试前状态
-      automation:
-        api: step_disable_router_ipv6
-      wait_after: 5
-    check:
-      description: 确认以太网已连接(DUT 不受 IPv6 清理影响)
-      automation:
-        api: check_ethernet_connected
-

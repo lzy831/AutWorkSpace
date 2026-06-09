@@ -1,9 +1,9 @@
 domain: ethernet
-id: Ethernet_Func_007
-auto_status: auto  # auto
-name: 静态IP模式配置成功
+id: Ethernet_Func_005
+auto_status: auto
+name: DHCP模式下路由器重启后DUT自动重连
 testbed: ethernet_router_lan
-description: 验证DUT通过Settings UI配置静态IP后, 以太网连接正常且获取到配置的IPv4地址
+description: 验证 DHCP 模式下路由器断电重启后 DUT 能重新获取 IP 地址
 
 setup_hooks: []
 teardown_hooks: []
@@ -22,8 +22,10 @@ preconditions:
       api: check_ethernet_connected
       params:
         method: cmd
+      params:
+        method: cmd
 
-  - description: DUT已处于DHCP模式且联网
+  - description: DUT 设为 DHCP 模式
     operation:
       api: step_set_ip_settings_to_dhcp
     check:
@@ -33,27 +35,30 @@ preconditions:
 
 procedure:
   - operation:
-      description: 采集当前网络信息(gateway/subnet/dns/static_ip)供后续步骤使用
+      description: 采集当前网络信息供后续使用
       automation:
         api: step_discover_network_info
-        wait_after: 3
     check:
-      description: 确认网络信息已采集
+      description: 确认网络正常
       automation:
         api: check_ethernet_connected
+        params:
+          method: cmd
 
   - operation:
-      description: 通过Settings UI配置静态IP(参数自动派生)
+      description: 重启路由器(等同于断电重开)
       automation:
-        api: step_set_static_ip
+        api: step_reboot_router
         params:
-          ip_address: ${step_discover_network_info.data.static_ip}
-          gateway: ${step_discover_network_info.data.gateway}
-          dns: ${step_discover_network_info.data.dns}
-          prefix: 24
-        wait_after: 3
+          timeout: 180
+
+  - operation:
+      description: 等待 DUT 检测到链路恢复并重新 DHCP
+      automation:
+        api: step_wait_seconds
+        params:
+          seconds: 30
     check:
-      description: 确认静态IP配置成功且以太网已连接
+      description: 确认 DUT 重新获取了 IP 地址
       automation:
         api: check_ethernet_connected
-        on_failure: abort

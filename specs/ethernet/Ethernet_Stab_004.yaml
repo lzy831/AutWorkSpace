@@ -1,0 +1,30 @@
+domain: ethernet
+id: Ethernet_Stab_004
+name: autosuspend+ping autosuspend+ping for 12 hours
+testbed: ethernet_router_lan
+category: Stability
+auto_status: pending  # pending: not yet implemented
+description: autosuspend+ping autosuspend+ping for 12 hours
+
+setup_hooks: []
+teardown_hooks: []
+
+# Excel raw data:
+#   Priority: P1
+#   Preset: 1. ASUS RT-AC1900P
+2. network cable
+3. DUT install autosuspend
+4. PC
+#   Steps: 1. The box is connected to the route through the network cable.
+2. PC connect the same toute by Ethernet cable, PC install iperf tool
+3. DUT install autosuspend apk and run autosuspend+ping for 12hour
+#   Expected: After test 12hours,DUT connect Ethernet normal
+
+preconditions:
+  - description: TODO
+
+procedure:
+  - operation:
+      description: TODO
+      automation:
+        api: TODO

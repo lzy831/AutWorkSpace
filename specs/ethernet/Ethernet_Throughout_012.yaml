@@ -1,0 +1,26 @@
+domain: ethernet
+id: Ethernet_Throughout_012
+name: UDP 1000M-TX
+testbed: ethernet_router_lan
+category: Performance
+auto_status: manual  # manual: DUT does not support 1000M
+description: UDP 1000M-TX
+
+setup_hooks: []
+teardown_hooks: []
+
+# Excel raw data:
+#   Priority: P1
+#   Preset: 
+#   Steps: 1. PC is the server side, enter the command: iperf -s -u
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 1000M -t 300
+#   Expected: 600Mbits/sec
+
+preconditions:
+  - description: TODO - ensure DUT & PC connected via specified speed (10M/100M/1000M)
+
+procedure:
+  - operation:
+      description: TODO - iperf test
+      automation:
+        api: TODO

@@ -1,0 +1,9 @@
+domain: ethernet
+id: Ethernet_Func_024
+auto_status: manual  # PPPOE related, not automatable
+name: PPPOE User name is empty. password is not empty. dial
+testbed: ethernet_router_lan
+description: （概要）
+# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+preconditions: []
+procedure: []
