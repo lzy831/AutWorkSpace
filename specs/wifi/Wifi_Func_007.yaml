@@ -19,14 +19,12 @@ preconditions:
     semantic: ensure
     operation:
       description: 开启WiFi
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
+      api: step_enable_wifi
+      params:
+        method: cmd
     check:
       description: 确认AP列表可见
-      automation:
-        api: check_wifi_ap_list
+      api: check_wifi_ap_list
       params:
         expected_present: true
 
@@ -35,33 +33,29 @@ preconditions:
     semantic: ensure
     operation:
       description: 断开以太网连接
-      automation:
-        api: step_disable_ethernet
-        params: {}
+      api: step_disable_ethernet
+      params: {}
     check:
       description: 确认以太网已断开
-      automation:
-        api: check_ethernet_disconnected
-        params:
-          method: ui
+      api: check_ethernet_disconnected
+      params:
+        method: ui
 
   - description: 确保WiFi已连接到目标AP
     manual: QA确认WiFi已连接
     semantic: ensure
     operation:
       description: 连接目标WiFi AP
-      automation:
-        api: step_connect_wifi
-        params:
-          ssid: ${custom_params.target_ssid}
-          password: ${custom_params.target_password}
-          method: cmd
+      api: step_connect_wifi
+      params:
+        ssid: ${custom_params.target_ssid}
+        password: ${custom_params.target_password}
+        method: cmd
     check:
       description: 确认WiFi已连接
-      automation:
-        api: check_wifi_connected
-        params:
-          method: cmd
+      api: check_wifi_connected
+      params:
+        method: cmd
 
 steps:
   - operation:
@@ -70,9 +64,8 @@ steps:
         actor: QA
         target: DUT
         action: 物理插入盒子端网线
-      automation:
-        api: step_enable_ethernet
-        params: {}
+      api: step_enable_ethernet
+      params: {}
       wait_after: 15
     check:
       description: 确认以太网已连接, 网络切换为以太网
@@ -80,10 +73,9 @@ steps:
         actor: QA
         target: DUT屏幕
         action: 观察以太网恢复连接, 网络正常工作
-      automation:
-        api: check_ethernet_connected
-        params:
-          method: ui
+      api: check_ethernet_connected
+      params:
+        method: ui
       timeout: 30
       on_failure: abort
 
@@ -93,9 +85,8 @@ steps:
         actor: QA
         target: DUT
         action: 物理拔掉盒子端网线
-      automation:
-        api: step_disable_ethernet
-        params: {}
+      api: step_disable_ethernet
+      params: {}
       wait_after: 10
     check:
       description: 确认WiFi自动恢复连接
@@ -103,9 +94,8 @@ steps:
         actor: QA
         target: DUT屏幕
         action: 观察WiFi恢复连接
-      automation:
-        api: check_wifi_connected
-        params:
-          method: cmd
+      api: check_wifi_connected
+      params:
+        method: cmd
       timeout: 30
       on_failure: abort

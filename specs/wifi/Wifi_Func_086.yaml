@@ -27,9 +27,8 @@ steps:
         target: DUT
         action: 设置WiFi热点加密方式为Open(无密码), 用于验证免密连接场景.
 
-      automation:
-        api: step_set_hotspot_security
-        params: {}
+      api: step_set_hotspot_security
+      params: {}
     check:
       description: 验证当热点加密方式设置为Open时, 客户端连接无需密码即可成功连接.
 
@@ -38,7 +37,6 @@ steps:
         target: DUT屏幕
         action: 验证当热点加密方式设置为Open时, 客户端连接无需密码即可成功连接.
 
-      automation:
-        api: check_wifi_connection_time
-        params: {}
+      api: check_wifi_connection_time
+      params: {}
 

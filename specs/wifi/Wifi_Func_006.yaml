@@ -20,14 +20,12 @@ preconditions:
     semantic: ensure
     operation:
       description: 开启WiFi
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
+      api: step_enable_wifi
+      params:
+        method: cmd
     check:
       description: 确认AP列表可见
-      automation:
-        api: check_wifi_ap_list
+      api: check_wifi_ap_list
       params:
         expected_present: true
 
@@ -35,17 +33,15 @@ preconditions:
     manual: QA在WiFi设置页面中断开所有已保存的AP连接
     operation:
       description: 断开当前WiFi连接
-      automation:
-        api: step_disconnect_network
-        params:
-          type: wifi
-          method: cmd
+      api: step_disconnect_network
+      params:
+        type: wifi
+        method: cmd
     check:
       description: 确认WiFi已断开
-      automation:
-        api: check_wifi_disconnected
-        params:
-          method: cmd
+      api: check_wifi_disconnected
+      params:
+        method: cmd
 
 steps:
   - operation:
@@ -54,15 +50,13 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings -> Network & Internet -> WiFi, 选择目标AP, 进入密码输入界面
-      automation:
-        api: step_open_wifi_settings
-        params: {}
+      api: step_open_wifi_settings
+      params: {}
     check:
       description: 确认AP列表可见且隐藏密码选项默认已勾选
       manual:
         actor: QA
         target: DUT屏幕
         action: 观察AP列表可见, 进入目标AP密码输入界面后确认Hide password checkbox默认已勾选
-      automation:
-        api: check_hide_password_optionswas_cli
-        params: {}
+      api: check_hide_password_optionswas_cli
+      params: {}

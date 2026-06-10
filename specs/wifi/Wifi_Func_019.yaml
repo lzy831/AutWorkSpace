@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: AP2 重新上电, 完成'AP2 power on'测试操作
-      automation:
-        api: step_power_on_ap
-        params: {}
+      api: step_power_on_ap
+      params: {}
     check:
       description: 检查 AP 列表界面中 AP2 自动更新状态, 帮助文本变为 'saved'
       manual:
         actor: QA
         target: DUT屏幕
         action: 检查 AP 列表界面中 AP2 自动更新状态, 帮助文本变为 'saved'
-      automation:
-        api: check_ap_list_display
-        params: {}
+      api: check_ap_list_display
+      params: {}
 

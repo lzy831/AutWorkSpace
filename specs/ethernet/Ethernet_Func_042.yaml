@@ -42,18 +42,15 @@ preconditions:
 procedure:
   - operation:
       description: 重启 DUT
-      automation:
-        api: step_reboot_dut
-        params:
-          timeout: 180
+      api: step_reboot_dut
+      params:
+        timeout: 180
 
   - operation:
       description: 等待 DUT 启动完成并重新获取双栈 IP
-      automation:
-        api: step_wait_seconds
-        params:
-          seconds: 60
+      api: step_wait_seconds
+      params:
+        seconds: 60
     check:
       description: 确认 DUT 重启后重新获取双栈 IP
-      automation:
-        api: check_ethernet_dual_stack_ip_obtained
+      api: check_ethernet_dual_stack_ip_obtained

@@ -42,48 +42,40 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息供后续步骤使用
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络正常
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 断开DUT以太网物理链路
-      automation:
-        api: step_disconnect_router_lan
-        params:
-          mac: ${step_discover_network_info.data.mac}
-        wait_after: 5
+      api: step_disconnect_router_lan
+      params:
+        mac: ${step_discover_network_info.data.mac}
+      wait_after: 5
     check:
       description: 确认以太网已断开
-      automation:
-        api: check_ethernet_disconnected
-        on_failure: abort
+      api: check_ethernet_disconnected
+      on_failure: abort
 
   - operation:
       description: 恢复DUT以太网物理链路
-      automation:
-        api: step_connect_router_lan
-        params:
-          port: ${step_disconnect_router_lan.data.port}
-          mac: ${step_discover_network_info.data.mac}
+      api: step_connect_router_lan
+      params:
+        port: ${step_disconnect_router_lan.data.port}
+        mac: ${step_discover_network_info.data.mac}
     check:
       description: 确认以太网已恢复
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   # eth0 link flap 后 DUT 丢失 global IPv6 地址(SLAAC 被动机制,需新 RA 触发重新生成)
   # 当前路由器不支持持续广播 RA,因此 reconnect 后必须重发
   - operation:
       description: 重新发送RA使DUT通过SLAAC获取IPv6
-      automation:
-        api: step_enable_router_ipv6
-        wait_after: 10
+      api: step_enable_router_ipv6
+      wait_after: 10
     check:
       description: 确认重新获取双栈 IP
-      automation:
-        api: check_ethernet_dual_stack_ip_obtained
-        timeout: 60
-        on_failure: abort
+      api: check_ethernet_dual_stack_ip_obtained
+      timeout: 60
+      on_failure: abort

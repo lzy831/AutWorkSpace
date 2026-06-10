@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 进入网络设置界面查看当前Country Code, 并完成country code设置操作
-      automation:
-        api: step_set_country_code
-        params: {}
+      api: step_set_country_code
+      params: {}
     check:
       description: 验证country code与设置的国家一致
       manual:
         actor: QA
         target: DUT屏幕
         action: 验证country code与设置的国家一致
-      automation:
-        api: check_country_code
-        params: {}
+      api: check_country_code
+      params: {}
 

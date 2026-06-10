@@ -41,21 +41,18 @@ preconditions:
 procedure:
   - operation:
       description: 重启 DUT
-      automation:
-        api: step_reboot_dut
-        params:
-          timeout: 180
+      api: step_reboot_dut
+      params:
+        timeout: 180
 
   - operation:
       description: 等待 DUT 启动完成并恢复网络
-      automation:
-        api: step_wait_seconds
-        params:
-          seconds: 60
+      api: step_wait_seconds
+      params:
+        seconds: 60
     check:
       description: 确认 DUT IP 地址与重启前一致
-      automation:
-        api: check_ethernet_ip_mode
-        params:
-          expected_mode: static
-          expected_ip: ${step_set_static_ip.data.ip_address}
+      api: check_ethernet_ip_mode
+      params:
+        expected_mode: static
+        expected_ip: ${step_set_static_ip.data.ip_address}

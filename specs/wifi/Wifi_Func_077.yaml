@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 连接加密方式为Open的AP, 完成WiFi连接操作
-      automation:
-        api: step_connect_wifi
-        params: {}
+      api: step_connect_wifi
+      params: {}
     check:
       description: 验证WiFi连接时间在5~10秒范围内
       manual:
         actor: QA
         target: DUT屏幕
         action: 验证WiFi连接时间在5~10秒范围内
-      automation:
-        api: check_wifi_connection_time
-        params: {}
+      api: check_wifi_connection_time
+      params: {}
 

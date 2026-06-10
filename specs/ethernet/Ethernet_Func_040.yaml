@@ -44,12 +44,10 @@ preconditions:
 procedure:
   - operation:
       description: 等待 SLAAC 分配 IPv6 地址
-      automation:
-        api: step_discover_network_info
-        wait_after: 10
+      api: step_discover_network_info
+      wait_after: 10
     check:
       description: 确认同时获取到IPv4和global IPv6地址
-      automation:
-        api: check_ethernet_dual_stack_ip_obtained
-        timeout: 60
-        on_failure: abort
+      api: check_ethernet_dual_stack_ip_obtained
+      timeout: 60
+      on_failure: abort

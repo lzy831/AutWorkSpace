@@ -26,11 +26,9 @@ preconditions:
 procedure:
   - operation:
       description: 将DUT IP设置模式切换为DHCP
-      automation:
-        api: step_set_ip_settings_to_dhcp
-        wait_after: 5
+      api: step_set_ip_settings_to_dhcp
+      wait_after: 5
     check:
       description: 确认DUT通过DHCP成功获取IPv4地址
-      automation:
-        api: check_ethernet_connected
-        timeout: 30
+      api: check_ethernet_connected
+      timeout: 30

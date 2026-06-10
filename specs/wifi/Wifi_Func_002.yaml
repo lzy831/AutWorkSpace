@@ -29,22 +29,20 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings → Network & Internet → WiFi, 确认WiFi开关为ON, AP列表可见
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
-        wait_after: 5
+      api: step_enable_wifi
+      params:
+        method: cmd
+      wait_after: 5
     check:
       description: 确认WiFi ON 且有 AP 扫描结果
       manual:
         actor: QA
         target: DUT屏幕
         action: 观察WiFi设置页面显示 AVAILABLE NETWORKS 和 AP 列表
-      automation:
-        api: check_wifi_ap_list
-        params:
-          expected_present: true
-        timeout: 10
+      api: check_wifi_ap_list
+      params:
+        expected_present: true
+      timeout: 10
 
   - operation:
       description: 关闭 WiFi
@@ -52,22 +50,20 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings → Network & Internet → WiFi, 关闭WiFi开关
-      automation:
-        api: step_disable_wifi
-        params:
-          method: cmd
-        wait_after: 5
+      api: step_disable_wifi
+      params:
+        method: cmd
+      wait_after: 5
     check:
       description: 确认WiFi OFF 且 AP 扫描结果消失
       manual:
         actor: QA
         target: DUT屏幕
         action: 观察WiFi开关为OFF, AP列表消失
-      automation:
-        api: check_wifi_ap_list
-        params:
-          expected_present: false
-        timeout: 10
+      api: check_wifi_ap_list
+      params:
+        expected_present: false
+      timeout: 10
 
   - operation:
       description: 重新开启 WiFi
@@ -75,21 +71,19 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings → Network & Internet → WiFi, 开启WiFi开关
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
-        wait_after: 5
+      api: step_enable_wifi
+      params:
+        method: cmd
+      wait_after: 5
     check:
       description: 确认WiFi ON 且 AP 扫描恢复
       manual:
         actor: QA
         target: DUT屏幕
         action: 观察 WiFi 设置页面重新显示 AP 列表
-      automation:
-        api: check_wifi_ap_list
-        params:
-          expected_present: true
-        timeout: 15
-        on_failure: abort
+      api: check_wifi_ap_list
+      params:
+        expected_present: true
+      timeout: 15
+      on_failure: abort
 

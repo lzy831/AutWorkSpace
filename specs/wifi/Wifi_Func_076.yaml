@@ -20,21 +20,19 @@ preconditions:
 
 steps:
   - operation:
-      description: 通过WPS方法连接AP: 按下路由器上的WPS按钮
+      description: "通过WPS方法连接AP: 按下路由器上的WPS按钮"
       manual:
         actor: QA
         target: DUT
-        action: 通过WPS方法连接AP: 按下路由器上的WPS按钮
-      automation:
-        api: step_connect_wifi_wps
-        params: {}
+        action: "通过WPS方法连接AP: 按下路由器上的WPS按钮"
+      api: step_connect_wifi_wps
+      params: {}
     check:
       description: 检查网络已连接(wifi/ethernet), 验证平台成功连接AP
       manual:
         actor: QA
         target: DUT屏幕
         action: 检查网络已连接(wifi/ethernet), 验证平台成功连接AP
-      automation:
-        api: check_network_connected
-        params: {}
+      api: check_network_connected
+      params: {}
 

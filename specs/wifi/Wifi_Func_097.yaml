@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 通过PC建立DLNA服务, 用于后续DLNA播放测试
-      automation:
-        api: step_setup_dlna_server
-        params: {}
+      api: step_setup_dlna_server
+      params: {}
     check:
       description: 验证WiFi DLNA场景下平台可以流畅播放视频
       manual:
         actor: QA
         target: DUT屏幕
         action: 验证WiFi DLNA场景下平台可以流畅播放视频
-      automation:
-        api: check_dlna_video_normal
-        params: {}
+      api: check_dlna_video_normal
+      params: {}
 

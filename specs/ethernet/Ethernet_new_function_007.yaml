@@ -30,18 +30,14 @@ preconditions:
 procedure:
   - operation:
       description: DUT 设为 DHCP 模式
-      automation:
-        api: step_set_ip_settings_to_dhcp
+      api: step_set_ip_settings_to_dhcp
     check:
       description: 确认 DUT 通过 DHCP 获取 IPv4 地址
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: Ping 路由器网关验证连通性
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网关可达
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected

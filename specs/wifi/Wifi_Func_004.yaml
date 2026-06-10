@@ -26,14 +26,12 @@ preconditions:
     semantic: ensure
     operation:
       description: 开启WiFi
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
+      api: step_enable_wifi
+      params:
+        method: cmd
     check:
       description: 确认AP列表可见
-      automation:
-        api: check_wifi_ap_list
+      api: check_wifi_ap_list
       params:
         expected_present: true
 
@@ -41,17 +39,15 @@ preconditions:
     manual: QA在WiFi设置页面中断开所有已保存的AP连接
     operation:
       description: 断开当前WiFi连接
-      automation:
-        api: step_disconnect_network
-        params:
-          type: wifi
-          method: cmd
+      api: step_disconnect_network
+      params:
+        type: wifi
+        method: cmd
     check:
       description: 确认WiFi已断开(Wifi is not connected)
-      automation:
-        api: check_wifi_disconnected
-        params:
-          method: cmd
+      api: check_wifi_disconnected
+      params:
+        method: cmd
 
 steps:
   - operation:
@@ -60,12 +56,11 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings -> Network & Internet -> WiFi, 选择目标AP, 输入密码并连接
-      automation:
-        api: step_connect_wifi
-        params:
-          ssid: ${custom_params.target_ssid}
-          password: ${custom_params.target_password}
-          method: cmd
+      api: step_connect_wifi
+      params:
+        ssid: ${custom_params.target_ssid}
+        password: ${custom_params.target_password}
+        method: cmd
       wait_after: 10
     check:
       description: 确认WiFi已连接, 连接成功提示显示, 已连AP显示在列表首位
@@ -73,11 +68,10 @@ steps:
         actor: QA
         target: DUT屏幕
         action: 观察连接成功提示, 已连AP显示在AP列表首位且标记为Connected
-      automation:
-        api: check_wifi_connected
-        params:
-          method: cmd
-        timeout: 15
-        on_failure: abort
+      api: check_wifi_connected
+      params:
+        method: cmd
+      timeout: 15
+      on_failure: abort
 
 

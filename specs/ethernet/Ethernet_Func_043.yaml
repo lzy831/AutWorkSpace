@@ -42,33 +42,27 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息供后续验证比对
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络正常
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: SSH重启路由器并等待恢复上线
-      automation:
-        api: step_reboot_router
-        params:
-          timeout: 120
+      api: step_reboot_router
+      params:
+        timeout: 120
     check:
       description: 确认路由器已恢复且以太网已重连
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   # 路由器重启后 RA 需重发,原因同 041: SLAAC 被动机制,需新 RA 触发 DUT 重新生成 IPv6 地址
   - operation:
       description: 重新发送RA使DUT通过SLAAC获取IPv6
-      automation:
-        api: step_enable_router_ipv6
-        wait_after: 10
+      api: step_enable_router_ipv6
+      wait_after: 10
     check:
       description: 确认重新获取双栈 IP
-      automation:
-        api: check_ethernet_dual_stack_ip_obtained
-        timeout: 60
-        on_failure: abort
+      api: check_ethernet_dual_stack_ip_obtained
+      timeout: 60
+      on_failure: abort

@@ -36,29 +36,24 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息供后续使用
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络正常
-      automation:
-        api: check_ethernet_connected
-        params:
-          method: cmd
+      api: check_ethernet_connected
+      params:
+        method: cmd
 
   - operation:
       description: 重启路由器(等同于断电重开)
-      automation:
-        api: step_reboot_router
-        params:
-          timeout: 180
+      api: step_reboot_router
+      params:
+        timeout: 180
 
   - operation:
       description: 等待 DUT 检测到链路恢复并重新 DHCP
-      automation:
-        api: step_wait_seconds
-        params:
-          seconds: 30
+      api: step_wait_seconds
+      params:
+        seconds: 30
     check:
       description: 确认 DUT 重新获取了 IP 地址
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected

@@ -30,43 +30,35 @@ preconditions:
 procedure:
   - operation:
       description: 确保 DUT 使用 DHCP 模式
-      automation:
-        api: step_set_ip_settings_to_dhcp
+      api: step_set_ip_settings_to_dhcp
     check:
       description: 确认 DHCP 模式生效
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 采集当前以太网网络信息(MAC/IP/网关等)
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络信息采集完成
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 断开路由器 LAN 口(DUT 所在端口 PHY 断电)
-      automation:
-        api: step_disconnect_router_lan
-        params:
-          mac: ${step_discover_network_info.data.mac}
-        wait_after: 3
+      api: step_disconnect_router_lan
+      params:
+        mac: ${step_discover_network_info.data.mac}
+      wait_after: 3
     check:
       description: DUT 以太网 IP 消失
-      automation:
-        api: check_ethernet_disconnected
+      api: check_ethernet_disconnected
 
   - operation:
       description: 恢复路由器 LAN 口(DUT 所在端口 PHY 上电)
-      automation:
-        api: step_connect_router_lan
-        params:
-          port: ${step_disconnect_router_lan.data.port}
-          mac: ${step_discover_network_info.data.mac}
-        wait_after: 5
+      api: step_connect_router_lan
+      params:
+        port: ${step_disconnect_router_lan.data.port}
+        mac: ${step_discover_network_info.data.mac}
+      wait_after: 5
     check:
       description: DUT 重新通过 DHCP 获取 IP 地址
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected

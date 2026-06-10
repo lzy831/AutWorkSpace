@@ -22,5 +22,4 @@ preconditions:
 procedure:
   - operation:
       description: TODO - iperf test
-      automation:
-        api: TODO
+      api: TODO

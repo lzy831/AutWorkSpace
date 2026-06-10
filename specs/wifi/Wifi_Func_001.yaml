@@ -30,20 +30,18 @@ preconditions:
         actor: QA
         target: DUT
         action: 进入 Settings → Device Preferences → Factory reset, 确认执行, 等待设备重启
-      automation:
-        api: factory_reset
-        params: {}
+      api: factory_reset
+      params: {}
     check:
       description: 等待 factory reset 完成, 设备重启并上线
       manual:
         actor: QA
         target: DUT
         action: 等待设备重启完成, 确认进入系统界面
-      automation:
-        api: check_factory_reset_completed
-        params:
-          timeout: 300
+      api: check_factory_reset_completed
+      params:
         timeout: 300
+      timeout: 300
 
   - operation:
       description: 跳过 OOBE 向导(WiFi 模块内部版本)
@@ -51,20 +49,18 @@ preconditions:
         actor: QA
         target: DUT
         action: 按遥控器跳过 OOBE 设置向导
-      automation:
-        api: step_skip_oobe
-        params: {}
+      api: step_skip_oobe
+      params: {}
     check:
       description: 确认 OOBE 已跳过
       manual:
         actor: QA
         target: DUT屏幕
         action: 观察已进入系统主界面
-      automation:
-        api: check_oobe_status
-        params:
-          expected: false
-        timeout: 10
+      api: check_oobe_status
+      params:
+        expected: false
+      timeout: 10
 
 steps:
   - operation:
@@ -73,21 +69,19 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings → Network & Internet, 查看 WiFi 开关
-      automation:
-        api: step_wait_seconds
-        params:
-          seconds: 3
+      api: step_wait_seconds
+      params:
+        seconds: 3
     check:
       description: 确认 WiFi 默认状态为 ON
       manual:
         actor: QA
         target: DUT屏幕
         action: WiFi 开关为 ON
-      automation:
-        api: check_wifi_state
-        params:
-          expected: true
-          method: cmd
-        timeout: 10
-        on_failure: abort
+      api: check_wifi_state
+      params:
+        expected: true
+        method: cmd
+      timeout: 10
+      on_failure: abort
 

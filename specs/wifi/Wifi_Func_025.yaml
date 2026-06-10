@@ -20,21 +20,19 @@ preconditions:
 
 steps:
   - operation:
-      description: switch DHCP and static: Switching IP between DHCP and static
+      description: "switch DHCP and static: Switching IP between DHCP and static"
       manual:
         actor: QA
         target: DUT
-        action: switch DHCP and static: Switching IP between DHCP and static
-      automation:
-        api: step_switch_wifi_ip_mode
-        params: {}
+        action: "switch DHCP and static: Switching IP between DHCP and static"
+      api: step_switch_wifi_ip_mode
+      params: {}
     check:
-      description: 验证switch DHCP and static: Switch IP successful
+      description: "验证switch DHCP and static: Switch IP successful"
       manual:
         actor: QA
         target: DUT屏幕
-        action: 验证switch DHCP and static: Switch IP successful
-      automation:
-        api: check_switch_ip_successful
-        params: {}
+        action: "验证switch DHCP and static: Switch IP successful"
+      api: check_switch_ip_successful
+      params: {}
 

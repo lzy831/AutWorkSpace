@@ -25,34 +25,30 @@ steps:
         actor: QA
         target: DUT
         action: 在路由器设置中隐藏SSID, 完成Hide SSID测试操作
-      automation:
-        api: step_configure_ap_hide_ssid
-        params: {}
+      api: step_configure_ap_hide_ssid
+      params: {}
     check:
       description: 验证平台无法搜索到隐藏SSID的AP
       manual:
         actor: QA
         target: DUT屏幕
         action: 验证平台无法搜索到隐藏SSID的AP
-      automation:
-        api: check_ap_not_visible
-        params: {}
+      api: check_ap_not_visible
+      params: {}
   - operation:
       description: 平台手动输入SSID和密码连接隐藏SSID的AP
       manual:
         actor: QA
         target: DUT
         action: 平台手动输入SSID和密码连接隐藏SSID的AP
-      automation:
-        api: step_connect_wifi
-        params: {"ssid": "${custom_params.target_ssid}", "pwd": "${custom_params.target_password}"}
+      api: step_connect_wifi
+      params: {"ssid": "${custom_params.target_ssid}", "pwd": "${custom_params.target_password}"}
     check:
       description: 验证平台已成功连接网络(WiFi)
       manual:
         actor: QA
         target: DUT屏幕
         action: 验证平台已成功连接网络(WiFi)
-      automation:
-        api: check_network_connected
-        params: {}
+      api: check_network_connected
+      params: {}
 

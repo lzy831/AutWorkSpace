@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 取消隐藏 SSID, 使 AP 可被搜索到
-      automation:
-        api: step_configure_ap_hide_ssid
-        params: {}
+      api: step_configure_ap_hide_ssid
+      params: {}
     check:
       description: 检查网络已连接(wifi/ethernet)
       manual:
         actor: QA
         target: DUT屏幕
         action: 检查网络已连接(wifi/ethernet)
-      automation:
-        api: check_network_connected
-        params: {}
+      api: check_network_connected
+      params: {}
 

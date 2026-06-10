@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 设置AP频段为2.4G优先
-      automation:
-        api: step_set_hotspot_band
-        params: {}
+      api: step_set_hotspot_band
+      params: {}
     check:
       description: 检查网络已连接(wifi/ethernet), 验证其他设备可以使用正确密码连接
       manual:
         actor: QA
         target: DUT屏幕
         action: 检查网络已连接(wifi/ethernet), 验证其他设备可以使用正确密码连接
-      automation:
-        api: check_network_connected
-        params: {}
+      api: check_network_connected
+      params: {}
 

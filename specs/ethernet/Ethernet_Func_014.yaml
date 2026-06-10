@@ -34,27 +34,23 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息供后续步骤使用
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络信息已采集且连接正常
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 通过Settings UI切换到静态IP模式
-      automation:
-        api: step_set_static_ip
-        params:
-          ip_address: ${step_discover_network_info.data.static_ip}
-          gateway: ${step_discover_network_info.data.gateway}
-          dns: ${step_discover_network_info.data.dns}
-          prefix: ${step_discover_network_info.data.prefix}
+      api: step_set_static_ip
+      params:
+        ip_address: ${step_discover_network_info.data.static_ip}
+        gateway: ${step_discover_network_info.data.gateway}
+        dns: ${step_discover_network_info.data.dns}
+        prefix: ${step_discover_network_info.data.prefix}
     check:
       description: 确认静态IP切换成功且IP地址正确
-      automation:
-        api: check_ethernet_ip_mode
-        params:
-          expected_mode: static
-          expected_ip: ${step_discover_network_info.data.static_ip}
-        on_failure: abort
+      api: check_ethernet_ip_mode
+      params:
+        expected_mode: static
+        expected_ip: ${step_discover_network_info.data.static_ip}
+      on_failure: abort

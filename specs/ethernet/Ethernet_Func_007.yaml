@@ -34,26 +34,22 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息(gateway/subnet/dns/static_ip)供后续步骤使用
-      automation:
-        api: step_discover_network_info
-        wait_after: 3
+      api: step_discover_network_info
+      wait_after: 3
     check:
       description: 确认网络信息已采集
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 通过Settings UI配置静态IP(参数自动派生)
-      automation:
-        api: step_set_static_ip
-        params:
-          ip_address: ${step_discover_network_info.data.static_ip}
-          gateway: ${step_discover_network_info.data.gateway}
-          dns: ${step_discover_network_info.data.dns}
-          prefix: 24
-        wait_after: 3
+      api: step_set_static_ip
+      params:
+        ip_address: ${step_discover_network_info.data.static_ip}
+        gateway: ${step_discover_network_info.data.gateway}
+        dns: ${step_discover_network_info.data.dns}
+        prefix: 24
+      wait_after: 3
     check:
       description: 确认静态IP配置成功且以太网已连接
-      automation:
-        api: check_ethernet_connected
-        on_failure: abort
+      api: check_ethernet_connected
+      on_failure: abort

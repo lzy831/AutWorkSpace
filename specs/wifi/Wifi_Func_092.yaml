@@ -27,9 +27,8 @@ steps:
         target: DUT
         action: 将网络源切换为以太网连接, 用于测试热点在以太网下的工作状态.
 
-      automation:
-        api: step_network_source_from_ethernet
-        params: {}
+      api: step_network_source_from_ethernet
+      params: {}
     check:
       description: 检查WiFi状态, 验证当平台连接以太网时, WiFi热点可被连接并访问网站.
 
@@ -38,7 +37,6 @@ steps:
         target: DUT屏幕
         action: 检查WiFi状态, 验证当平台连接以太网时, WiFi热点可被连接并访问网站.
 
-      automation:
-        api: check_wifi_state
-        params: {}
+      api: check_wifi_state
+      params: {}
 

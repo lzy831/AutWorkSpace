@@ -12,10 +12,10 @@ teardown_hooks: []
 # Excel raw data:
 #   Priority: P1
 #   Preset: 1. ASUS RT-AC1900P
-2. network cable
-3. PC
+#   2. network cable
+#   3. PC
 #   Steps: 1. DUT connect with route by Ethernet  cable 
-2.Open YouTube  to playback video online for 12 hours
+#   2.Open YouTube  to playback video online for 12 hours
 #   Expected: Vdeo playback normal
 
 preconditions:
@@ -24,5 +24,4 @@ preconditions:
 procedure:
   - operation:
       description: TODO
-      automation:
-        api: TODO
+      api: TODO

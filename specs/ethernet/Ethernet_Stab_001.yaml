@@ -12,12 +12,12 @@ teardown_hooks: []
 # Excel raw data:
 #   Priority: P0
 #   Preset: 1. ASUS RT-AC1900P
-2. network cable
-3. iperf tool
-4. PC
+#   2. network cable
+#   3. iperf tool
+#   4. PC
 #   Steps: 1. The box is connected to the route through the network cable.
-2. PC connect the same toute by Ethernet cable, PC install iperf tool
-3. test the throughput for 12hours by iPerf  tool
+#   2. PC connect the same toute by Ethernet cable, PC install iperf tool
+#   3. test the throughput for 12hours by iPerf  tool
 #   Expected: RX not less than 90Mbits/sec:
 
 preconditions:
@@ -26,5 +26,4 @@ preconditions:
 procedure:
   - operation:
       description: TODO
-      automation:
-        api: TODO
+      api: TODO

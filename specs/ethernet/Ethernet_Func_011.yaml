@@ -34,36 +34,30 @@ preconditions:
 procedure:
   - operation:
       description: 采集当前网络信息供后续步骤使用
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络信息已采集且连接正常
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 通过Settings UI配置静态IP
-      automation:
-        api: step_set_static_ip
-        params:
-          ip_address: ${step_discover_network_info.data.static_ip}
-          gateway: ${step_discover_network_info.data.gateway}
-          prefix: ${step_discover_network_info.data.prefix}
+      api: step_set_static_ip
+      params:
+        ip_address: ${step_discover_network_info.data.static_ip}
+        gateway: ${step_discover_network_info.data.gateway}
+        prefix: ${step_discover_network_info.data.prefix}
     check:
       description: 确认静态IP已生效
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: SSH重启路由器并等待恢复上线
-      automation:
-        api: step_reboot_router
-        params:
-          timeout: 120
+      api: step_reboot_router
+      params:
+        timeout: 120
     check:
       description: 确认DUT网络恢复且静态IP配置未变
-      automation:
-        api: check_ethernet_ip_mode
-        params:
-          expected_mode: static
-          expected_ip: ${step_discover_network_info.data.static_ip}
+      api: check_ethernet_ip_mode
+      params:
+        expected_mode: static
+        expected_ip: ${step_discover_network_info.data.static_ip}

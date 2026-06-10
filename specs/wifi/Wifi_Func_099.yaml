@@ -27,9 +27,8 @@ steps:
         target: DUT
         action: 断开网络连接(wifi/ethernet).
 
-      automation:
-        api: step_disconnect_network
-        params: {}
+      api: step_disconnect_network
+      params: {}
   - operation:
       description: 启动YouTube在线视频播放(对应iYiQi或YouTube在线播放).
 
@@ -38,9 +37,8 @@ steps:
         target: DUT
         action: 启动YouTube在线视频播放(对应iYiQi或YouTube在线播放).
 
-      automation:
-        api: step_start_playback
-        params: {"playback_format": "auto"}
+      api: step_start_playback
+      params: {"playback_format": "auto"}
     check:
       description: 检查在线视频画面和声音正常播放, 可进行seek, 暂停/播放等操作.
 
@@ -49,9 +47,8 @@ steps:
         target: DUT屏幕
         action: 检查在线视频画面和声音正常播放, 可进行seek, 暂停/播放等操作.
 
-      automation:
-        api: check_video_playback_normal
-        params: {"playback_format": "auto"}
+      api: check_video_playback_normal
+      params: {"playback_format": "auto"}
   - operation:
       description: 停止YouTube播放, 清理测试资源.
 
@@ -60,7 +57,6 @@ steps:
         target: DUT
         action: 停止YouTube播放, 清理测试资源.
 
-      automation:
-        api: step_stop_playback
-        params: {}
+      api: step_stop_playback
+      params: {}
 

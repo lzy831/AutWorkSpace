@@ -20,14 +20,12 @@ preconditions:
     semantic: ensure
     operation:
       description: 开启WiFi
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
+      api: step_enable_wifi
+      params:
+        method: cmd
     check:
       description: 确认AP列表可见
-      automation:
-        api: check_wifi_ap_list
+      api: check_wifi_ap_list
       params:
         expected_present: true
 
@@ -36,18 +34,16 @@ preconditions:
     semantic: ensure
     operation:
       description: 连接目标WiFi AP
-      automation:
-        api: step_connect_wifi
-        params:
-          ssid: ${custom_params.target_ssid}
-          password: ${custom_params.target_password}
-          method: cmd
+      api: step_connect_wifi
+      params:
+        ssid: ${custom_params.target_ssid}
+        password: ${custom_params.target_password}
+        method: cmd
     check:
       description: 确认WiFi已连接
-      automation:
-        api: check_wifi_connected
-        params:
-          method: cmd
+      api: check_wifi_connected
+      params:
+        method: cmd
 
 steps:
   - operation:
@@ -56,22 +52,20 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings -> Network & Internet -> WiFi, 选择已连接的AP, 点击忘记网络
-      automation:
-        api: step_disconnect_network
-        params:
-          type: wifi
-          method: cmd
-          forget: true
+      api: step_disconnect_network
+      params:
+        type: wifi
+        method: cmd
+        forget: true
     check:
       description: 确认WiFi密码已被删除, 网络不会自动重连
       manual:
         actor: QA
         target: DUT屏幕
         action: 确认该AP不再出现在已保存网络列表, WiFi未自动重连
-      automation:
-        api: check_wifi_password_forgotten
-        params:
-          ssid: ${custom_params.target_ssid}
-          method: cmd
+      api: check_wifi_password_forgotten
+      params:
+        ssid: ${custom_params.target_ssid}
+        method: cmd
       timeout: 10
       on_failure: abort

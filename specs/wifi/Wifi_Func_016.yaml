@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 使用错误密码连接AP2, 触发连接失败, 验证自动回切到AP1
-      automation:
-        api: step_connect_wifi
-        params: {"ssid": "${custom_params.target_ssid}", "pwd": "${custom_params.target_password}"}
+      api: step_connect_wifi
+      params: {"ssid": "${custom_params.target_ssid}", "pwd": "${custom_params.target_password}"}
     check:
       description: 检查网络是否已连接(验证自动切换到AP1成功)
       manual:
         actor: QA
         target: DUT屏幕
         action: 检查网络是否已连接(验证自动切换到AP1成功)
-      automation:
-        api: check_network_connected
-        params: {}
+      api: check_network_connected
+      params: {}
 

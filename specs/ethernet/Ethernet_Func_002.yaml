@@ -30,38 +30,30 @@ preconditions:
 procedure:
   - operation:
       description: 确保 DUT 使用 DHCP 模式
-      automation:
-        api: step_set_ip_settings_to_dhcp
+      api: step_set_ip_settings_to_dhcp
     check:
       description: 确认 DHCP 模式生效
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 采集当前以太网网络信息，确认网络状态良好
-      automation:
-        api: step_discover_network_info
+      api: step_discover_network_info
     check:
       description: 确认网络信息采集完成
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected
 
   - operation:
       description: 禁用 DUT 以太网接口（模拟拔掉 DUT 端网线）
-      automation:
-        api: step_disable_ethernet
-        wait_after: 3
+      api: step_disable_ethernet
+      wait_after: 3
     check:
       description: DUT 以太网已断开
-      automation:
-        api: check_ethernet_disconnected
+      api: check_ethernet_disconnected
 
   - operation:
       description: 启用 DUT 以太网接口（模拟重新插上网线）
-      automation:
-        api: step_enable_ethernet
-        wait_after: 5
+      api: step_enable_ethernet
+      wait_after: 5
     check:
       description: DUT 重新通过 DHCP 获取 IP 地址
-      automation:
-        api: check_ethernet_connected
+      api: check_ethernet_connected

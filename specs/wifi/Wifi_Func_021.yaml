@@ -25,16 +25,14 @@ steps:
         actor: QA
         target: DUT
         action: 断开网络连接(wifi/ethernet), 模拟Restart with wifi off场景
-      automation:
-        api: step_disconnect_network
-        params: {}
+      api: step_disconnect_network
+      params: {}
     check:
-      description: 验证wifi default switch: Wifi switch default status is on, 但此处需要验证重启后WiFi开关保持关闭状态
+      description: "验证wifi default switch: Wifi switch default status is on, 但此处需要验证重启后WiFi开关保持关闭状态"
       manual:
         actor: QA
         target: DUT屏幕
-        action: 验证wifi default switch: Wifi switch default status is on, 但此处需要验证重启后WiFi开关保持关闭状态
-      automation:
-        api: check_wifi_state
-        params: {}
+        action: "验证wifi default switch: Wifi switch default status is on, 但此处需要验证重启后WiFi开关保持关闭状态"
+      api: check_wifi_state
+      params: {}
 

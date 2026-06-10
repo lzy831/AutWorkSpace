@@ -12,12 +12,12 @@ teardown_hooks: []
 # Excel raw data:
 #   Priority: P1
 #   Preset: 1. ASUS RT-AC1900P
-2. network cable
-3. iperf tool
-4. PC
+#   2. network cable
+#   3. iperf tool
+#   4. PC
 #   Steps: 1. The box is connected to the route through the network cable.
-2. PC connect the same toute by Ethernet cable, PC install iperf tool
-3. PC ping DUT's IP  address  for 12 hours
+#   2. PC connect the same toute by Ethernet cable, PC install iperf tool
+#   3. PC ping DUT's IP  address  for 12 hours
 #   Expected: The  lost  packet  is 0%
 
 preconditions:
@@ -26,5 +26,4 @@ preconditions:
 procedure:
   - operation:
       description: TODO
-      automation:
-        api: TODO
+      api: TODO

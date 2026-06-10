@@ -1,6 +1,6 @@
 # Spec YAML 格式规范
 
-所有 `tsuite/specs/<domain>/*.yaml` 文件遵守此规范。
+所有 `ClaudeWorkSpace/specs/<domain>/*.yaml` 文件遵守此规范。
 
 ## 顶层字段
 
@@ -8,8 +8,9 @@
 |------|:--:|------|----------|
 | `domain` | ✅ | 测试域: ethernet / wifi | — |
 | `id` | ✅ | 唯一标识，如 `Ethernet_Func_011` | — |
+| `auto_status` | ✅ | `auto`(已实现) / `pending`(可行未做) / `manual`(不实现) | — |
 | `name` | ✅ | 简短用例名称 | 参数值、实现细节 |
-| `testbed` | ✅ | 引用 `tsuite/environments/<id>.yaml` | — |
+| `testbed` | ✅ | 引用 `ClaudeWorkSpace/environments/<id>.yaml` | — |
 | `description` | ✅ | 测试目的和场景的宏观描述 | SSID、密码、IP、cmd wifi status、Supplicant、错误字符串、实现方式 |
 
 ## hooks
@@ -36,7 +37,7 @@ preconditions:
 **Format A（check-only）：**
 ```yaml
 - description: 检查项描述
-  automation:
+  check:
     api: check_xxx
     params: {}
 ```
@@ -52,6 +53,28 @@ preconditions:
     params: {}
 ```
 
+**precondition 中 check 的 `method` 规则：**
+
+precondition 的 `check_ethernet_connected` 必须使用 `method: cmd`，避免打开 Settings UI 浪费时间（每个 check 节省 ~30s）。procedure 中的 check 按需选择 method。
+
+```yaml
+# ✅ precondition: 用 cmd
+- description: DUT 以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+
+# ❌ precondition: 用 ui（浪费时间）
+- description: DUT 以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+```
+
 ## procedure
 
 每个 procedure 步骤**仅支持 Format B**（operation + check pair）：
@@ -59,18 +82,18 @@ preconditions:
 ```yaml
 - operation:
     description: 步骤描述
-    automation:
-      api: step_xxx
-      params: {}
-      wait_after: 5   # 可选，步骤完成后等待秒数
+    api: step_xxx
+    params: {}
+    wait_after: 5   # 可选，步骤完成后等待秒数
   check:
     description: 验证描述
-    automation:
-      api: check_xxx
-      params: {}
-      timeout: 30     # 可选，check 超时秒数
-      on_failure: abort  # 可选，失败时的行为
+    api: check_xxx
+    params: {}
+    timeout: 30     # 可选，check 超时秒数
+    on_failure: abort  # 可选，失败时的行为（compile_workflow 是否支持以实际为准）
 ```
+
+**注意：** 不使用 `automation:` 包装层——直接写 `api:` + `params:`，`compile_workflow.py` 的 `_get_auto()` 同时支持两种格式，但统一用简洁写法。
 
 ## 参数模板变量
 
@@ -115,6 +138,7 @@ grep -rn '\${step_[^}]*}' specs/ | grep -v '\.data\.' | grep -v 'custom_params'
 
 - `hardware` 字段 — 硬件信息在 environments/*.yaml
 - 具体 IP 地址、SSID、密码 — 用 `${custom_params.xxx}`
-- `cmd wifi status` 等实现命令 — 宏观看"WiFi 已连接"
+- `cmd wifi status` 等实现命令 — 用 check 封装，宏观描述即可
 - `Supplicant state COMPLETED` 等技术细节 — 用 check 封装
 - 中文标点符号 — 一律使用 ASCII 标点（`;` 替代 `；`，`()` 替代 `（）`，`,` 替代 `，` 等），确保 workflow JSON 和 YAML 在任何环境下兼容
+- `automation:` 包装层 — 直接写 `api:` + `params:`（简洁格式）

@@ -25,25 +25,22 @@ steps:
         actor: QA
         target: DUT
         action: 开启WiFi热点, 用于后续reboot with hotspot测试
-      automation:
-        api: step_enable_wifi_hotspot
-        params: {}
+      api: step_enable_wifi_hotspot
+      params: {}
   - operation:
       description: 执行DUT重启操作, 验证reboot with hotspot场景
       manual:
         actor: QA
         target: DUT
         action: 执行DUT重启操作, 验证reboot with hotspot场景
-      automation:
-        api: step_reboot_dut
-        params: {}
+      api: step_reboot_dut
+      params: {}
     check:
       description: 检查设备正常启动, 确认重启后系统正常
       manual:
         actor: QA
         target: DUT屏幕
         action: 检查设备正常启动, 确认重启后系统正常
-      automation:
-        api: check_boot_normal
-        params: {}
+      api: check_boot_normal
+      params: {}
 

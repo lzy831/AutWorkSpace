@@ -28,10 +28,8 @@ preconditions:
 procedure:
   - operation:
       description: 通过Settings UI输入无效静态IP并提交
-      automation:
-        api: step_set_static_ip_invalid
+      api: step_set_static_ip_invalid
     check:
       description: 确认系统显示IP配置无效的错误提示
-      automation:
-        api: check_prompt_invalid_ip
-        on_failure: abort
+      api: check_prompt_invalid_ip
+      on_failure: abort

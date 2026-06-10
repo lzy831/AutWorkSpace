@@ -58,32 +58,27 @@ preconditions:
 procedure:
   - operation:
       description: DUT进入深度睡眠
-      automation:
-        api: step_enter_deep_sleep
+      api: step_enter_deep_sleep
       wait_after: 20
     check:
       description: 确认DUT已进入深度睡眠
-      automation:
-        api: check_dut_in_deep_sleep
+      api: check_dut_in_deep_sleep
 
   - operation:
       description: 发送遥控器Power键, DUT离开深睡眠
-      automation:
-        api: step_input_rc_key_power
-        params:
-          bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+      api: step_input_rc_key_power
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
       wait_after: 10
 
   - operation:
       description: 确保DUT完全唤醒(ADB已恢复, 自动发送POWER直至Awake)
-      automation:
-        api: step_ensure_awake
-        params:
-          max_retries: 5
+      api: step_ensure_awake
+      params:
+        max_retries: 5
       wait_after: 30
     check:
       description: 确认DUT唤醒后通过DHCP恢复网络连接
-      automation:
-        api: check_ethernet_connected
-        params:
-          method: cmd
+      api: check_ethernet_connected
+      params:
+        method: cmd

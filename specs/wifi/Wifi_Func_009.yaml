@@ -19,14 +19,12 @@ preconditions:
     semantic: ensure
     operation:
       description: 开启WiFi
-      automation:
-        api: step_enable_wifi
-        params:
-          method: cmd
+      api: step_enable_wifi
+      params:
+        method: cmd
     check:
       description: 确认AP列表可见
-      automation:
-        api: check_wifi_ap_list
+      api: check_wifi_ap_list
       params:
         expected_present: true
 
@@ -35,33 +33,29 @@ preconditions:
     semantic: ensure
     operation:
       description: 断开以太网连接
-      automation:
-        api: step_disable_ethernet
-        params: {}
+      api: step_disable_ethernet
+      params: {}
     check:
       description: 确认以太网已断开
-      automation:
-        api: check_ethernet_disconnected
-        params:
-          method: ui
+      api: check_ethernet_disconnected
+      params:
+        method: ui
 
   - description: 确保WiFi已连接到目标AP
     manual: QA确认WiFi已连接
     semantic: ensure
     operation:
       description: 连接目标WiFi AP
-      automation:
-        api: step_connect_wifi
-        params:
-          ssid: ${custom_params.target_ssid}
-          password: ${custom_params.target_password}
-          method: cmd
+      api: step_connect_wifi
+      params:
+        ssid: ${custom_params.target_ssid}
+        password: ${custom_params.target_password}
+        method: cmd
     check:
       description: 确认WiFi已连接
-      automation:
-        api: check_wifi_connected
-        params:
-          method: cmd
+      api: check_wifi_connected
+      params:
+        method: cmd
 
 steps:
   - operation:
@@ -70,19 +64,17 @@ steps:
         actor: QA
         target: DUT
         action: 记录当前DHCP分配的IP地址、网关、子网掩码
-      automation:
-        api: step_discover_wifi_network_info
-        params: {}
+      api: step_discover_wifi_network_info
+      params: {}
     check:
       description: 确认网络信息采集完成
       manual:
         actor: QA
         target: DUT屏幕
         action: 确认采集到有效的网关和IP信息
-      automation:
-        api: check_wifi_connected
-        params:
-          method: cmd
+      api: check_wifi_connected
+      params:
+        method: cmd
 
   - operation:
       description: 设置WiFi静态IP
@@ -90,13 +82,12 @@ steps:
         actor: QA
         target: DUT
         action: 进入 Settings -> Network & Internet -> WiFi -> IP settings, 选择Static, 填入IP/Gateway/Prefix
-      automation:
-        api: step_set_wifi_static_ip
-        params:
-          ip: ${step_discover_wifi_network_info.data.static_ip}
-          gateway: ${step_discover_wifi_network_info.data.gateway}
-          prefix: 24
-          method: ui
+      api: step_set_wifi_static_ip
+      params:
+        ip: ${step_discover_wifi_network_info.data.static_ip}
+        gateway: ${step_discover_wifi_network_info.data.gateway}
+        prefix: 24
+        method: ui
     check:
       description: |
         确认静态IP设置成功, IP模式为静态.
@@ -105,9 +96,8 @@ steps:
         actor: QA
         target: DUT屏幕
         action: 观察系统IP模式显示为Static, IP地址为配置的静态IP
-      automation:
-        api: check_wifi_ip_mode
-        params:
-          expected_mode: static
+      api: check_wifi_ip_mode
+      params:
+        expected_mode: static
       timeout: 15
       on_failure: abort
