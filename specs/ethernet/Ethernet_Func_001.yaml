@@ -3,7 +3,7 @@ id: Ethernet_Func_001
 auto_status: auto
 name: DHCP模式下获取IPv4地址
 testbed: ethernet_router_lan
-description: 验证DUT在网线物理连通情况下, IP地址模式设置为DHCP后, 可以正常获取到IPv4网络地址
+description: DHCP模式下, DUT通过网线连接路由器, 检测DUT获取IPv4地址
 excel_preset: The box is connected to the DHCP function device.
 excel_steps: "1. Plug the network cable into the box Ethernet interface.\n2. Select Ethernet DHCP in the network settings."
 excel_expected: "1. The box successfully obtains an IP address.\n2. can use the serial port tool to view the IP address of the box"

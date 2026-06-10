@@ -3,7 +3,7 @@ id: Ethernet_Func_003
 auto_status: auto
 name: DHCP模式下重启后网络自动恢复
 testbed: ethernet_router_lan
-description: 验证DUT在DHCP模式下重启后, 能自动重新获取IPv4地址并恢复网络连接
+description: DHCP模式下, DUT断电重启, 检测DUT通过DHCP重新获取IP
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. the box has an IP address. can access the Internet\n2. Power off the  DUT\n3. Power on the  DUT.DUT  can get the IP address normally and can access the Internet."
 excel_expected: 1. After the box is powered off and restarted. it can normally obtain IP and can access the Internet.

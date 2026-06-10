@@ -3,7 +3,7 @@ id: Ethernet_Func_007
 auto_status: auto
 name: 静态IP模式配置成功
 testbed: ethernet_router_lan
-description: 验证DUT通过Settings UI配置静态IP后, 以太网连接正常且获取到配置的IPv4地址
+description: Static IP模式下, DUT配置静态IP, 检测DUT IP mode为Static且网络连通
 excel_preset: The box is connected to the DHCP function device.
 excel_steps: "1. Plug the network cable into the box Ethernet interface.\n2. Set the IP address to static."
 excel_expected: "1. The box static IP is set successfully\n2.Static IP address succeful"

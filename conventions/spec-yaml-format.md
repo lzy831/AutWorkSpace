@@ -11,7 +11,35 @@
 | `auto_status` | ✅ | `auto`(已实现) / `pending`(可行未做) / `manual`(不实现) | — |
 | `name` | ✅ | 简短用例名称 | 参数值、实现细节 |
 | `testbed` | ✅ | 引用 `ClaudeWorkSpace/environments/<id>.yaml` | — |
-| `description` | ✅ | 测试目的和场景的宏观描述 | SSID、密码、IP、cmd wifi status、Supplicant、错误字符串、实现方式 |
+| `description` | ✅ | 测试目的和场景的宏观描述，遵守 description 模板规则 | SSID、密码、IP、cmd wifi status、Supplicant、错误字符串、实现方式 |
+
+### description 模板
+
+`description` 由 `[状态]`,`[动作(含主体)]`,`检测[结果(含主体)]` 三要素组成，多步骤时串联 `动作→检测` 链条。
+
+格式：`[状态]下, [动作(含主体)], 检测[结果(含主体)], [动作(含主体)], 检测[结果(含主体)]`
+
+规则：
+```yaml
+# ✅ 正确
+description: DHCP模式下, 拔掉DUT端网线, 检测DUT IP消失, 重新插入网线, 检测DUT通过DHCP重新获取IP
+description: Static IP模式下, DUT配置静态IP, 检测DUT IP mode为Static且网络连通
+
+# ❌ 错误（缺少主体）
+description: DHCP模式下, 拔掉网线, 检测IP消失
+
+# ❌ 错误（含实现细节）
+description: DHCP模式下, 通过ip link down模拟拔掉DUT端网线, 检测DUT IP消失
+
+# ❌ 错误（动作后有多余的"后"）
+description: DHCP模式下, 拔掉网线后, 检测IP消失
+```
+
+- **状态**：网络模式(DHCP/Static IP/双栈)或前置条件(DUT连接IPv6路由器并正常获取双栈IP地址)
+- **动作**：须含明确主体(DUT/路由器/系统)
+- **检测**：验证点，用 `检测` 关键词，结果须含主体
+- 动作与检测间用 `,` 分隔，不用 `后,`
+- 不含实现细节(ip link、ADB、SSH)
 
 ## hooks
 

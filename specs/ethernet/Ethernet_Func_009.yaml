@@ -3,7 +3,7 @@ id: Ethernet_Func_009
 auto_status: auto
 name: Static模式下DUT断电重启后IP保持不变
 testbed: ethernet_router_lan
-description: 验证 Static 模式下 DUT 断电重启后不会丢失静态 IP 地址
+description: Static IP模式下, DUT断电重启, 检测DUT Static IP保持不变
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. Set DUT IP address to static\n2. Power off the DUT\n3. Power on the DUT"
 excel_expected: 1. After DUT boot up,DUT can get the IP address and IP address not change

@@ -3,7 +3,7 @@ id: Ethernet_Func_014
 auto_status: auto
 name: 以太网从DHCP切换到静态IP
 testbed: ethernet_router_lan
-description: 验证DUT能正常从DHCP模式切换到静态IP模式, 切换后以太网连接正常且使用配置的静态IP地址
+description: DHCP模式下, DUT获取IP后切换到Static IP, 检测DUT IP mode变为Static
 excel_preset: The box is connected to the DHCP function device.
 excel_steps: "1. Select Ethernet DHCP in the network settings to successfully obtain an IP address.\n2. Switch IP address to static"
 excel_expected: "1. can get the DHCP IP address\n2. static IP settings are successful. can get IP address. normal Internet access"

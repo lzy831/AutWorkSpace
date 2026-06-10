@@ -3,7 +3,7 @@ id: Ethernet_Func_013
 auto_status: auto
 name: 输入无效静态IP时系统报错
 testbed: ethernet_router_lan
-description: 验证通过Settings UI配置静态IP时, 输入无效IP地址后系统应显示 'IP settings not valid' 错误提示并阻止保存
+description: Static IP模式下, DUT输入无效静态IP, 检测系统弹出IP settings not valid错误提示
 excel_preset: Platform connect  router
 excel_steps: "1. Enter set IP address interface\n2. the platform static IP address or DNS input error"
 excel_expected: 1. failed to connect to the AP. and there are related error reminders

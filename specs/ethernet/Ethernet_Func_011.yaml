@@ -3,7 +3,7 @@ id: Ethernet_Func_011
 auto_status: auto
 name: 静态IP模式下路由器重启后DUT恢复网络
 testbed: ethernet_router_lan
-description: 验证DUT配置静态IP后, 路由器重启, 期间DUT检测到断网, 路由器恢复后, DUT自动恢复网络连接且保持静态IP配置不变
+description: Static IP模式下, 路由器断电重启, 检测DUT恢复Static IP地址和网络连接
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. Set the DUT IP address to static\n2. Power off the route\n4. Power on the route"
 excel_expected: 1. After route power on,DUT  can  get the IP address.

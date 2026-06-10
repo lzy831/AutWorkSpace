@@ -3,7 +3,7 @@ id: Ethernet_Func_002
 auto_status: auto
 name: DHCP模式下DUT侧拔插网线后IP恢复
 testbed: ethernet_router_lan
-description: 验证DUT在DHCP模式下,通过ip link down模拟拔掉DUT端网线后IP消失,ip link up后能通过DHCP恢复IP地址
+description: DHCP模式下, 拔掉DUT端网线, 检测DUT IP消失, 重新插入网线, 检测DUT通过DHCP重新获取IP
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. the box has an IP address. can access the Internet\n2. unplug the box end network cable\n3. the box IP address disappears\n4. plug in the Internet cable. the box can regain the IP address. normal Internet access"
 excel_expected: 1. Unplug the network cable box and the IP address disappears. After plugging in the Internet cable. you can regain the IP address.

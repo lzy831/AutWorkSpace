@@ -3,7 +3,7 @@ id: Ethernet_Func_040
 auto_status: auto
 name: 双栈网络(IPv4 + IPv6)地址获取
 testbed: ethernet_router_lan
-description: 验证DUT在DHCP模式下, 同时获取IPv4地址和global IPv6地址
+description: DUT连接IPv6路由器, 检测DUT获取IPv4和IPv6地址
 excel_preset: The box is connected to the IPV6 function router.
 excel_steps: 1.DUT connect with an router which support IPV6 by Ethernet
 excel_expected: 1.DUT  get the IPV4 and IPV6 IP address succeful
