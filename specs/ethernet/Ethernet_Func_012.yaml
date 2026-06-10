@@ -1,33 +1,12 @@
 domain: ethernet
 id: Ethernet_Func_012
-auto_status: pending  # pending
-name: Static Connect static IP. can the box standby wake up automatically reconnect?
+auto_status: auto
+name: Static模式下待机唤醒后IP恢复
 testbed: ethernet_router_lan
-description: （概要）
+description: 验证静态 IP 模式下 DUT 深度睡眠后通过蓝牙遥控器唤醒，静态 IP 自动恢复
 
 setup_hooks: []
 teardown_hooks: []
-验证静态 IP 模式下 DUT 待机唤醒后能自动恢复网络连接，验证：1. 待机后 IP 断开；2. 唤醒后静态 IP 恢复。
-
-Preconditions（前置条件/环境准备）
-1. DUT 已配置静态 IP 并成功联网。
-
-Steps（操作步骤）
-Step 1：DUT 进入深度待机
-目的：触发深度待机，测试网络恢复能力。
-对应函数：step_enter_standby()
-Step 2
-
-# Excel raw data for review:
-#   Test_Item: Static
-#   Test_SubItem: Connect static IP. can the box standby wake up automatically reconnect?
-#   Priority: P0
-#   Preset: The box has successfully obtained an IP address and can access the Internet.
-#   Steps: 1. Set the DUT IP address to static
-2. Press power key on remote
-3. After DUT  enter deep sleep status,press power key to wake up the DUT
-#   Expected: 1. After the standby. the box network is disconnected. After waking up. you can regain the IP address and access the Internet.
-#   API_Summary: [{"kind": "step", "function_name": "step_enter_standby", "description": "使 DUT 进入完全待机/深度休眠状态。", "category": "ethernet_static", "tags": ["kind:step", "domain:ethernet_static"], "params": {}, "pre_condi
 
 preconditions:
   - description: 确保 DUT 处于唤醒状态再开始测试
@@ -36,17 +15,89 @@ preconditions:
       params:
         max_retries: 3
 
-  - description: DUT以太网物理链路已连通
+  - description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+    operation:
+      api: step_enable_ethernet
+
+  - description: DUT 以太网物理链路已连通
     operation:
       api: step_ensure_router_lan_up
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
-  - description: TODO - based on test preset: The box has successfully obtained an IP address and can access the Internet.
+  - description: 采集网络信息并配置静态 IP
+    operation:
+      api: step_discover_network_info
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
+
+  - description: 配置静态 IP 地址
+    operation:
+      api: step_set_static_ip
+      params:
+        ip_address: ${step_discover_network_info.data.static_ip}
+        gateway: ${step_discover_network_info.data.gateway}
+        dns: ${step_discover_network_info.data.dns}
+    check:
+      api: check_ethernet_ip_mode
+      params:
+        expected_mode: static
+
+  - description: 蓝牙遥控器已配对并连接
+    operation:
+      api: step_init_bt_env
+
+  - description: 创建蓝牙遥控器设备句柄
+    operation:
+      api: step_create_rc_by_device_id
+
+  - description: 触发遥控器配对模式
+    operation:
+      api: step_trigger_rc_pairing_mode
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+
+  - description: 配对蓝牙遥控器
+    operation:
+      api: step_pair_bt_device
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+    check:
+      api: check_bt_device_connected
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
 
 procedure:
-  # TODO - review and implement based on Excel steps
   - operation:
-      description: TODO
+      description: DUT 进入深度睡眠
       automation:
-        api: TODO
+        api: step_enter_deep_sleep
+      wait_after: 20
+    check:
+      description: 确认 DUT 已进入深度睡眠
+      automation:
+        api: check_dut_in_deep_sleep
+
+  - operation:
+      description: 发送遥控器 Power 键唤醒 DUT
+      automation:
+        api: step_input_rc_key_power
+        params:
+          bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+      wait_after: 10
+
+  - operation:
+      description: 确保 DUT 完全唤醒 (ADB 已恢复）
+      automation:
+        api: step_ensure_awake
+        params:
+          max_retries: 5
+      wait_after: 30
+    check:
+      description: 确认 DUT 唤醒后静态 IP 恢复
+      automation:
+        api: check_ethernet_connected

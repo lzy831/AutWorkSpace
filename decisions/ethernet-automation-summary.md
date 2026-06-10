@@ -7,7 +7,7 @@
 - Aux Device (Router Client): AUX 模式远程控制 Router
 - iperf Tester (Linux PC): 性能/稳定性测试
 
-## auto (已实现) — 18 个
+## auto (已实现) — 20 个
 
 所有 auto 用例 precondition 统一为：`step_ensure_awake` → `step_enable_ethernet`(从异常恢复) → `step_ensure_router_lan_up` → `check_ethernet_connected`。
 
@@ -24,20 +24,20 @@
 | Func_009 | Static | Static 模式下 DUT 断电重启后 IP 保持不变 | — | AUT Server, Controller, Router, Aux | |
 | Func_010 | Static | Static 模式下路由器 LAN 口拔插后 IP 恢复 | `step_disconnect/connect_router_lan` | AUT Server, Controller, Router, Aux | |
 | Func_011 | Static | 静态 IP 模式下路由器重启后 DUT 恢复连接 | — | AUT Server, Controller, Router, Aux | ✅ |
+| Func_012 | Static | Static 模式下待机唤醒后 IP 恢复 | — | AUT Server, Controller, Router, Aux, BT RCU | |
 | Func_013 | Static | 设置无效静态 IP 时系统报错 | — | AUT Server, Controller | ✅ |
 | Func_014 | Static | 以太网从 DHCP 切换到静态 IP | — | AUT Server, Controller, Router, Aux | ✅ |
 | Func_040 | IPv6 | 双栈网络(IPv4 + IPv6)地址获取 | — | AUT Server, Controller, Router, Aux | ✅ |
 | Func_041 | IPv6 | 双栈网络下热插拔网线后 IP 恢复 | `step_disconnect/connect_router_lan` | AUT Server, Controller, Router, Aux | ✅ |
 | Func_042 | IPv6 | IPv6 双栈下 DUT 重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | |
 | Func_043 | IPv6 | 双栈网络下路由器重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | ✅ |
+| Func_044 | IPv6 | IPv6 双栈下待机唤醒后 IP 恢复 | — | AUT Server, Controller, Router, Aux, BT RCU | |
 | new_007 | MDIX | Auto MDIX 直连线正常连接 | — | AUT Server, Controller, Router, Aux | |
 
-## pending (待实现) — 14 个
+## pending (待实现) — 12 个
 
 | # | 分类 | 内容 | 设备依赖 | 待实现 step/check |
 |---|------|------|---------|------------------|
-| Func_012 | Static | Static 模式下待机唤醒后 IP 恢复 | AUT Server, Controller, Router, Aux, BT RCU | 深睡眠唤醒稳定性 |
-| Func_044 | IPv6 | IPv6 双栈下 DUT 待机唤醒后 IP 恢复 | AUT Server, Controller, Router, Aux, BT RCU | 深睡眠唤醒稳定性 |
 | Stab_001 | Stability | iperf 测试 12h (10M) | AUT Server, Controller, Router, iperf Tester | iperf step/check |
 | Stab_002 | Stability | 在线播放视频 12h (10M) | AUT Server, Controller, Router | 播放器 + 长跑框架 |
 | Stab_003 | Stability | Ping 12h (Super 5 100M) | AUT Server, Controller, Router | 长跑框架 |

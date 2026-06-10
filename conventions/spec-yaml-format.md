@@ -74,12 +74,41 @@ preconditions:
 
 ## 参数模板变量
 
-环境特定参数使用 `${...}` 引用，运行时由 ConfigManager 解析：
+环境特定参数使用 `${...}` 引用，运行时由 workflow 框架 `_resolve_simple_variable()` 解析。
 
+### 引用规则
+
+**1. 引用前序 step 的 data 输出（必须经过 `.data.`）：**
+
+step 返回值结构固定为：
+```python
+{"step": "step_xxx", "status": True, "data": {"field": "value"}, "timestamp": "..."}
 ```
-${custom_params.xxx}                   # 来自 --custom-params
-${step_discover_network_info.data.gateway}  # 前序 step 的 data 输出
-${step_disconnect_ethernet.data.port}        # 前序 step 的 data 输出
+
+解析器从 `context[step_id]` 取整个返回值 dict，再逐级访问属性。因此：
+
+```yaml
+# ✅ 正确：经过 .data. 访问实际业务字段
+${step_discover_network_info.data.gateway}
+${step_disconnect_router_lan.data.port}
+${step_create_rc_by_device_id.data.bluetooth_device}
+
+# ❌ 错误：跳过 .data.，解析器会在返回值顶层找 field，结果为 <未知变量>
+${step_discover_network_info.gateway}
+${step_create_rc_by_device_id.bluetooth_device}
+```
+
+**2. 引用 custom_params（无中间层）：**
+```yaml
+${custom_params.xxx}    # 来自 --custom-params 的 key
+```
+
+**3. 判断引用层级的快速方法：**
+
+凡是从 step 函数的 `data` 字典中取值，路径中必须有 `.data.`。检查方式：
+```bash
+# 找出所有跳过 .data. 的错误引用（排除 custom_params）
+grep -rn '\${step_[^}]*}' specs/ | grep -v '\.data\.' | grep -v 'custom_params'
 ```
 
 ## 不应出现在 spec 中的内容

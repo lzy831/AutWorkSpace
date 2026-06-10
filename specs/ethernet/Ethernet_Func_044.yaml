@@ -1,32 +1,13 @@
 domain: ethernet
 id: Ethernet_Func_044
-auto_status: pending  # pending
-name: DHCP IPV6 DUT connect with IPV6 route and suspend the DUT
+auto_status: auto
+name: IPv6双栈下待机唤醒后IP恢复
 testbed: ethernet_router_lan
-description: （概要）
+description: 验证 IPv6 双栈网络下 DUT 深度睡眠后通过蓝牙遥控器唤醒，IPv4 和 IPv6 地址均自动恢复
 
 setup_hooks: []
-teardown_hooks: []
-验证 DUT 连接 IPv6 路由器后待机唤醒能重新获取双栈 IP，验证：唤醒后 IPv4 和 IPv6 地址均恢复。
-
-Preconditions（前置条件/环境准备）
-1. DUT 已连接至支持 IPv6 的路由器并获取双栈 IP。
-
-Steps（操作步骤）
-Step 1：DUT 进入深度待机状态
-目的：触发待机，测试双栈 IP 恢复能力。
-对应函数：step_enter_stand
-
-# Excel raw data for review:
-#   Test_Item: DHCP IPV6
-#   Test_SubItem: DUT connect with IPV6 route and suspend the DUT
-#   Priority: P0
-#   Preset: DUT connect with IPV6 route
-#   Steps: 1. DUT connect with route which support IPV6
-2.Press power key on DUT's remote 
-3.When  DUT  enter  sleep  status,press power key on DUT's remote to  wake  up the  DUT
-#   Expected: After  DUT  wake up,DUT  can get the IPV4 and IPV6 IP address
-#   API_Summary: [{"kind": "step", "function_name": "step_enter_standby", "description": "使 DUT 进入完全待机/深度休眠。", "category": "ethernet_ipv6", "tags": ["kind:step", "domain:ethernet_ipv6"], "params": {}, "pre_conditions"
+teardown_hooks:
+  - step_disable_router_ipv6
 
 preconditions:
   - description: 确保 DUT 处于唤醒状态再开始测试
@@ -35,17 +16,93 @@ preconditions:
       params:
         max_retries: 3
 
-  - description: DUT以太网物理链路已连通
+  - description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+    operation:
+      api: step_enable_ethernet
+
+  - description: DUT 以太网物理链路已连通
     operation:
       api: step_ensure_router_lan_up
     check:
       api: check_ethernet_connected
+      params:
+        method: cmd
 
-  - description: TODO - based on test preset: DUT connect with IPV6 route
+  - description: DUT 设为 DHCP 模式
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
+
+  - description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
+    operation:
+      api: step_enable_router_ipv6
+    check:
+      api: check_ethernet_dual_stack_ip_obtained
+
+  - description: 蓝牙遥控器已配对并连接
+    operation:
+      api: step_init_bt_env
+
+  - description: 创建蓝牙遥控器设备句柄
+    operation:
+      api: step_create_rc_by_device_id
+
+  - description: 触发遥控器配对模式
+    operation:
+      api: step_trigger_rc_pairing_mode
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+
+  - description: 配对蓝牙遥控器
+    operation:
+      api: step_pair_bt_device
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+    check:
+      api: check_bt_device_connected
+      params:
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
 
 procedure:
-  # TODO - review and implement based on Excel steps
   - operation:
-      description: TODO
+      description: DUT 进入深度睡眠
       automation:
-        api: TODO
+        api: step_enter_deep_sleep
+      wait_after: 20
+    check:
+      description: 确认 DUT 已进入深度睡眠
+      automation:
+        api: check_dut_in_deep_sleep
+
+  - operation:
+      description: 发送遥控器 Power 键唤醒 DUT
+      automation:
+        api: step_input_rc_key_power
+        params:
+          bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+      wait_after: 10
+
+  - operation:
+      description: 确保 DUT 完全唤醒（ADB 已恢复）
+      automation:
+        api: step_ensure_awake
+        params:
+          max_retries: 5
+      wait_after: 30
+    check:
+      description: 确认唤醒后 IPv4 地址已恢复
+      automation:
+        api: check_ethernet_connected
+
+  - operation:
+      description: 重新发送 RA 使 DUT 通过 SLAAC 获取 IPv6 地址
+      automation:
+        api: step_enable_router_ipv6
+        wait_after: 10
+    check:
+      description: 确认 DUT 恢复双栈 IP
+      automation:
+        api: check_ethernet_dual_stack_ip_obtained

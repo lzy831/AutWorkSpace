@@ -43,17 +43,17 @@ preconditions:
     operation:
       api: step_trigger_rc_pairing_mode
       params:
-        bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
 
   - description: 配对蓝牙遥控器
     operation:
       api: step_pair_bt_device
       params:
-        bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
     check:
       api: check_bt_device_connected
       params:
-        bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
 
 procedure:
   - operation:
@@ -71,7 +71,7 @@ procedure:
       automation:
         api: step_input_rc_key_power
         params:
-          bluetooth_device: ${step_create_rc_by_device_id.bluetooth_device}
+          bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
       wait_after: 10
 
   - operation:
