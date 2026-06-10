@@ -4,40 +4,37 @@ auto_status: auto
 name: Auto MDIX 直连线正常连接
 testbed: ethernet_router_lan
 description: 验证 Auto MDIX 功能在标准直连线连接下能正常获取 IP 地址并通信
-
+excel_preset: "1.A router\n2.1 piece direct Ethernet cable"
+excel_steps: "1.DUT's IP address set to auto\n2.DUT connect with router by direct Ethernet cable\n3.Check DUT's IP  address  and  ping router's gateway"
+excel_expected: DUT  can  get IP address and ping router gateway successful
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
-    operation:
-      api: step_enable_ethernet
-
-  - description: DUT 以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+  operation:
+    api: step_enable_ethernet
+- description: DUT 以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: DUT 设为 DHCP 模式
-      api: step_set_ip_settings_to_dhcp
-    check:
-      description: 确认 DUT 通过 DHCP 获取 IPv4 地址
-      api: check_ethernet_connected
-
-  - operation:
-      description: Ping 路由器网关验证连通性
-      api: step_discover_network_info
-    check:
-      description: 确认网关可达
-      api: check_ethernet_connected
+- operation:
+    description: DUT 设为 DHCP 模式
+    api: step_set_ip_settings_to_dhcp
+  check:
+    description: 确认 DUT 通过 DHCP 获取 IPv4 地址
+    api: check_ethernet_connected
+- operation:
+    description: Ping 路由器网关验证连通性
+    api: step_discover_network_info
+  check:
+    description: 确认网关可达
+    api: check_ethernet_connected

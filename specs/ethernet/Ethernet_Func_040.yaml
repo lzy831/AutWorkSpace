@@ -1,53 +1,49 @@
 domain: ethernet
 id: Ethernet_Func_040
-auto_status: auto  # auto
+auto_status: auto
 name: 双栈网络(IPv4 + IPv6)地址获取
 testbed: ethernet_router_lan
 description: 验证DUT在DHCP模式下, 同时获取IPv4地址和global IPv6地址
-
+excel_preset: The box is connected to the IPV6 function router.
+excel_steps: 1.DUT connect with an router which support IPV6 by Ethernet
+excel_expected: 1.DUT  get the IPV4 and IPV6 IP address succeful
 setup_hooks: []
 teardown_hooks:
-  - step_disable_router_ipv6
-
-
+- step_disable_router_ipv6
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: DUT IP设置模式为DHCP
-    operation:
-      api: step_set_ip_settings_to_dhcp
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 路由器 IPv6 LAN 侧功能已启用
-    operation:
-      api: step_enable_router_ipv6
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT IP设置模式为DHCP
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 路由器 IPv6 LAN 侧功能已启用
+  operation:
+    api: step_enable_router_ipv6
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: 等待 SLAAC 分配 IPv6 地址
-      api: step_discover_network_info
-      wait_after: 10
-    check:
-      description: 确认同时获取到IPv4和global IPv6地址
-      api: check_ethernet_dual_stack_ip_obtained
-      timeout: 60
-      on_failure: abort
+- operation:
+    description: 等待 SLAAC 分配 IPv6 地址
+    api: step_discover_network_info
+    wait_after: 10
+  check:
+    description: 确认同时获取到IPv4和global IPv6地址
+    api: check_ethernet_dual_stack_ip_obtained
+    timeout: 60
+    on_failure: abort

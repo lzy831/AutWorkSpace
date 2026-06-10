@@ -4,61 +4,56 @@ auto_status: auto
 name: DHCP模式下路由器LAN口拔插后IP恢复
 testbed: ethernet_router_lan
 description: 验证 DHCP 模式下拔掉路由器 LAN 口网线后 DUT IP 消失，重新插上后 DUT 能重新获取 IP 地址
-
+excel_preset: The box has successfully obtained an IP address and can access the Internet.
+excel_steps: "1. DUT connect with route by Ethernet cable\n2. Unplug the router's upstream network cable.\n3. Plug in the Internet cable."
+excel_expected: 1. Unplug the IP address of the upstream network cable box on the router and disappear. After plugging in the Internet cable. you can regain the IP address.
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
-    operation:
-      api: step_enable_ethernet
-
-  - description: DUT 以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+  operation:
+    api: step_enable_ethernet
+- description: DUT 以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: 确保 DUT 使用 DHCP 模式
-      api: step_set_ip_settings_to_dhcp
-    check:
-      description: 确认 DHCP 模式生效
-      api: check_ethernet_connected
-
-  - operation:
-      description: 采集当前以太网网络信息(MAC/IP/网关等)
-      api: step_discover_network_info
-    check:
-      description: 确认网络信息采集完成
-      api: check_ethernet_connected
-
-  - operation:
-      description: 断开路由器 LAN 口(DUT 所在端口 PHY 断电)
-      api: step_disconnect_router_lan
-      params:
-        mac: ${step_discover_network_info.data.mac}
-      wait_after: 3
-    check:
-      description: DUT 以太网 IP 消失
-      api: check_ethernet_disconnected
-
-  - operation:
-      description: 恢复路由器 LAN 口(DUT 所在端口 PHY 上电)
-      api: step_connect_router_lan
-      params:
-        port: ${step_disconnect_router_lan.data.port}
-        mac: ${step_discover_network_info.data.mac}
-      wait_after: 5
-    check:
-      description: DUT 重新通过 DHCP 获取 IP 地址
-      api: check_ethernet_connected
+- operation:
+    description: 确保 DUT 使用 DHCP 模式
+    api: step_set_ip_settings_to_dhcp
+  check:
+    description: 确认 DHCP 模式生效
+    api: check_ethernet_connected
+- operation:
+    description: 采集当前以太网网络信息(MAC/IP/网关等)
+    api: step_discover_network_info
+  check:
+    description: 确认网络信息采集完成
+    api: check_ethernet_connected
+- operation:
+    description: 断开路由器 LAN 口(DUT 所在端口 PHY 断电)
+    api: step_disconnect_router_lan
+    params:
+      mac: ${step_discover_network_info.data.mac}
+    wait_after: 3
+  check:
+    description: DUT 以太网 IP 消失
+    api: check_ethernet_disconnected
+- operation:
+    description: 恢复路由器 LAN 口(DUT 所在端口 PHY 上电)
+    api: step_connect_router_lan
+    params:
+      port: ${step_disconnect_router_lan.data.port}
+      mac: ${step_discover_network_info.data.mac}
+    wait_after: 5
+  check:
+    description: DUT 重新通过 DHCP 获取 IP 地址
+    api: check_ethernet_connected

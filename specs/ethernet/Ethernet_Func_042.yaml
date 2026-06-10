@@ -4,53 +4,48 @@ auto_status: auto
 name: IPv6双栈下DUT重启后IP恢复
 testbed: ethernet_router_lan
 description: 验证 IPv6 双栈模式下 DUT 重启后能重新获取 IPv4 和 IPv6 地址
-
+excel_preset: DUT connect with IPV6 route
+excel_steps: "1. DUT connect with route which support IPV6\n2.Power off the DUT\n3.Power on the DUT"
+excel_expected: After DUT power on,DUT can get the IPV4 and IPV6 IP address
 setup_hooks: []
 teardown_hooks:
-  - step_disable_router_ipv6
-
-
+- step_disable_router_ipv6
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: DUT 设为 DHCP 模式
-    operation:
-      api: step_set_ip_settings_to_dhcp
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 启用路由器 IPv6 并确认 DUT 获取双栈 IP
-    operation:
-      api: step_enable_router_ipv6
-    check:
-      api: check_ethernet_dual_stack_ip_obtained
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT 设为 DHCP 模式
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 启用路由器 IPv6 并确认 DUT 获取双栈 IP
+  operation:
+    api: step_enable_router_ipv6
+  check:
+    api: check_ethernet_dual_stack_ip_obtained
 procedure:
-  - operation:
-      description: 重启 DUT
-      api: step_reboot_dut
-      params:
-        timeout: 180
-
-  - operation:
-      description: 等待 DUT 启动完成并重新获取双栈 IP
-      api: step_wait_seconds
-      params:
-        seconds: 60
-    check:
-      description: 确认 DUT 重启后重新获取双栈 IP
-      api: check_ethernet_dual_stack_ip_obtained
+- operation:
+    description: 重启 DUT
+    api: step_reboot_dut
+    params:
+      timeout: 180
+- operation:
+    description: 等待 DUT 启动完成并重新获取双栈 IP
+    api: step_wait_seconds
+    params:
+      seconds: 60
+  check:
+    description: 确认 DUT 重启后重新获取双栈 IP
+    api: check_ethernet_dual_stack_ip_obtained

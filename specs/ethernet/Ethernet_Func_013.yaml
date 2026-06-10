@@ -1,35 +1,32 @@
 domain: ethernet
 id: Ethernet_Func_013
-auto_status: auto  # auto
+auto_status: auto
 name: 输入无效静态IP时系统报错
 testbed: ethernet_router_lan
 description: 验证通过Settings UI配置静态IP时, 输入无效IP地址后系统应显示 'IP settings not valid' 错误提示并阻止保存
-
+excel_preset: Platform connect  router
+excel_steps: "1. Enter set IP address interface\n2. the platform static IP address or DNS input error"
+excel_expected: 1. failed to connect to the AP. and there are related error reminders
 setup_hooks: []
 teardown_hooks: []
-
-# TODO: 后续增加前置条件确保系统语言为英语, 否则 check_prompt_invalid_ip 中硬编码的英文错误提示文本会匹配失败
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: 通过Settings UI输入无效静态IP并提交
-      api: step_set_static_ip_invalid
-    check:
-      description: 确认系统显示IP配置无效的错误提示
-      api: check_prompt_invalid_ip
-      on_failure: abort
+- operation:
+    description: 通过Settings UI输入无效静态IP并提交
+    api: step_set_static_ip_invalid
+  check:
+    description: 确认系统显示IP配置无效的错误提示
+    api: check_prompt_invalid_ip
+    on_failure: abort

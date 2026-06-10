@@ -3,27 +3,16 @@ id: Ethernet_Stab_001
 name: 10M HUB testing Iperf tool test for 12 hours
 testbed: ethernet_router_lan
 category: Stability
-auto_status: pending  # pending: not yet implemented
+auto_status: pending
 description: 10M HUB testing Iperf tool test for 12 hours
-
+excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. iperf tool\n4. PC"
+excel_steps: "1. The box is connected to the route through the network cable.\n2. PC connect the same toute by Ethernet cable, PC install iperf tool\n3. test the throughput for 12hours by iPerf  tool"
+excel_expected: "RX not less than 90Mbits/sec:"
 setup_hooks: []
 teardown_hooks: []
-
-# Excel raw data:
-#   Priority: P0
-#   Preset: 1. ASUS RT-AC1900P
-#   2. network cable
-#   3. iperf tool
-#   4. PC
-#   Steps: 1. The box is connected to the route through the network cable.
-#   2. PC connect the same toute by Ethernet cable, PC install iperf tool
-#   3. test the throughput for 12hours by iPerf  tool
-#   Expected: RX not less than 90Mbits/sec:
-
 preconditions:
-  - description: TODO
-
+- description: TODO
 procedure:
-  - operation:
-      description: TODO
-      api: TODO
+- operation:
+    description: TODO
+    api: TODO

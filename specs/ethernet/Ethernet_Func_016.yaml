@@ -1,9 +1,11 @@
 domain: ethernet
 id: Ethernet_Func_016
-auto_status: manual  # PPPOE related, not automatable
+auto_status: manual
 name: Network status switching Connect to DHCP first. switch to PPPoE. and the network connection is normal.
 testbed: ethernet_router_lan
 description: （概要）
-# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+excel_preset: The box is connected to the DHCP function device.
+excel_steps: "1. Select Ethernet static IP in the network settings. enter a static IP address. and obtain an IP address successfully.\n2. then switch to DHCP"
+excel_expected: "1. The static IP setting is successful. and the IP address can be obtained.\n2. you can get the DHCP IP address"
 preconditions: []
 procedure: []

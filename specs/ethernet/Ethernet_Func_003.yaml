@@ -1,44 +1,42 @@
 domain: ethernet
 id: Ethernet_Func_003
-auto_status: auto  # auto
+auto_status: auto
 name: DHCP模式下重启后网络自动恢复
 testbed: ethernet_router_lan
 description: 验证DUT在DHCP模式下重启后, 能自动重新获取IPv4地址并恢复网络连接
-
+excel_preset: The box has successfully obtained an IP address and can access the Internet.
+excel_steps: "1. the box has an IP address. can access the Internet\n2. Power off the  DUT\n3. Power on the  DUT.DUT  can get the IP address normally and can access the Internet."
+excel_expected: 1. After the box is powered off and restarted. it can normally obtain IP and can access the Internet.
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: DUT已通过DHCP获取IPv4地址
-    operation:
-      api: step_set_ip_settings_to_dhcp
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT已通过DHCP获取IPv4地址
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: 重启DUT
-      api: step_reboot_dut
-      params:
-        mode: normal
-        timeout: 120
-      wait_after: 30
-    check:
-      description: 重启后DUT通过DHCP恢复网络连接
-      api: check_ethernet_connected
+- operation:
+    description: 重启DUT
+    api: step_reboot_dut
+    params:
+      mode: normal
+      timeout: 120
+    wait_after: 30
+  check:
+    description: 重启后DUT通过DHCP恢复网络连接
+    api: check_ethernet_connected

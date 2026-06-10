@@ -1,9 +1,11 @@
 domain: ethernet
 id: Ethernet_Comp_004
-auto_status: manual  # requires hardware switching, not automatable
+auto_status: manual
 name: Router compatibility Ping packet test (TP-LINK TL-SF2005 (HUB) 100M network port)
 testbed: ethernet_router_lan
 description: Router compatibility Ping packet test (TP-LINK TL-SF2005 (HUB) 100M network port)
-# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+excel_preset: "1. TP-LINK TL-SF2005 (HUB) 100M network port\n2, 100M network cable\n3, ATKKping tools\n4, iperf tool\n5, PC"
+excel_steps: "1. The box is connected to the HUB through the network cable.\n2, PC connected to this HUB, PC installed ATKKping tool and iperf tool\n3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool."
+excel_expected: "Average packet loss rate:\nMaximum value:\nMinimum value:"
 preconditions: []
 procedure: []

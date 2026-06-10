@@ -1,34 +1,33 @@
 domain: ethernet
 id: Ethernet_Func_001
-auto_status: auto  # auto
+auto_status: auto
 name: DHCP模式下获取IPv4地址
 testbed: ethernet_router_lan
 description: 验证DUT在网线物理连通情况下, IP地址模式设置为DHCP后, 可以正常获取到IPv4网络地址
-
+excel_preset: The box is connected to the DHCP function device.
+excel_steps: "1. Plug the network cable into the box Ethernet interface.\n2. Select Ethernet DHCP in the network settings."
+excel_expected: "1. The box successfully obtains an IP address.\n2. can use the serial port tool to view the IP address of the box"
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: 将DUT IP设置模式切换为DHCP
-      api: step_set_ip_settings_to_dhcp
-      wait_after: 5
-    check:
-      description: 确认DUT通过DHCP成功获取IPv4地址
-      api: check_ethernet_connected
-      timeout: 30
+- operation:
+    description: 将DUT IP设置模式切换为DHCP
+    api: step_set_ip_settings_to_dhcp
+    wait_after: 5
+  check:
+    description: 确认DUT通过DHCP成功获取IPv4地址
+    api: check_ethernet_connected
+    timeout: 30

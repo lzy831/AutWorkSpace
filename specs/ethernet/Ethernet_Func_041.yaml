@@ -1,81 +1,72 @@
 domain: ethernet
 id: Ethernet_Func_041
-auto_status: auto  # auto
+auto_status: auto
 name: 双栈网络下热插拔网线后 IP 恢复
 testbed: ethernet_router_lan
 description: 验证双栈网络下热插拔网线后DUT能重新获取IPv4和IPv6地址
-
+excel_preset: The box is connected to the IPV6 function router.
+excel_steps: "1.DUT connect with an router which support IPV6 by Ethernet\n2.At Ethernet detail interface,hot-plug out Ethernet cable\n3.At Ethernet detail interface,hot-plug in Ethernet cable"
+excel_expected: "1. After hot-plug out Ethernet cable,Ethernet display not connect and not display the IP address\n2.After hot-plug in Etheconnected and not display the IP address"
 setup_hooks: []
 teardown_hooks:
-  - step_disable_router_ipv6
-
-
+- step_disable_router_ipv6
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: DUT 设为 DHCP 模式
-    operation:
-      api: step_set_ip_settings_to_dhcp
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
-    operation:
-      api: step_enable_router_ipv6
-    check:
-      api: check_ethernet_dual_stack_ip_obtained
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT 设为 DHCP 模式
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
+  operation:
+    api: step_enable_router_ipv6
+  check:
+    api: check_ethernet_dual_stack_ip_obtained
 procedure:
-  - operation:
-      description: 采集当前网络信息供后续步骤使用
-      api: step_discover_network_info
-    check:
-      description: 确认网络正常
-      api: check_ethernet_connected
-
-  - operation:
-      description: 断开DUT以太网物理链路
-      api: step_disconnect_router_lan
-      params:
-        mac: ${step_discover_network_info.data.mac}
-      wait_after: 5
-    check:
-      description: 确认以太网已断开
-      api: check_ethernet_disconnected
-      on_failure: abort
-
-  - operation:
-      description: 恢复DUT以太网物理链路
-      api: step_connect_router_lan
-      params:
-        port: ${step_disconnect_router_lan.data.port}
-        mac: ${step_discover_network_info.data.mac}
-    check:
-      description: 确认以太网已恢复
-      api: check_ethernet_connected
-
-  # eth0 link flap 后 DUT 丢失 global IPv6 地址(SLAAC 被动机制,需新 RA 触发重新生成)
-  # 当前路由器不支持持续广播 RA,因此 reconnect 后必须重发
-  - operation:
-      description: 重新发送RA使DUT通过SLAAC获取IPv6
-      api: step_enable_router_ipv6
-      wait_after: 10
-    check:
-      description: 确认重新获取双栈 IP
-      api: check_ethernet_dual_stack_ip_obtained
-      timeout: 60
-      on_failure: abort
+- operation:
+    description: 采集当前网络信息供后续步骤使用
+    api: step_discover_network_info
+  check:
+    description: 确认网络正常
+    api: check_ethernet_connected
+- operation:
+    description: 断开DUT以太网物理链路
+    api: step_disconnect_router_lan
+    params:
+      mac: ${step_discover_network_info.data.mac}
+    wait_after: 5
+  check:
+    description: 确认以太网已断开
+    api: check_ethernet_disconnected
+    on_failure: abort
+- operation:
+    description: 恢复DUT以太网物理链路
+    api: step_connect_router_lan
+    params:
+      port: ${step_disconnect_router_lan.data.port}
+      mac: ${step_discover_network_info.data.mac}
+  check:
+    description: 确认以太网已恢复
+    api: check_ethernet_connected
+- operation:
+    description: 重新发送RA使DUT通过SLAAC获取IPv6
+    api: step_enable_router_ipv6
+    wait_after: 10
+  check:
+    description: 确认重新获取双栈 IP
+    api: check_ethernet_dual_stack_ip_obtained
+    timeout: 60
+    on_failure: abort

@@ -4,55 +4,51 @@ auto_status: auto
 name: Static模式下DUT断电重启后IP保持不变
 testbed: ethernet_router_lan
 description: 验证 Static 模式下 DUT 断电重启后不会丢失静态 IP 地址
-
+excel_preset: The box has successfully obtained an IP address and can access the Internet.
+excel_steps: "1. Set DUT IP address to static\n2. Power off the DUT\n3. Power on the DUT"
+excel_expected: 1. After DUT boot up,DUT can get the IP address and IP address not change
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 采集网络信息获取静态 IP
-    operation:
-      api: step_discover_network_info
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: DUT 配置为静态 IP 模式
-    operation:
-      api: step_set_static_ip
-      params:
-        ip_address: ${step_discover_network_info.data.static_ip}
-        gateway: ${step_discover_network_info.data.gateway}
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 采集网络信息获取静态 IP
+  operation:
+    api: step_discover_network_info
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT 配置为静态 IP 模式
+  operation:
+    api: step_set_static_ip
+    params:
+      ip_address: ${step_discover_network_info.data.static_ip}
+      gateway: ${step_discover_network_info.data.gateway}
 procedure:
-  - operation:
-      description: 重启 DUT
-      api: step_reboot_dut
-      params:
-        timeout: 180
-
-  - operation:
-      description: 等待 DUT 启动完成并恢复网络
-      api: step_wait_seconds
-      params:
-        seconds: 60
-    check:
-      description: 确认 DUT IP 地址与重启前一致
-      api: check_ethernet_ip_mode
-      params:
-        expected_mode: static
-        expected_ip: ${step_set_static_ip.data.ip_address}
+- operation:
+    description: 重启 DUT
+    api: step_reboot_dut
+    params:
+      timeout: 180
+- operation:
+    description: 等待 DUT 启动完成并恢复网络
+    api: step_wait_seconds
+    params:
+      seconds: 60
+  check:
+    description: 确认 DUT IP 地址与重启前一致
+    api: check_ethernet_ip_mode
+    params:
+      expected_mode: static
+      expected_ip: ${step_set_static_ip.data.ip_address}

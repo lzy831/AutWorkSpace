@@ -1,9 +1,11 @@
 domain: ethernet
 id: Ethernet_Func_027
-auto_status: manual  # PPPOE related, not automatable
+auto_status: manual
 name: PPPOE Wrong password. correct username. dial
 testbed: ethernet_router_lan
 description: （概要）
-# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+excel_preset: The box is connected to the PPPOE dialing function device.
+excel_steps: "1. Select PPPOE dialing in the network settings.\n2. enter the wrong password. the user name is correct. dial"
+excel_expected: 1. Error code and error prompt. whether the prompt is displayed correctly (error code 691)
 preconditions: []
 procedure: []

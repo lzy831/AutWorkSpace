@@ -1,9 +1,11 @@
 domain: ethernet
 id: Ethernet_Func_038
-auto_status: manual  # PPPOE related, not automatable
+auto_status: manual
 name: PPPOE Hot-plug Ethernet cable after PPPOE succeful
 testbed: ethernet_router_lan
 description: （概要）
-# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+excel_preset: DUT connect with route which support PPPOE function
+excel_steps: "1.DUT PPPOE dial-up success\n2.Hot-plug Ethernet cable for several times"
+excel_expected: 1. The network is connected normally. the IP address is normal. and the netcfg display is correct.
 preconditions: []
 procedure: []

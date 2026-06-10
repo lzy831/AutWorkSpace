@@ -1,9 +1,11 @@
 domain: ethernet
 id: Ethernet_Func_020
-auto_status: manual  # PPPOE related, not automatable
+auto_status: manual
 name: PPPOE Connect PPPoE
 testbed: ethernet_router_lan
 description: （概要）
-# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+excel_preset: The box is connected to the PPPOE dialing function device.
+excel_steps: "1. Plug the network cable into the box Ethernet interface.\n2. Enter the correct PPPOE account and password in the network settings."
+excel_expected: "1. The box is successfully dialed and can obtain the PPPOE IP address.\n2. can use the serial port tool to view the box PPPOE IP address"
 preconditions: []
 procedure: []

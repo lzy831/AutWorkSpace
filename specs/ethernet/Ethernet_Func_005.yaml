@@ -4,56 +4,50 @@ auto_status: auto
 name: DHCP模式下路由器重启后DUT自动重连
 testbed: ethernet_router_lan
 description: 验证 DHCP 模式下路由器断电重启后 DUT 能重新获取 IP 地址
-
+excel_preset: The box has successfully obtained an IP address and can access the Internet.
+excel_steps: "1. the box has an IP address. can access the Internet\n2. disconnect the router power\n3. the box IP address disappears\n4. the router is powered back on. the box can regain the IP address. and the Internet is normal."
+excel_expected: Disconnect the IP address of the power box of the router and disappear. After power-on. the box can regain the IP address.
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-      params:
-        method: cmd
-
-  - description: DUT 设为 DHCP 模式
-    operation:
-      api: step_set_ip_settings_to_dhcp
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT 设为 DHCP 模式
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
 procedure:
-  - operation:
-      description: 采集当前网络信息供后续使用
-      api: step_discover_network_info
-    check:
-      description: 确认网络正常
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - operation:
-      description: 重启路由器(等同于断电重开)
-      api: step_reboot_router
-      params:
-        timeout: 180
-
-  - operation:
-      description: 等待 DUT 检测到链路恢复并重新 DHCP
-      api: step_wait_seconds
-      params:
-        seconds: 30
-    check:
-      description: 确认 DUT 重新获取了 IP 地址
-      api: check_ethernet_connected
+- operation:
+    description: 采集当前网络信息供后续使用
+    api: step_discover_network_info
+  check:
+    description: 确认网络正常
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- operation:
+    description: 重启路由器(等同于断电重开)
+    api: step_reboot_router
+    params:
+      timeout: 180
+- operation:
+    description: 等待 DUT 检测到链路恢复并重新 DHCP
+    api: step_wait_seconds
+    params:
+      seconds: 30
+  check:
+    description: 确认 DUT 重新获取了 IP 地址
+    api: check_ethernet_connected

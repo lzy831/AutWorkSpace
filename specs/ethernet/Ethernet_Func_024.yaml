@@ -1,9 +1,11 @@
 domain: ethernet
 id: Ethernet_Func_024
-auto_status: manual  # PPPOE related, not automatable
+auto_status: manual
 name: PPPOE User name is empty. password is not empty. dial
 testbed: ethernet_router_lan
 description: （概要）
-# 此用例在当前测试环境中不实现自动化, 不生成 workflow JSON.
+excel_preset: The box is connected to the PPPOE dialing function device.
+excel_steps: "1. Select PPPOE dialing in the network settings.\n2. the user name is empty. the password is not empty. dial"
+excel_expected: 1. Prompt "Username or password cannot be empty"
 preconditions: []
 procedure: []

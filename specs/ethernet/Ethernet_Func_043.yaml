@@ -1,68 +1,61 @@
 domain: ethernet
 id: Ethernet_Func_043
-auto_status: auto  # auto
+auto_status: auto
 name: 双栈网络下路由器重启后 IP 恢复
 testbed: ethernet_router_lan
 description: 验证双栈网络下路由器重启后DUT能重新获取IPv4和IPv6地址
-
+excel_preset: DUT connect with IPV6 route
+excel_steps: "1. DUT connect with route which support IPV6\n2.Power off the route\n3.Power on the route"
+excel_expected: After route power on,DUT can get the IPV4 and IPV6 IP address
 setup_hooks: []
 teardown_hooks:
-  - step_disable_router_ipv6
-
-
+- step_disable_router_ipv6
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: DUT以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: DUT 设为 DHCP 模式
-    operation:
-      api: step_set_ip_settings_to_dhcp
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
-    operation:
-      api: step_enable_router_ipv6
-    check:
-      api: check_ethernet_dual_stack_ip_obtained
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: DUT以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT 设为 DHCP 模式
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 路由器 IPv6 LAN 侧功能已启用且 DUT 已获取双栈 IP
+  operation:
+    api: step_enable_router_ipv6
+  check:
+    api: check_ethernet_dual_stack_ip_obtained
 procedure:
-  - operation:
-      description: 采集当前网络信息供后续验证比对
-      api: step_discover_network_info
-    check:
-      description: 确认网络正常
-      api: check_ethernet_connected
-
-  - operation:
-      description: SSH重启路由器并等待恢复上线
-      api: step_reboot_router
-      params:
-        timeout: 120
-    check:
-      description: 确认路由器已恢复且以太网已重连
-      api: check_ethernet_connected
-
-  # 路由器重启后 RA 需重发,原因同 041: SLAAC 被动机制,需新 RA 触发 DUT 重新生成 IPv6 地址
-  - operation:
-      description: 重新发送RA使DUT通过SLAAC获取IPv6
-      api: step_enable_router_ipv6
-      wait_after: 10
-    check:
-      description: 确认重新获取双栈 IP
-      api: check_ethernet_dual_stack_ip_obtained
-      timeout: 60
-      on_failure: abort
+- operation:
+    description: 采集当前网络信息供后续验证比对
+    api: step_discover_network_info
+  check:
+    description: 确认网络正常
+    api: check_ethernet_connected
+- operation:
+    description: SSH重启路由器并等待恢复上线
+    api: step_reboot_router
+    params:
+      timeout: 120
+  check:
+    description: 确认路由器已恢复且以太网已重连
+    api: check_ethernet_connected
+- operation:
+    description: 重新发送RA使DUT通过SLAAC获取IPv6
+    api: step_enable_router_ipv6
+    wait_after: 10
+  check:
+    description: 确认重新获取双栈 IP
+    api: check_ethernet_dual_stack_ip_obtained
+    timeout: 60
+    on_failure: abort

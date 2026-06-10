@@ -3,25 +3,16 @@ id: Ethernet_Stab_002
 name: 10M HUB testing Playback video online for 12hours
 testbed: ethernet_router_lan
 category: Stability
-auto_status: pending  # pending: not yet implemented
+auto_status: pending
 description: 10M HUB testing Playback video online for 12hours
-
+excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. PC"
+excel_steps: "1. DUT connect with route by Ethernet  cable \n2.Open YouTube  to playback video online for 12 hours"
+excel_expected: Vdeo playback normal
 setup_hooks: []
 teardown_hooks: []
-
-# Excel raw data:
-#   Priority: P1
-#   Preset: 1. ASUS RT-AC1900P
-#   2. network cable
-#   3. PC
-#   Steps: 1. DUT connect with route by Ethernet  cable 
-#   2.Open YouTube  to playback video online for 12 hours
-#   Expected: Vdeo playback normal
-
 preconditions:
-  - description: TODO
-
+- description: TODO
 procedure:
-  - operation:
-      description: TODO
-      api: TODO
+- operation:
+    description: TODO
+    api: TODO

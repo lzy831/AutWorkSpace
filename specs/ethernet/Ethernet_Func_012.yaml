@@ -4,95 +4,85 @@ auto_status: auto
 name: Static模式下待机唤醒后IP恢复
 testbed: ethernet_router_lan
 description: 验证静态 IP 模式下 DUT 深度睡眠后通过蓝牙遥控器唤醒，静态 IP 自动恢复
-
+excel_preset: The box has successfully obtained an IP address and can access the Internet.
+excel_steps: "1. Set the DUT IP address to static\n2. Press power key on remote\n3. After DUT  enter deep sleep status,press power key to wake up the DUT"
+excel_expected: 1. After the standby. the box network is disconnected. After waking up. you can regain the IP address and access the Internet.
 setup_hooks: []
 teardown_hooks: []
-
 preconditions:
-  - description: 确保 DUT 处于唤醒状态再开始测试
-    operation:
-      api: step_ensure_awake
-      params:
-        max_retries: 3
-
-  - description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
-    operation:
-      api: step_enable_ethernet
-
-  - description: DUT 以太网物理链路已连通
-    operation:
-      api: step_ensure_router_lan_up
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 采集网络信息并配置静态 IP
-    operation:
-      api: step_discover_network_info
-    check:
-      api: check_ethernet_connected
-      params:
-        method: cmd
-
-  - description: 配置静态 IP 地址
-    operation:
-      api: step_set_static_ip
-      params:
-        ip_address: ${step_discover_network_info.data.static_ip}
-        gateway: ${step_discover_network_info.data.gateway}
-        dns: ${step_discover_network_info.data.dns}
-    check:
-      api: check_ethernet_ip_mode
-      params:
-        expected_mode: static
-
-  - description: 蓝牙遥控器已配对并连接
-    operation:
-      api: step_init_bt_env
-
-  - description: 创建蓝牙遥控器设备句柄
-    operation:
-      api: step_create_rc_by_device_id
-
-  - description: 触发遥控器配对模式
-    operation:
-      api: step_trigger_rc_pairing_mode
-      params:
-        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
-
-  - description: 配对蓝牙遥控器
-    operation:
-      api: step_pair_bt_device
-      params:
-        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
-    check:
-      api: check_bt_device_connected
-      params:
-        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
-
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+  operation:
+    api: step_enable_ethernet
+- description: DUT 以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 采集网络信息并配置静态 IP
+  operation:
+    api: step_discover_network_info
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 配置静态 IP 地址
+  operation:
+    api: step_set_static_ip
+    params:
+      ip_address: ${step_discover_network_info.data.static_ip}
+      gateway: ${step_discover_network_info.data.gateway}
+      dns: ${step_discover_network_info.data.dns}
+  check:
+    api: check_ethernet_ip_mode
+    params:
+      expected_mode: static
+- description: 蓝牙遥控器已配对并连接
+  operation:
+    api: step_init_bt_env
+- description: 创建蓝牙遥控器设备句柄
+  operation:
+    api: step_create_rc_by_device_id
+- description: 触发遥控器配对模式
+  operation:
+    api: step_trigger_rc_pairing_mode
+    params:
+      bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+- description: 配对蓝牙遥控器
+  operation:
+    api: step_pair_bt_device
+    params:
+      bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+  check:
+    api: check_bt_device_connected
+    params:
+      bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
 procedure:
-  - operation:
-      description: DUT 进入深度睡眠
-      api: step_enter_deep_sleep
-      wait_after: 20
-    check:
-      description: 确认 DUT 已进入深度睡眠
-      api: check_dut_in_deep_sleep
-
-  - operation:
-      description: 发送遥控器 Power 键唤醒 DUT
-      api: step_input_rc_key_power
-      params:
-        bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
-      wait_after: 10
-
-  - operation:
-      description: 确保 DUT 完全唤醒 (ADB 已恢复）
-      api: step_ensure_awake
-      params:
-        max_retries: 5
-      wait_after: 30
-    check:
-      description: 确认 DUT 唤醒后静态 IP 恢复
-      api: check_ethernet_connected
+- operation:
+    description: DUT 进入深度睡眠
+    api: step_enter_deep_sleep
+    wait_after: 20
+  check:
+    description: 确认 DUT 已进入深度睡眠
+    api: check_dut_in_deep_sleep
+- operation:
+    description: 发送遥控器 Power 键唤醒 DUT
+    api: step_input_rc_key_power
+    params:
+      bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+    wait_after: 10
+- operation:
+    description: 确保 DUT 完全唤醒 (ADB 已恢复）
+    api: step_ensure_awake
+    params:
+      max_retries: 5
+    wait_after: 30
+  check:
+    description: 确认 DUT 唤醒后静态 IP 恢复
+    api: check_ethernet_connected
