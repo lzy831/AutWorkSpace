@@ -1,0 +1,25 @@
+﻿Ethernet Stability Test Case,,,,,,,,,,,,,,
+No.,"Priority
+(P0/P1/P2)",Test_Item,Test_SubItem,Test_Preset,Test_Step,Expected_Result,Actual_Result,Pass/Fail,Comments,Execution type,Author,是否可自动化,不可自动化原因,
+Ethernet_Stab_001,P0,10M HUB testing,Iperf tool test for 12 hours,"1. ASUS RT-AC1900P
+2. network cable
+3. iperf tool
+4. PC","1. The box is connected to the route through the network cable.
+2. PC connect the same toute by Ethernet cable, PC install iperf tool
+3. test the throughput for 12hours by iPerf  tool",RX not less than 90Mbits/sec:,92.4Mits/sec,N/A,,manual,weidong.feng,Yes,,
+Ethernet_Stab_002,P1,10M HUB testing,Playback video online for 12hours,"1. ASUS RT-AC1900P
+2. network cable
+3. PC","1. DUT connect with route by Ethernet  cable 
+2.Open YouTube  to playback video online for 12 hours",Vdeo playback normal,100%,N/A,,manual,weidong.feng,Yes,,
+Ethernet_Stab_003,P1,Super 5 100M network cable testing,Ping packet for 12 hours,"1. ASUS RT-AC1900P
+2. network cable
+3. iperf tool
+4. PC","1. The box is connected to the route through the network cable.
+2. PC connect the same toute by Ethernet cable, PC install iperf tool
+3. PC ping DUT's IP  address  for 12 hours",The  lost  packet  is 0%,,N/A,,manual,weidong.feng,Yes,,
+Ethernet_Stab_004,P1,autosuspend+ping,autosuspend+ping for 12 hours,"1. ASUS RT-AC1900P
+2. network cable
+3. DUT install autosuspend
+4. PC","1. The box is connected to the route through the network cable.
+2. PC connect the same toute by Ethernet cable, PC install iperf tool
+3. DUT install autosuspend apk and run autosuspend+ping for 12hours","After test 12hours,DUT connect Ethernet normal",,N/A,,manual,weidong.feng,Yes,,

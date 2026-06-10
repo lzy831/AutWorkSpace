@@ -1,0 +1,125 @@
+从服务器无法免密 SSH 到 AUX。请在 AUX（10.58.120.88）上直接运行以下命令：
+
+  1. 查看当前网络管理方式：
+
+  # 检查谁在管理网络
+  systemctl is-active NetworkManager
+  systemctl is-active wpa_supplicant
+  systemctl is-active systemd-networkd
+
+  # 如果是 NetworkManager，列出所有 WiFi 连接
+  nmcli con show | grep -i wifi
+
+  # 查看当前 WiFi 接口状态
+  nmcli dev status
+  iwconfig 2>/dev/null | grep -A5 wlan
+
+  2. 确认回连的行为：
+
+  # 列出 WiFi 连接的 auto-connect 设置
+  for conn in $(nmcli -t -f NAME con show); do
+      autoconnect=$(nmcli -t -f connection.autoconnect con show "$conn" 2>/dev/null)
+      echo "$conn: $autoconnect"
+  done
+
+  3. 如果回连未开启，启用：
+
+  # 假设 WiFi 连接名是 router-test（替换为实际名称）
+  nmcli con modify "<连接名>" connection.autoconnect yes
+  nmcli con modify "<连接名>" connection.autoconnect-retries 0
+
+  把步骤 1 和 2 的输出贴给我，我帮你分析。
+
+✻ Churned for 42s
+
+❯ zhiyuan.liu@amlogic-ThinkPad-L580:~$ systemctl is-active NetworkManager
+  active
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ systemctl is-active wpa_supplicant
+  active
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ systemctl is-active systemd-networkd
+  inactive
+  zhiyuan.lonn" 2>/dev/null)
+        echo "$conn: $autoconnect"
+    done
+  enp0s31f6: connection.autoconnect:no
+  AX86U: connection.autoconnect:yes
+  lo: connection.autoconnect:no
+  MyHome_5G: connection.autoconnect:yes
+  sunshine_5G: connection.autoconnect:yes
+  wifi_test_1_1: connection.autoconnect:yes
+  Wired: 
+  connection: 
+  1: 
+  Xiaomi_R1C_5G: connection.autoconnect:yes
+
+  Thought for 7s (ctrl+o to expand)
+
+● 分析结果：
+
+  - NetworkManager 管理网络 ✓
+  - AX86U: connection.autoconnect:yes — 自动连接已开 ✓
+  - 但同时有 5 个 WiFi 都设了 autoconnect:yes
+
+  很可能的问题是优先级冲突——router 重启后 SSID 暂时消失，NetworkManager 转而连了另一个可用的 WiFi（如 sunshine_5G 或 Xiaomi_R1C_5G），不会自动切回来。
+
+  请运行以下命令进一步确认：
+
+  # 查看 AX86U 的详细配置
+  nmcli con show AX86U | grep -E "autoconnect|priority"
+
+  贴出结果后我告诉你怎么改。
+
+✻ Baked for 11s
+
+❯ zhiyuan.liu@amlogic-ThinkPad-L580:~$ nmcli con show AX86U | grep -E "autoconnect|priority"
+  connection.autoconnect:                 yes
+  connection.autoconnect-priority:        0
+  connection.autoconnect-retries:         -1 (default)
+  connection.autoconnect-slaves:          -1 (default)
+  connection.autoconnect-ports:           -1 (default)
+  ipv4.dns-priority:                      0
+  ipv6.dns-priority:                      0
+
+  Thought for 7s (ctrl+o to expand)
+
+● 问题找到了：autoconnect-priority: 0——所有 WiFi 同等优先级。router 重启后 SSID 消失时 NM 随机连了其他 WiFi，回来时不会主动切回。
+
+  解决：提高 AX86U 优先级并设为无限重试。
+
+  # 1. 提高优先级（高于其他 WiFi 的默认 0）
+  nmcli con modify AX86U connection.autoconnect-priority 10
+
+  # 2. 无限重试（默认为 -1，只有 4 次）
+  nmcli con modify AX86U connection.autoconnect-retries 0
+
+  # 3. 重连生效
+  nmcli con down AX86U
+  nmcli con up AX86U
+
+  这样 router 重启后，当 AX86U 的 SSID 再次出现时，NetworkManager 会优先切回它。
+
+✻ Cooked for 10s
+
+❯ zhiyuan.liu@amlogic-ThinkPad-L580:~$ sudo nmcli con modify AX86U connection.autoconnect-priority 10
+  [sudo] password for zhiyuan.liu:
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ 
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ sudo nmcli con modify AX86U connection.autoconnect-retries 0
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ nmcli con down AX86U
+  Connection 'AX86U' deactivation failed: Not authorized to deactivate connections
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ sudo nmcli con down AX86U
+  Connection 'AX86U' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/68)
+  zhiyuan.liu@amlogic-ThinkPad-L580:~$ sudo nmcli con up AX86U
+  Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/69)
+
+  Thought for 3s (ctrl+o to expand)
+
+● 配置完成。验证并测试：
+
+  # 确认配置生效
+  nmcli con show AX86U | grep -E "autoconnect-priority|autoconnect-retries"
+
+  预期输出：
+  connection.autoconnect-priority:        10
+  connection.autoconnect-retries:         0
+
+  然后我可以帮你重跑一次 043，验证 router 重启后 AUX 是否自动回连。

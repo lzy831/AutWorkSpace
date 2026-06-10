@@ -1,0 +1,50 @@
+﻿Ethernet Compatibility Test Case  ,,,,,,,,,,,,,
+No.,"Priority
+(P0/P1/P2)",Test_Item,Test_SubItem,Test_Preset,Test_Step,Expected_Result,Actual_Result,Pass/Fail,Comments,Execution type,Author,是否可自动化,不可自动化原因
+Ethernet_Comp_003,P0,Router compatibility,Ping packet test (TP-LINK TL-HP5MU (HUB)) 10M network port),"1. TP-LINK TL-HP5MU (HUB)) 10M network port
+2. 10M network cable
+3. ATKKping tools
+4. iperf tool
+5. PC
+","1. The box is connected to the HUB through the network cable.
+2. PC connected to this HUB, PC installed ATKKping tool and iperf tool
+3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool.
+","Average packet loss rate:
+Maximum value:
+Minimum value:",,N/A,,manual,weidong.feng,No,切换设备
+Ethernet_Comp_004,P0,Router compatibility,Ping packet test (TP-LINK TL-SF2005 (HUB) 100M network port),"1. TP-LINK TL-SF2005 (HUB) 100M network port
+2, 100M network cable
+3, ATKKping tools
+4, iperf tool
+5, PC
+","1. The box is connected to the HUB through the network cable.
+2, PC connected to this HUB, PC installed ATKKping tool and iperf tool
+3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool.
+","Average packet loss rate:
+Maximum value:
+Minimum value:",,N/A,,manual,weidong.feng,No,切换设备
+Ethernet_Comp_007,P1,Router compatibility,Ping packet test (Tenda Ethernet switch 100M network port),"1. Tenda Ethernet switch 100M network port
+2, 100M network cable
+3, ATKKping tools
+4, iperf tool
+5, PC","1. The box is connected to the HUB through the network cable.
+2, PC connected to this HUB, PC installed ATKKping tool and iperf tool
+3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool.
+","Average packet loss rate:2.58%
+Maximum value:1
+Minimum value:9",,N/A,,manual,weidong.feng,No,切换设备
+Ethernet_Comp_008,P0,Router compatibility,Ping packet test (AUSU RT-AC66U 1000M network port),"1, AUSU RT-AC66U 1000M network port
+2, 100M network cable
+3, ATKKping tools
+4, iperf tool
+5, PC
+","1. The box is connected to the HUB through the network cable.
+2, PC connected to this HUB, PC installed ATKKping tool and iperf tool
+3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool.
+","Average packet loss rate:
+Maximum value:
+Minimum value:",,N/A,,manual,weidong.feng,No,切换设备
+Ethernet_Comp_023,P1,Network cable compatibility,Serial port ping external network,1、Category 5-SAMZHE CAT5E 4P UTP 24AWG TIA/EIA568B PATCH CABLE L,"1. After the network cable to be tested is connected to the network device, you can ping the external network normally (it is recommended to ping for about 1 minute)
+2. Can I work normally after plugging and unplugging the network cable?",Can ping the external network,,N/A,,manual,weidong.feng,No,切换设备
+Ethernet_Comp_040,P1,Network cable compatibility,Serial port ping external network,1、Super seven line - win for CAT.7 SSTP CABLE 28AWG/4PAIRS VERIFIED TO TIA/EIA 568B.2,"1. After the network cable to be tested is connected to the network device, you can ping the external network normally (it is recommended to ping for about 1 minute)
+3. Can I work normally after plugging and unplugging the network cable?",Can ping the external network,,N/A,,manual,weidong.feng,No,切换设备

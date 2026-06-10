@@ -1,0 +1,38 @@
+﻿Ethernet Throughput Test Case  ,,,,,,,,,,,,,
+Test_Target:,,,,,,,,,,,,,
+Tester:,,,,,,,,,,,,,
+Precondition:,"Test instruction:
+1. Before testing, please confirm whether the PC network card supports Gigabit. In addition, you need to confirm the network link speed and confirm it as follows: Control Panel--Network and Internet--View Network Status and Task--Change Adapter Settings-- Right click on ""Local Network""--Properties--Configuration--Link Speed--Speed and Duplex Drop-down Menu
+If you are testing a 100M NIC, set it to 100 Mbps full duplex. If you are testing a Gigabit NIC, set it to 1.0 Gbps full duplex.
+2. Test Gigabit NICs with special support for Gigabit routers (ASUS RT-AC68U, TP-LINK WDR7500)
+3, PC adb put iperf.exe tool, copy the iperf bin file to /system/bin, chmod 777
+Test command:
+TX: Platform input iperf -c [PC IP] -i 1 -t 60 -w 1m, PC input iperf -s
+RX: input iperf -s on the platform side, iperf -c on the PC side [platform IP] -i 1 -t 60 -w 1m
+4. Test the iperf data of TX/RX under each channel.",,,,,,,,,,,,
+No.,"Priority
+(P0/P1/P2)",Test_Item,Test_SubItem,Test_Preset,Test_Step,Expected_Result,Actual_Result,Pass/Fail,Comments,Execution type,Author,是否可自动化,不可自动化原因
+Ethernet_Throughout_001,P1,TCP,10M-RX,,"1. The public version is the server side, enter the command: iperf -s
+2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 10M -t 300",9Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_002,P1,TCP,10M-TX,,"1. PC is the server side, enter the command: iperf -s
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 10M -t 300",9Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_003,P1,TCP,100M-RX,,"1. The public version is the server side, enter the command: iperf -s
+2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 100M -t 300",90Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_004,P1,TCP,100M-TX,,"1. PC is the server side, enter the command: iperf -s
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 100M -t 300",90Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_005,P1,TCP,1000M-RX,,"1. The public version is the server side, enter the command: iperf -s
+2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 1000M -t 300",900Mbits/sec,,N/A,not support 1000M,manual,weidong.feng,No,not support 1000M
+Ethernet_Throughout_006,P1,TCP,1000M-TX,,"1. PC is the server side, enter the command: iperf -s
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 1000M -t 300",800Mbits/sec,,N/A,not support 1000M,manual,weidong.feng,No,not support 1000M
+Ethernet_Throughout_007,P1,UDP,10M-RX,,"1. The public version is the server side, enter the command: iperf -s -u
+2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 10M -t 300",9Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_008,P1,UDP,10M-TX,,"1. PC is the server side, enter the command: iperf -s -u
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 10M -t 300",9Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_009,P1,UDP,100M-RX,,"1. The public version is the server side, enter the command: iperf -s -u
+2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 100M -t 300",90Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_010,P1,UDP,100M-TX,,"1. PC is the server side, enter the command: iperf -s -u
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 100M -t 300",90Mbits/sec,,N/A,,manual,weidong.feng,Yes,
+Ethernet_Throughout_011,P1,UDP,1000M-RX,,"1. The public version is the server side, enter the command: iperf -s -u
+2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 1000M -t 300",800Mbits/sec,,N/A,not support 1000M,manual,weidong.feng,No,not support 1000M
+Ethernet_Throughout_012,P1,UDP,1000M-TX,,"1. PC is the server side, enter the command: iperf -s -u
+2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 1000M -t 300",600Mbits/sec,,N/A,not support 1000M,manual,weidong.feng,No,not support 1000M
