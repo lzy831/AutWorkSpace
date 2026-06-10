@@ -8,6 +8,7 @@ description: TCP 1000M-RX
 excel_preset: ''
 excel_steps: "1. The public version is the server side, enter the command: iperf -s\n2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 1000M -t 300"
 excel_expected: 900Mbits/sec
+
 setup_hooks: []
 teardown_hooks: []
 2.PC enters the command for the client: iperf -c 192.168.1.3 -i 2 -w 1000M -t 300

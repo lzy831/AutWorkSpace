@@ -3,7 +3,7 @@ id: Ethernet_Func_031
 auto_status: manual
 name: PPPOE Empty password text box
 testbed: ethernet_router_lan
-description: （概要）
+description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
 excel_steps: "1. Select PPPOE dialing in the network settings.\n2. Enter in the password text box. then clear the input."
 excel_expected: 1. Can the password be cleared or not

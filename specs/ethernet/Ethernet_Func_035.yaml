@@ -3,7 +3,7 @@ id: Ethernet_Func_035
 auto_status: manual
 name: PPPOE Calculate the world from disconnection to PPPOE completely disconnected
 testbed: ethernet_router_lan
-description: （概要）
+description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
 excel_steps: "1. PPPOE dial-up success\n2. manually choose to disconnect"
 excel_expected: Will disconnected from the world is within 15s

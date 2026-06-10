@@ -8,6 +8,7 @@ description: UDP 1000M-TX
 excel_preset: ''
 excel_steps: "1. PC is the server side, enter the command: iperf -s -u\n2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 1000M -t 300"
 excel_expected: 600Mbits/sec
+
 setup_hooks: []
 teardown_hooks: []
 2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 1000M -t 300

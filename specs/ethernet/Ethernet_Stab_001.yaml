@@ -8,6 +8,7 @@ description: 10M HUB testing Iperf tool test for 12 hours
 excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. iperf tool\n4. PC"
 excel_steps: "1. The box is connected to the route through the network cable.\n2. PC connect the same toute by Ethernet cable, PC install iperf tool\n3. test the throughput for 12hours by iPerf  tool"
 excel_expected: "RX not less than 90Mbits/sec:"
+
 setup_hooks: []
 teardown_hooks: []
 preconditions:

@@ -3,10 +3,11 @@ id: Ethernet_Func_012
 auto_status: auto
 name: Static模式下待机唤醒后IP恢复
 testbed: ethernet_router_lan
-description: 验证静态 IP 模式下 DUT 深度睡眠后通过蓝牙遥控器唤醒，静态 IP 自动恢复
+description: 验证静态 IP 模式下 DUT 深度睡眠后通过蓝牙遥控器唤醒,静态 IP 自动恢复
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. Set the DUT IP address to static\n2. Press power key on remote\n3. After DUT  enter deep sleep status,press power key to wake up the DUT"
 excel_expected: 1. After the standby. the box network is disconnected. After waking up. you can regain the IP address and access the Internet.
+
 setup_hooks: []
 teardown_hooks: []
 preconditions:
@@ -15,7 +16,7 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
-- description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+- description: 确保 eth0 接口处于 UP 状态(从上一轮异常中恢复)
   operation:
     api: step_enable_ethernet
 - description: DUT 以太网物理链路已连通
@@ -78,7 +79,7 @@ procedure:
       bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
     wait_after: 10
 - operation:
-    description: 确保 DUT 完全唤醒 (ADB 已恢复）
+    description: 确保 DUT 完全唤醒 (ADB 已恢复)
     api: step_ensure_awake
     params:
       max_retries: 5

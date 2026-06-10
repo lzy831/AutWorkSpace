@@ -3,7 +3,7 @@ id: Ethernet_Func_029
 auto_status: manual
 name: PPPOE Dial the number from the dial-up to the prompt with the wrong username/password
 testbed: ethernet_router_lan
-description: （概要）
+description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
 excel_steps: "1. Select PPPOE dialing in the network settings.\n2. enter the user name and password are wrong. dial"
 excel_expected: Whether is the timeout time within 15s?

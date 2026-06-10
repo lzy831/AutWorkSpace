@@ -7,6 +7,7 @@ description: 验证 IPv6 双栈模式下 DUT 重启后能重新获取 IPv4 和 I
 excel_preset: DUT connect with IPV6 route
 excel_steps: "1. DUT connect with route which support IPV6\n2.Power off the DUT\n3.Power on the DUT"
 excel_expected: After DUT power on,DUT can get the IPV4 and IPV6 IP address
+
 setup_hooks: []
 teardown_hooks:
 - step_disable_router_ipv6

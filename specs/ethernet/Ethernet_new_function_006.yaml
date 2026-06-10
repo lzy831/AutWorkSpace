@@ -7,6 +7,7 @@ description: 验证 Auto MDIX 功能在交叉线连接下能正常获取 IP 地�
 excel_preset: "1.A router\n2.1 piece  crossover Ethernet cable"
 excel_steps: "1.DUT's IP address set to auto\n2.DUT connect with router by crossover Ethernet cable\n3.Check DUT's IP  address  and  ping router's gateway"
 excel_expected: DUT  can  get IP address and ping router gateway successful
+
 setup_hooks: []
 teardown_hooks: []
 preconditions:

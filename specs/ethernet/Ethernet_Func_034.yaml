@@ -3,7 +3,7 @@ id: Ethernet_Func_034
 auto_status: manual
 name: PPPOE Manually disconnect after PPPOE connection. then manually dial and reconnect
 testbed: ethernet_router_lan
-description: （概要）
+description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
 excel_steps: "1. PPPOE dial-up success\n2. manually disconnect. and then manually select the dial"
 excel_expected: 1. The network is connected normally. the IP address is normal. and the netcfg display is correct.

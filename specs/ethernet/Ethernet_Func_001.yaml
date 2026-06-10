@@ -7,6 +7,7 @@ description: 验证DUT在网线物理连通情况下, IP地址模式设置为DHC
 excel_preset: The box is connected to the DHCP function device.
 excel_steps: "1. Plug the network cable into the box Ethernet interface.\n2. Select Ethernet DHCP in the network settings."
 excel_expected: "1. The box successfully obtains an IP address.\n2. can use the serial port tool to view the IP address of the box"
+
 setup_hooks: []
 teardown_hooks: []
 preconditions:

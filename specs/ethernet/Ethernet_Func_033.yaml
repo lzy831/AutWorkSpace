@@ -3,7 +3,7 @@ id: Ethernet_Func_033
 auto_status: manual
 name: PPPOE Calculate the time from dial-up selection to PPPoE dial-up success
 testbed: ethernet_router_lan
-description: （概要）
+description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
 excel_steps: "1. Select PPPOE dialing in the network settings.\n2. Enter the correct username and password to dial"
 excel_expected: Within 15s dialing successful

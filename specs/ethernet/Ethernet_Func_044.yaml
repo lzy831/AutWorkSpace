@@ -3,10 +3,11 @@ id: Ethernet_Func_044
 auto_status: auto
 name: IPv6双栈下待机唤醒后IP恢复
 testbed: ethernet_router_lan
-description: 验证 IPv6 双栈网络下 DUT 深度睡眠后通过蓝牙遥控器唤醒，IPv4 和 IPv6 地址均自动恢复
+description: 验证 IPv6 双栈网络下 DUT 深度睡眠后通过蓝牙遥控器唤醒,IPv4 和 IPv6 地址均自动恢复
 excel_preset: DUT connect with IPV6 route
 excel_steps: "1. DUT connect with route which support IPV6\n2.Press power key on DUT's remote \n3.When  DUT  enter  sleep  status,press power key on DUT's remote to  wake  up the  DUT"
 excel_expected: After  DUT  wake up,DUT  can get the IPV4 and IPV6 IP address
+
 setup_hooks: []
 teardown_hooks:
 - step_disable_router_ipv6
@@ -16,7 +17,7 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
-- description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+- description: 确保 eth0 接口处于 UP 状态(从上一轮异常中恢复)
   operation:
     api: step_enable_ethernet
 - description: DUT 以太网物理链路已连通
@@ -73,7 +74,7 @@ procedure:
       bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
     wait_after: 10
 - operation:
-    description: 确保 DUT 完全唤醒（ADB 已恢复）
+    description: 确保 DUT 完全唤醒(ADB 已恢复)
     api: step_ensure_awake
     params:
       max_retries: 5

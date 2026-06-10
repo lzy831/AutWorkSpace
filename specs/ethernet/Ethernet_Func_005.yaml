@@ -7,6 +7,7 @@ description: 验证 DHCP 模式下路由器断电重启后 DUT 能重新获取 I
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. the box has an IP address. can access the Internet\n2. disconnect the router power\n3. the box IP address disappears\n4. the router is powered back on. the box can regain the IP address. and the Internet is normal."
 excel_expected: Disconnect the IP address of the power box of the router and disappear. After power-on. the box can regain the IP address.
+
 setup_hooks: []
 teardown_hooks: []
 preconditions:

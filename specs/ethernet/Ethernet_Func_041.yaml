@@ -7,6 +7,7 @@ description: 验证双栈网络下热插拔网线后DUT能重新获取IPv4和IPv
 excel_preset: The box is connected to the IPV6 function router.
 excel_steps: "1.DUT connect with an router which support IPV6 by Ethernet\n2.At Ethernet detail interface,hot-plug out Ethernet cable\n3.At Ethernet detail interface,hot-plug in Ethernet cable"
 excel_expected: "1. After hot-plug out Ethernet cable,Ethernet display not connect and not display the IP address\n2.After hot-plug in Etheconnected and not display the IP address"
+
 setup_hooks: []
 teardown_hooks:
 - step_disable_router_ipv6

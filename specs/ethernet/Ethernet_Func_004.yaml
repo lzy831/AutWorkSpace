@@ -3,10 +3,11 @@ id: Ethernet_Func_004
 auto_status: auto
 name: DHCP模式下路由器LAN口拔插后IP恢复
 testbed: ethernet_router_lan
-description: 验证 DHCP 模式下拔掉路由器 LAN 口网线后 DUT IP 消失，重新插上后 DUT 能重新获取 IP 地址
+description: 验证 DHCP 模式下拔掉路由器 LAN 口网线后 DUT IP 消失,重新插上后 DUT 能重新获取 IP 地址
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
 excel_steps: "1. DUT connect with route by Ethernet cable\n2. Unplug the router's upstream network cable.\n3. Plug in the Internet cable."
 excel_expected: 1. Unplug the IP address of the upstream network cable box on the router and disappear. After plugging in the Internet cable. you can regain the IP address.
+
 setup_hooks: []
 teardown_hooks: []
 preconditions:
@@ -15,7 +16,7 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
-- description: 确保 eth0 接口处于 UP 状态（从上一轮异常中恢复）
+- description: 确保 eth0 接口处于 UP 状态(从上一轮异常中恢复)
   operation:
     api: step_enable_ethernet
 - description: DUT 以太网物理链路已连通
