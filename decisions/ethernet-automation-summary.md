@@ -7,7 +7,7 @@
 - Aux Device (Router Client): AUX 模式远程控制 Router
 - iperf Tester (Linux PC): 性能/稳定性测试
 
-## auto (已实现) — 20 个
+## auto (已实现) — 28 个
 
 所有 auto 用例 precondition 统一为：`step_ensure_awake` → `step_enable_ethernet`(从异常恢复) → `step_ensure_router_lan_up` → `check_ethernet_connected`。
 
@@ -29,12 +29,20 @@
 | Func_014 | Static | 以太网从 DHCP 切换到静态 IP | — | AUT Server, Controller, Router, Aux | ✅ |
 | Func_040 | IPv6 | 双栈网络(IPv4 + IPv6)地址获取 | — | AUT Server, Controller, Router, Aux | ✅ |
 | Func_041 | IPv6 | 双栈网络下热插拔网线后 IP 恢复 | `step_disconnect/connect_router_lan` | AUT Server, Controller, Router, Aux | ✅ |
-| Func_042 | IPv6 | IPv6 双栈下 DUT 重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | |
+| Func_042 | IPv6 | IPv6 双栈下 DUT 重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | ✅ |
 | Func_043 | IPv6 | 双栈网络下路由器重启后 IP 恢复 | — | AUT Server, Controller, Router, Aux | ✅ |
 | Func_044 | IPv6 | IPv6 双栈下待机唤醒后 IP 恢复 | — | AUT Server, Controller, Router, Aux, BT RCU | |
 | new_007 | MDIX | Auto MDIX 直连线正常连接 | — | AUT Server, Controller, Router, Aux | |
+| Throughout_001 | Perf | TCP 10M RX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_002 | Perf | TCP 10M TX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_003 | Perf | TCP 100M RX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_004 | Perf | TCP 100M TX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_007 | Perf | UDP 10M RX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_008 | Perf | UDP 10M TX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_009 | Perf | UDP 100M RX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
+| Throughout_010 | Perf | UDP 100M TX 吞吐量 | — | AUT Server, Controller, Router, iperf Tester | |
 
-## pending (待实现) — 12 个
+## pending (待实现) — 4 个
 
 | # | 分类 | 内容 | 设备依赖 | 待实现 step/check |
 |---|------|------|---------|------------------|
@@ -42,14 +50,6 @@
 | Stab_002 | Stability | 在线播放视频 12h (10M) | AUT Server, Controller, Router | 播放器 + 长跑框架 |
 | Stab_003 | Stability | Ping 12h (Super 5 100M) | AUT Server, Controller, Router | 长跑框架 |
 | Stab_004 | Stability | autosuspend + ping 12h | AUT Server, Controller, Router | autosuspend APK + 长跑框架 |
-| Throughout_001 | Performance | TCP 10M RX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_002 | Performance | TCP 10M TX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_003 | Performance | TCP 100M RX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_004 | Performance | TCP 100M TX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_007 | Performance | UDP 10M RX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_008 | Performance | UDP 10M TX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_009 | Performance | UDP 100M RX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
-| Throughout_010 | Performance | UDP 100M TX | AUT Server, Controller, Router, iperf Tester | iperf step/check |
 
 ## manual (不实现) — 38 个
-PPPOE 015-039 (25), Network switching 015-019 含 PPPOE, Compatibility (6), new_function_002 peer PC, new_function_006 MDIX crossover
+PPPOE 015-039 (25), Network switching 015-019 含 PPPOE, Compatibility (6), new_function_002 peer PC, new_function_006 MDIX crossover, Throughout_005/006/011/012 1000M (DUT 不支持千兆)

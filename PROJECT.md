@@ -44,16 +44,24 @@ scripts/python/
 - **实现层** = atomic 层调用的具体实现，`scripts/python/lib/common/`
 - **ClaudeWorkSpace** = 项目规范、用例、参考的规范源（独立 git 仓）
 
-## 工作范围
+## 文件维护范围
 
-允许修改的目录，超出需提示：
+允许修改的目录/文件, 超出需提示:
 
-- `scripts/python/atomic/step_impl/peripheral/network`
-- `scripts/python/atomic/check_impl/peripheral/network`
-- `scripts/python/lib/common/peripheral/network`
-- `scripts/python/lib/common/system/settings_navigator*.py`
 - `scripts/python/atomic/workflows/auto_generate/Ethernet_V1.3_test_case/`
-- `scripts/python/atomic/workflows/auto_generate/wifi_BT_testcase_v1.1/`
+- `scripts/python/atomic/step_impl/system/suspend/suspend_steps.py`
+- `scripts/python/atomic/step_impl/peripheral/network/ethernet/`
+- `scripts/python/atomic/step_impl/peripheral/network/iperf/`
+- `scripts/python/atomic/check_impl/peripheral/network/ethernet/`
+- `scripts/python/atomic/check_impl/peripheral/network/iperf/`
+- `scripts/python/lib/common/peripheral/network/ethernet/`
+- `scripts/python/lib/common/peripheral/network/iperf/`
+- `scripts/python/lib/common/peripheral/network/router/`
+- `scripts/python/lib/common/system/settings_navigator.py`
+- `scripts/python/lib/common/system/settings_navigator_eth.py`
+- `scripts/python/lib/common/system/settings_navigator_atv.py`
+- `scripts/python/lib/common/peripheral/network/router/__init__.py`
+- `scripts/python/tools/RouterControl/AsusRouter/Asusax86uControl.py`
 - `ClaudeWorkSpace/`
 
 ## DUT & Router
@@ -64,6 +72,19 @@ scripts/python/
 | 平台 | GTV/ATV，服务器 USB 直连 |
 | Router | ASUS RT-AX86U @ 192.168.50.1 |
 | Router SSH | AX86U / New!123456 |
+
+
+## Workflow JSON 路径
+
+| 用例集 | 路径 |
+|--------|------|
+| Minimal (10个) |  |
+| Full (所有auto) |  |
+| Performance |  |
+
+-  下按 domain 分子目录: , , , 
+-  通过  推断子目录，无  时默认 
+- 新生成 workflow 时须确认输出到正确路径
 
 ## 运行 Workflow
 

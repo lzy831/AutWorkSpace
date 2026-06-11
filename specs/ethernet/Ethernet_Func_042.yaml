@@ -42,11 +42,29 @@ procedure:
     api: step_reboot_dut
     params:
       timeout: 180
+
 - operation:
-    description: 等待 DUT 启动完成并重新获取双栈 IP
+    description: 确保 eth0 处于 UP 状态（重启后可能为 down）
+    api: step_enable_ethernet
+
+- operation:
+    description: 确保 DUT 以太网物理链路恢复
+    api: step_ensure_router_lan_up
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
+
+- operation:
+    description: 重发 RA 使 DUT 通过 SLAAC 获取 IPv6
+    api: step_enable_router_ipv6
+    wait_after: 10
+
+- operation:
+    description: 等待 DUT SLAAC 完成 IPv6 地址配置
     api: step_wait_seconds
     params:
-      seconds: 60
+      seconds: 30
   check:
     description: 确认 DUT 重启后重新获取双栈 IP
     api: check_ethernet_dual_stack_ip_obtained

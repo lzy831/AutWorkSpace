@@ -1,20 +1,81 @@
 domain: ethernet
 id: Ethernet_Throughout_010
-name: UDP 100M-TX
+auto_status: auto
+name: UDP 100M TX 吞吐量测试
 testbed: ethernet_router_lan
-category: Performance
-auto_status: pending
-description: UDP 100M-TX
-excel_preset: ''
-excel_steps: "1. PC is the server side, enter the command: iperf -s -u\n2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 100M -t 300"
-excel_expected: 90Mbits/sec
-
+description: DUT连接路由器下, DUT作为iperf client, 检测DUT发送吞吐 >= 90Mbits/sec
 setup_hooks: []
-teardown_hooks: []
-2. The public version enters the command for the client: iperf -c 192.168.1.3 -i 2 -u -b 100M -t 300
+teardown_hooks:
+- step_iperf_stop_all
+excel_preset: ''
+excel_steps: ''
+excel_expected: 90Mbits/sec
 preconditions:
-- description: TODO - ensure DUT & PC connected via specified speed (10M/100M/1000M)
+- description: 确保 DUT 处于唤醒状态再开始测试
+  operation:
+    api: step_ensure_awake
+    params:
+      max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+- description: DUT 以太网物理链路已连通
+  operation:
+    api: step_ensure_router_lan_up
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: DUT 已通过 DHCP 获取 IPv4 地址
+  operation:
+    api: step_set_ip_settings_to_dhcp
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 采集 DUT IP 供 iperf 使用
+  operation:
+    api: step_discover_network_info
+  check:
+    api: check_ethernet_connected
+    params:
+      method: cmd
+- description: 确保 DUT 上 iperf 二进制可用 (不存在则自动下载 push)
+  operation:
+    api: step_ensure_iperf_on_dut
+    params: {}
+- description: 确保 AUX iperf Tester 上 iperf 可用
+  operation:
+    api: step_ensure_iperf_on_aux
+    params: {}
+- description: 获取 AUX 以太网 IP (iperf Tester)
+  operation:
+    api: step_discover_aux_eth_ip_to_router
 procedure:
 - operation:
-    description: TODO - iperf test
-    api: TODO
+    description: 启动 AUX iperf server (daemon)
+    api: step_iperf_start
+    params:
+      target: pc
+      role: server
+      port: 5001
+    wait_after: 2
+- operation:
+    description: 启动 DUT iperf client (同步, 300s)
+    api: step_iperf_start
+    params:
+      target: dut
+      role: client
+      protocol: udp
+      bandwidth: 100M
+      duration: 300
+      port: 5001
+      server_ip: ${step_discover_aux_eth_ip_to_router.data.ip}
+  check:
+    description: 验证吞吐 >= 90Mbits/sec
+    api: check_iperf_throughput
+    params:
+      output: ${step_iperf_start.data.output}
+      expected_rate: 90Mbits/sec
+_source:
+  sheet: Performance

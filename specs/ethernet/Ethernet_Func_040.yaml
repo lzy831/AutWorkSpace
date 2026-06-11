@@ -6,7 +6,7 @@ testbed: ethernet_router_lan
 description: DUT连接IPv6路由器, 检测DUT获取IPv4和IPv6地址
 excel_preset: The box is connected to the IPV6 function router.
 excel_steps: 1.DUT connect with an router which support IPV6 by Ethernet
-excel_expected: 1.DUT  get the IPV4 and IPV6 IP address succeful
+excel_expected: 1.DUT  get the IPV4 and IPV6 IP address successful
 
 setup_hooks: []
 teardown_hooks:

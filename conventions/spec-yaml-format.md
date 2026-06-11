@@ -166,5 +166,5 @@ grep -rn '\${step_[^}]*}' specs/ | grep -v '\.data\.' | grep -v 'custom_params'
 - 具体 IP 地址、SSID、密码 — 用 `${custom_params.xxx}`
 - `cmd wifi status` 等实现命令 — 用 check 封装，宏观描述即可
 - `Supplicant state COMPLETED` 等技术细节 — 用 check 封装
-- 中文标点符号 — 一律使用 ASCII 标点（`;` 替代 `；`，`()` 替代 `（）`，`,` 替代 `，` 等），确保 workflow JSON 和 YAML 在任何环境下兼容
+- 中文标点符号 — 见 `code-style.md` 统一规范
 - `yaml.dump` 直接修改 YAML — 会破坏原始格式（去空行、改缩进、丢失注释）。修改 YAML 后必须检查：hooks 前有空行分隔、中文标点未被引入
