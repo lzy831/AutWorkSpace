@@ -5,9 +5,13 @@ name: PPPOE Connect PPPoE
 testbed: ethernet_router_lan
 
 description: (概要)
-excel_preset: "The box is connected to the PPPOE dialing function device."
-excel_steps: "1. Plug the network cable into the box Ethernet interface. 2. Enter the correct PPPOE account and password in the network settings."
-excel_expected: "1. The box is successfully dialed and can obtain the PPPOE IP address. 2. can use the serial port tool to view the box PPPOE IP address"
+excel_preset: The box is connected to the PPPOE dialing function device.
+excel_steps: '1. Plug the network cable into the box Ethernet interface.
+
+  2. Enter the correct PPPOE account and password in the network settings.'
+excel_expected: '1. The box is successfully dialed and can obtain the PPPOE IP address.
+
+  2. can use the serial port tool to view the box PPPOE IP address'
 
 preconditions: []
 

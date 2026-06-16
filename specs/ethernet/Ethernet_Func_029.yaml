@@ -5,9 +5,11 @@ name: PPPOE Dial the number from the dial-up to the prompt with the wrong userna
 testbed: ethernet_router_lan
 
 description: (概要)
-excel_preset: "The box is connected to the PPPOE dialing function device."
-excel_steps: "1. Select PPPOE dialing in the network settings. 2. enter the user name and password are wrong. dial"
-excel_expected: "Whether is the timeout time within 15s?"
+excel_preset: The box is connected to the PPPOE dialing function device.
+excel_steps: '1. Select PPPOE dialing in the network settings.
+
+  2. enter the user name and password are wrong. dial'
+excel_expected: Whether is the timeout time within 15s?
 
 preconditions: []
 

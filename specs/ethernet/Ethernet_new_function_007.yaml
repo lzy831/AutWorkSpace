@@ -5,9 +5,15 @@ name: Auto MDIX 直连线正常连接
 testbed: ethernet_router_lan
 
 description: 直连线连接模式下, DUT连接路由器, 检测DUT获取IP并能ping通网关
-excel_preset: "1.A router\\n2.1 piece direct Ethernet cable"
-excel_steps: "1.DUT's IP address set to auto\\n2.DUT connect with router by direct Ethernet cable\\n3.Check DUT's IP  address  and  ping router's gateway"
-excel_expected: "DUT  can  get IP address and ping router gateway successful"
+excel_preset: '1.A router
+
+  2.1 piece direct Ethernet cable'
+excel_steps: '1.DUT''s IP address set to auto
+
+  2.DUT connect with router by direct Ethernet cable
+
+  3.Check DUT''s IP  address  and  ping router''s gateway'
+excel_expected: DUT  can  get IP address and ping router gateway successful
 
 setup_hooks: []
 teardown_hooks: []

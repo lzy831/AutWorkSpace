@@ -5,9 +5,25 @@ name: Router compatibility Ping packet test (Tenda Ethernet switch 100M network 
 testbed: ethernet_router_lan
 
 description: Router compatibility Ping packet test (Tenda Ethernet switch 100M network port)
-excel_preset: "1. Tenda Ethernet switch 100M network port 2, 100M network cable 3, ATKKping tools 4, iperf tool 5, PC"
-excel_steps: "1. The box is connected to the HUB through the network cable. 2, PC connected to this HUB, PC installed ATKKping tool and iperf tool 3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool."
-excel_expected: "Average packet loss rate:2.58% Maximum value:1 Minimum value:9"
+excel_preset: '1. Tenda Ethernet switch 100M network port
+
+  2, 100M network cable
+
+  3, ATKKping tools
+
+  4, iperf tool
+
+  5, PC'
+excel_steps: '1. The box is connected to the HUB through the network cable.
+
+  2, PC connected to this HUB, PC installed ATKKping tool and iperf tool
+
+  3. Ping the packet for 5 minutes with the ATKKping tool and the iperf tool.'
+excel_expected: 'Average packet loss rate:2.58%
+
+  Maximum value:1
+
+  Minimum value:9'
 
 preconditions: []
 

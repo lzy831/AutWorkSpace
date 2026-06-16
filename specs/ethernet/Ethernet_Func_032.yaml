@@ -5,9 +5,13 @@ name: PPPOE After filling in the password. check "Show password"
 testbed: ethernet_router_lan
 
 description: (概要)
-excel_preset: "The box is connected to the PPPOE dialing function device."
-excel_steps: "1. Select PPPOE dialing in the network settings. 2. enter the username and password 3. check the display password"
-excel_expected: "1. the password can be displayed normally"
+excel_preset: The box is connected to the PPPOE dialing function device.
+excel_steps: '1. Select PPPOE dialing in the network settings.
+
+  2. enter the username and password
+
+  3. check the display password'
+excel_expected: 1. the password can be displayed normally
 
 preconditions: []
 

@@ -4,86 +4,102 @@ auto_status: auto
 name: autosuspend + ping 稳定性测试 12h
 testbed: ethernet_router_lan
 
-description: DUT安装autosuspend APK, 周期性深睡眠+RTC唤醒, AUX持续ping, 检测丢包率
+description: DUT周期深睡眠+RTC唤醒, AUX持续ping, 检测丢包率和网络恢复
 
-setup_hooks: []
-teardown_hooks: []
-excel_preset: 1. ASUS RT-AC1900P 2. network cable 3. DUT install autosuspend 4. PC
-excel_steps: 1. The box is connected to the route through the network cable. 2. PC connect the same toute by Ethernet cable, PC install iperf tool 3. DUT install autosuspend apk and run autosuspend+ping for 12hours
+excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. DUT install autosuspend\n4. PC"
+excel_steps: "1. The box is connected to the route through the network cable.\n2. PC connect the same toute by Ethernet cable, PC install iperf tool\n3. DUT install autosuspend apk and run autosuspend+ping for 12hours"
 excel_expected: After test 12hours,DUT connect Ethernet normal
 
+setup_hooks: []
+teardown_hooks:
+  - step_stop_sleep_cycle
+
 preconditions:
-- description: 确保 DUT 处于唤醒状态再开始测试
-  operation:
-    api: step_ensure_awake
-    params:
-      max_retries: 3
-- description: 确保 eth0 接口处于 UP 状态
-  operation:
-    api: step_enable_ethernet
-- description: DUT 以太网物理链路已连通
-  operation:
-    api: step_ensure_router_lan_up
-  check:
-    api: check_ethernet_connected
-    params:
-      method: cmd
-- description: DUT 已通过 DHCP 获取 IPv4 地址
-  operation:
-    api: step_set_ip_settings_to_dhcp
-  check:
-    api: check_ethernet_connected
-    params:
-      method: cmd
-- description: 采集 DUT IP 供 ping 使用
-  operation:
-    api: step_discover_network_info
-  check:
-    api: check_ethernet_connected
-    params:
-      method: cmd
-- description: 安装 autosuspend APK
-  operation:
-    api: step_install_apk
-    params:
-      apk_path: apk/autosuspend.apk
-- description: 启动 autosuspend
-  operation:
-    api: step_launch_autosuspend
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
+  - description: 确保 eth0 接口处于 UP 状态
+    operation:
+      api: step_enable_ethernet
+
+  - description: DUT 以太网物理链路已连通
+    operation:
+      api: step_ensure_router_lan_up
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
+
+  - description: DUT 已通过 DHCP 获取 IPv4 地址
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
+
+  - description: 采集 DUT IP 供 ping 使用
+    operation:
+      api: step_discover_network_info
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
 
 procedure:
-- operation:
-    description: 设定 RTC 闹钟 (10s 后唤醒)
-    api: step_set_rtc_alarm
-    params:
-      seconds: 10
-    wait_after: 2
-- operation:
-    description: DUT 进入深度睡眠 (保留 RTC 唤醒)
-    api: step_enter_deep_sleep
-    params:
-      disable_rtc_alarm: false
-- operation:
-    description: 启动 AUX ping DUT (daemon, 输出到文件)
-    api: step_ping_start
-    params:
-      server_ip: ${step_discover_network_info.data.ip}
-      output_file: /tmp/ping_stab004.txt
-- operation:
-    description: 等待 ping 完成 (默认 12h, 可通过 PING_DURATION 调整)
-    api: step_ping_wait_completion
-    params: {}
-- operation:
-    description: 读取 ping 结果文件
-    api: step_ping_read_output
-    params:
-      file_path: /tmp/ping_stab004.txt
-  check:
-    description: 验证丢包率 = 0%
-    api: check_ping_loss
-    params:
-      output: ${step_ping_read_output.data.output}
-      max_loss_pct: 0
+  - operation:
+      description: 启动 AUX ping DUT (daemon, 输出到文件)
+      api: step_ping_start
+      params:
+        server_ip: ${step_discover_network_info.data.ip}
+        output_file: /tmp/ping_stab004.txt
+
+  - operation:
+      description: 启动 DUT sleep/wake 后台循环 (深睡间隔60s, 唤醒等待5s)
+      api: step_start_sleep_cycle
+      params: {}
+      wait_after: 5
+
+  - operation:
+      description: 等待测试完成 (默认 12h, 可通过 PING_DURATION 调整)
+      api: step_ping_wait_completion
+      params: {}
+
+  - operation:
+      description: 停止 DUT sleep/wake 循环
+      api: step_stop_sleep_cycle
+      params: {}
+      wait_after: 10
+
+  - operation:
+      description: 确保 DUT 已唤醒, 网络可通
+      api: step_ensure_awake
+      params:
+        max_retries: 10
+        adbrecheck_max: 10
+
+  - operation:
+      description: 读取 ping 结果文件
+      api: step_ping_read_output
+      params:
+        file_path: /tmp/ping_stab004.txt
+    check:
+      description: 验证丢包率 = 0%
+      api: check_ping_loss
+      params:
+        output: ${step_ping_read_output.data.output}
+        max_loss_pct: 0
+
+  - operation:
+      description: 验证 DUT 网络恢复正常
+      api: step_ensure_router_lan_up
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
 
 _source:
   sheet: Stability

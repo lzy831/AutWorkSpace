@@ -5,9 +5,9 @@ name: IPv6双栈下待机唤醒后IP恢复
 testbed: ethernet_router_lan
 
 description: DUT连接IPv6路由器并正常获取双栈IP地址下, DUT深度睡眠, 通过蓝牙遥控器唤醒DUT, 检测DUT重新获取IPv4和IPv6地址
-excel_preset: "DUT connect with IPV6 route"
-excel_steps: "1. DUT connect with route which support IPV6 2.Press power key on DUT's remote 3.When  DUT  enter  sleep  status,press power key on DUT's remote to  wake  up the  DUT"
-excel_expected: "After  DUT  wake up,DUT  can get the IPV4 and IPV6 IP address"
+excel_preset: DUT connect with IPV6 route
+excel_steps: "1. DUT connect with route which support IPV6\n2.Press power key on DUT's remote \n3.When  DUT  enter  sleep  status,press power key on DUT's remote to  wake  up the  DUT"
+excel_expected: After  DUT  wake up,DUT  can get the IPV4 and IPV6 IP address
 
 setup_hooks: []
 teardown_hooks:

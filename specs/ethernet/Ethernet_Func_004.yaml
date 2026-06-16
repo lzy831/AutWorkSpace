@@ -5,9 +5,13 @@ name: DHCP模式下路由器LAN口拔插后IP恢复
 testbed: ethernet_router_lan
 
 description: DHCP模式下, 拔掉路由器LAN口网线, 检测DUT IP消失, 重新插上, 检测DUT通过DHCP重新获取IP
-excel_preset: "The box has successfully obtained an IP address and can access the Internet."
-excel_steps: "1. DUT connect with route by Ethernet cable\\n2. Unplug the router's upstream network cable.\\n3. Plug in the Internet cable."
-excel_expected: "1. Unplug the IP address of the upstream network cable box on the router and disappear. After plugging in the Internet cable. you can regain the IP address."
+excel_preset: The box has successfully obtained an IP address and can access the Internet.
+excel_steps: '1. DUT connect with route by Ethernet cable
+
+  2. Unplug the router''s upstream network cable.
+
+  3. Plug in the Internet cable.'
+excel_expected: 1. Unplug the IP address of the upstream network cable box on the router and disappear. After plugging in the Internet cable. you can regain the IP address.
 
 setup_hooks: []
 teardown_hooks: []
