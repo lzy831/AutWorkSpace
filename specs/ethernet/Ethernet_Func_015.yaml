@@ -3,9 +3,12 @@ id: Ethernet_Func_015
 auto_status: manual
 name: Network status switching Connect to DHCP first. switch to PPPoE. and the network connection is normal.
 testbed: ethernet_router_lan
+
 description: (概要)
-excel_preset: The box is connected to the DHCP. PPPOE function router
-excel_steps: "1. Select Ethernet DHCP in the network settings to successfully obtain an IP address.\n2. then switch to PPPOE dialing. enter the account and password"
-excel_expected: "1. can get the DHCP IP address\n2. PPPOE dial-up success. can get IP address. normal Internet access"
+excel_preset: "The box is connected to the DHCP. PPPOE function router"
+excel_steps: "1. Select Ethernet DHCP in the network settings to successfully obtain an IP address. 2. then switch to PPPOE dialing. enter the account and password"
+excel_expected: "1. can get the DHCP IP address 2. PPPOE dial-up success. can get IP address. normal Internet access"
+
 preconditions: []
+
 procedure: []

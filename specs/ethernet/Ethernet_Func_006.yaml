@@ -3,10 +3,11 @@ id: Ethernet_Func_006
 auto_status: auto
 name: DHCP待机唤醒后网络自动恢复
 testbed: ethernet_router_lan
+
 description: DHCP模式下, DUT深度睡眠, 通过蓝牙遥控器唤醒DUT, 检测DUT获取IPv4地址并恢复网络连接
-excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: "1. the box has an IP address. can access the Internet\n2. the box is completely standby and wake up"
-excel_expected: After waking up. DUT can regain the IP address and access the Internet.
+excel_preset: "The box has successfully obtained an IP address and can access the Internet."
+excel_steps: "1. the box has an IP address. can access the Internet 2. the box is completely standby and wake up"
+excel_expected: "After waking up. DUT can regain the IP address and access the Internet."
 
 setup_hooks: []
 teardown_hooks: []
@@ -66,7 +67,7 @@ procedure:
     description: 确认DUT已进入深度睡眠
     api: check_dut_in_deep_sleep
 - operation:
-    description: 维持深睡眠一段时间 
+    description: 维持深睡眠一段时间
     api: step_wait_seconds
     params:
       seconds: 20

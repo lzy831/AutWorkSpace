@@ -3,17 +3,15 @@ id: Ethernet_Func_003
 auto_status: auto
 name: DHCP模式下重启后网络自动恢复
 testbed: ethernet_router_lan
+
 description: DHCP模式下, DUT断电重启, 检测DUT通过DHCP重新获取IP
-excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. the box has an IP address. can access the Internet
-
-  2. Power off the  DUT
-
-  3. Power on the  DUT.DUT  can get the IP address normally and can access the Internet.'
-excel_expected: 1. After the box is powered off and restarted. it can normally obtain IP and can access the Internet.
+excel_preset: "The box has successfully obtained an IP address and can access the Internet."
+excel_steps: "1. the box has an IP address. can access the Internet 2. Power off the  DUT 3. Power on the  DUT.DUT  can get the IP address normally and can access the Internet."
+excel_expected: "1. After the box is powered off and restarted. it can normally obtain IP and can access the Internet."
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -38,6 +36,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: 重启DUT

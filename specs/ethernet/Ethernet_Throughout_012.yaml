@@ -3,14 +3,17 @@ id: Ethernet_Throughout_012
 auto_status: manual
 name: UDP 1000M TX 吞吐量测试
 testbed: ethernet_router_lan
+
 description: DUT连接路由器下, DUT作为iperf client, 检测DUT发送吞吐 >= 600Mbits/sec - DUT 不支持 1000M 网卡
 
 setup_hooks: []
 teardown_hooks:
 - step_iperf_stop_all
-excel_preset: ''
-excel_steps: ''
-excel_expected: 600Mbits/sec
+
+excel_preset: ""
+excel_steps: ""
+excel_expected: "600Mbits/sec"
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -44,4 +47,5 @@ preconditions:
 - description: 获取 AUX 以太网 IP (iperf Tester)
   operation:
     api: step_discover_aux_eth_ip_to_router
+
 procedure: []

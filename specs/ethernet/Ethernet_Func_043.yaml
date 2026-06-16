@@ -3,18 +3,16 @@ id: Ethernet_Func_043
 auto_status: auto
 name: 双栈网络下路由器重启后 IP 恢复
 testbed: ethernet_router_lan
+
 description: DUT连接IPv6路由器并正常获取双栈IP地址下, 路由器断电重启, 检测DUT重新获取IPv4和IPv6地址
-excel_preset: DUT connect with IPV6 route
-excel_steps: '1. DUT connect with route which support IPV6
-
-  2.Power off the route
-
-  3.Power on the route'
-excel_expected: After route power on,DUT can get the IPV4 and IPV6 IP address
+excel_preset: "DUT connect with IPV6 route"
+excel_steps: "1. DUT connect with route which support IPV6 2.Power off the route 3.Power on the route"
+excel_expected: "After route power on,DUT can get the IPV4 and IPV6 IP address"
 
 setup_hooks: []
 teardown_hooks:
 - step_disable_router_ipv6
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -44,6 +42,7 @@ preconditions:
     api: step_enable_router_ipv6
   check:
     api: check_ethernet_dual_stack_ip_obtained
+
 procedure:
 - operation:
     description: 采集当前网络信息供后续验证比对

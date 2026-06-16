@@ -41,22 +41,47 @@ description: DHCP模式下, 拔掉网线后, 检测IP消失
 - 动作与检测间用 `,` 分隔，不用 `后,`
 - 不含实现细节(ip link、ADB、SSH)
 
-## hooks
+## 段落结构
 
-`setup_hooks` 和 `teardown_hooks` 放在 `description` 之后、`preconditions` 之前，与 `description` 用空行分隔。两个字段必须同时存在，无内容时写空数组 `[]`，保持结构完整性。
+YAML 文件分为 5 个段落，**段间空 1 行，段内不空行**：
+
+| 段落 | 字段 |
+|------|------|
+| 1 | `domain`, `id`, `auto_status`, `name`, `testbed` |
+| 2 | `description`, `excel_preset`, `excel_steps`, `excel_expected` |
+| 3 | `setup_hooks`, `teardown_hooks` |
+| 4 | `preconditions` |
+| 5 | `procedure` |
+
+`setup_hooks` 和 `teardown_hooks` 必须同时存在，无内容时写 `[]`。excel_* 字段使用双引号单行格式，换行用 `\n` 表示。
 
 ```yaml
+domain: ethernet
+id: Ethernet_Func_001
+auto_status: auto
+name: xxx
+testbed: ethernet_router_lan
+
 description: xxx
+excel_preset: "xxx"
+excel_steps: "1. xxx\n2. xxx"
+excel_expected: "xxx"
 
 setup_hooks: []
 teardown_hooks:
   - step_disable_router_ipv6
 
 preconditions:
-  ...
-```
+  - description: xxx
+    operation:
+      api: step_xxx
+...
 
-属于概述部分（description）和流程部分（preconditions/procedure）之间的桥梁。
+procedure:
+  - operation:
+      api: step_xxx
+...
+```
 
 ## preconditions
 
@@ -167,4 +192,8 @@ grep -rn '\${step_[^}]*}' specs/ | grep -v '\.data\.' | grep -v 'custom_params'
 - `cmd wifi status` 等实现命令 — 用 check 封装，宏观描述即可
 - `Supplicant state COMPLETED` 等技术细节 — 用 check 封装
 - 中文标点符号 — 见 `code-style.md` 统一规范
-- `yaml.dump` 直接修改 YAML — 会破坏原始格式（去空行、改缩进、丢失注释）。修改 YAML 后必须检查：hooks 前有空行分隔、中文标点未被引入
+- `yaml.dump` 直接修改 YAML — 会破坏原始格式。修改后必须检查：
+  - `hooks` 前后与 description/preconditions 间有空行
+  - `excel_preset/steps/expected` 和上下文字段间有空行
+  - `preconditions` 和 `procedure` 与前后段落间有空行
+  - 中文标点未被引入

@@ -3,13 +3,15 @@ id: Ethernet_new_function_006
 auto_status: manual
 name: Auto MDIX 交叉线自动适配
 testbed: ethernet_router_lan_crossover
+
 description: 验证 Auto MDIX 功能在交叉线连接下能正常获取 IP 地址并通信
-excel_preset: "1.A router\n2.1 piece  crossover Ethernet cable"
-excel_steps: "1.DUT's IP address set to auto\n2.DUT connect with router by crossover Ethernet cable\n3.Check DUT's IP  address  and  ping router's gateway"
-excel_expected: DUT  can  get IP address and ping router gateway successful
+excel_preset: "1.A router\\n2.1 piece  crossover Ethernet cable"
+excel_steps: "1.DUT's IP address set to auto\\n2.DUT connect with router by crossover Ethernet cable\\n3.Check DUT's IP  address  and  ping router's gateway"
+excel_expected: "DUT  can  get IP address and ping router gateway successful"
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -23,6 +25,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: DUT 设为 DHCP 模式

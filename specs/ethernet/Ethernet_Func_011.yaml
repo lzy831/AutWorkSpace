@@ -3,17 +3,15 @@ id: Ethernet_Func_011
 auto_status: auto
 name: 静态IP模式下路由器重启后DUT恢复网络
 testbed: ethernet_router_lan
+
 description: Static IP模式下, 路由器断电重启, 检测DUT恢复Static IP地址和网络连接
-excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. Set the DUT IP address to static
-
-  2. Power off the route
-
-  4. Power on the route'
-excel_expected: 1. After route power on,DUT  can  get the IP address.
+excel_preset: "The box has successfully obtained an IP address and can access the Internet."
+excel_steps: "1. Set the DUT IP address to static 2. Power off the route 4. Power on the route"
+excel_expected: "1. After route power on,DUT  can  get the IP address."
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -38,6 +36,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: 采集当前网络信息供后续步骤使用

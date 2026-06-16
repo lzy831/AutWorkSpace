@@ -3,9 +3,12 @@ id: Ethernet_Func_019
 auto_status: manual
 name: Network status switching Connect PPPoE first. switch to static ip. network connection is normal
 testbed: ethernet_router_lan
+
 description: (概要)
-excel_preset: The box is connected to the DHCP. PPPOE function router
-excel_steps: "1. Enter the PPPOE account and password in the network settings. PPPOE dials successfully and can obtain the PPPOE IP address.\n2. then switch to static IP"
-excel_expected: "1. PPPOE dials successfully and can obtain an IP address.\n2. Static IP setting is successful. can obtain IP address. normal Internet access"
+excel_preset: "The box is connected to the DHCP. PPPOE function router"
+excel_steps: "1. Enter the PPPOE account and password in the network settings. PPPOE dials successfully and can obtain the PPPOE IP address. 2. then switch to static IP"
+excel_expected: "1. PPPOE dials successfully and can obtain an IP address. 2. Static IP setting is successful. can obtain IP address. normal Internet access"
+
 preconditions: []
+
 procedure: []

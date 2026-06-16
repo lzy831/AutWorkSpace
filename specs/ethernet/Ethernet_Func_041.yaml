@@ -3,20 +3,16 @@ id: Ethernet_Func_041
 auto_status: auto
 name: 双栈网络下热插拔网线后 IP 恢复
 testbed: ethernet_router_lan
+
 description: DUT连接IPv6路由器并正常获取双栈IP地址下, 拔插DUT端网线, 检测DUT重新获取IPv4和IPv6地址
-excel_preset: The box is connected to the IPV6 function router.
-excel_steps: '1.DUT connect with an router which support IPV6 by Ethernet
-
-  2.At Ethernet detail interface,hot-plug out Ethernet cable
-
-  3.At Ethernet detail interface,hot-plug in Ethernet cable'
-excel_expected: '1. After hot-plug out Ethernet cable,Ethernet display not connect and not display the IP address
-
-  2.After hot-plug in Etheconnected and not display the IP address'
+excel_preset: "The box is connected to the IPV6 function router."
+excel_steps: "1.DUT connect with an router which support IPV6 by Ethernet 2.At Ethernet detail interface,hot-plug out Ethernet cable 3.At Ethernet detail interface,hot-plug in Ethernet cable"
+excel_expected: "1. After hot-plug out Ethernet cable,Ethernet display not connect and not display the IP address 2.After hot-plug in Etheconnected and not display the IP address"
 
 setup_hooks: []
 teardown_hooks:
 - step_disable_router_ipv6
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -46,6 +42,7 @@ preconditions:
     api: step_enable_router_ipv6
   check:
     api: check_ethernet_dual_stack_ip_obtained
+
 procedure:
 - operation:
     description: 采集当前网络信息供后续步骤使用

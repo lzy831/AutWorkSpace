@@ -3,22 +3,15 @@ id: Ethernet_Stab_003
 auto_status: auto
 name: Ping 稳定性测试 12h
 testbed: ethernet_router_lan
+
 description: DUT连接路由器下, AUX持续ping DUT 12h, 检测丢包率为0
+
 setup_hooks: []
 teardown_hooks: []
-excel_preset: '1. ASUS RT-AC1900P
-
-  2. network cable
-
-  3. iperf tool
-
-  4. PC'
-excel_steps: '1. The box is connected to the route through the network cable.
-
-  2. PC connect the same toute by Ethernet cable, PC install iperf tool
-
-  3. PC ping DUT''s IP  address  for 12 hours'
+excel_preset: 1. ASUS RT-AC1900P\n2. network cable\n3. iperf tool\n4. PC
+excel_steps: 1. The box is connected to the route through the network cable.\n2. PC connect the same toute by Ethernet cable, PC install iperf tool\n3. PC ping DUT's IP  address  for 12 hours
 excel_expected: The  lost  packet  is 0%
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -49,6 +42,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: 启动 AUX ping DUT (daemon, 输出到文件)
@@ -71,5 +65,6 @@ procedure:
     params:
       output: ${step_ping_read_output.data.output}
       max_loss_pct: 0
+
 _source:
   sheet: Stability

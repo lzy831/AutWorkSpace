@@ -3,13 +3,15 @@ id: Ethernet_Func_008
 auto_status: auto
 name: Static模式下DUT侧拔插网线后IP恢复
 testbed: ethernet_router_lan
+
 description: Static IP模式下, 拔掉DUT端网线, 检测DUT IP消失, 重新插入网线, 检测DUT Static IP恢复
-excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: "1. Set the DUT IP address to static\n2. unplug the box end network cable\n3. plug in the Internet cable. the box can regain the IP address. normal Internet access"
-excel_expected: "1. Unplug the network cable box and the IP address disappears.\n2.After plugging in the Internet cable. you can regain the IP address."
+excel_preset: "The box has successfully obtained an IP address and can access the Internet."
+excel_steps: "1. Set the DUT IP address to static 2. unplug the box end network cable 3. plug in the Internet cable. the box can regain the IP address. normal Internet access"
+excel_expected: "1. Unplug the network cable box and the IP address disappears. 2.After plugging in the Internet cable. you can regain the IP address."
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -26,6 +28,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: 采集当前以太网网络信息

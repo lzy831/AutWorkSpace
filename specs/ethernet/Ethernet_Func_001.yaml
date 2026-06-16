@@ -3,17 +3,15 @@ id: Ethernet_Func_001
 auto_status: auto
 name: DHCP模式下获取IPv4地址
 testbed: ethernet_router_lan
+
 description: DHCP模式下, DUT通过网线连接路由器, 检测DUT获取IPv4地址
-excel_preset: The box is connected to the DHCP function device.
-excel_steps: '1. Plug the network cable into the box Ethernet interface.
-
-  2. Select Ethernet DHCP in the network settings.'
-excel_expected: '1. The box successfully obtains an IP address.
-
-  2. can use the serial port tool to view the IP address of the box'
+excel_preset: "The box is connected to the DHCP function device."
+excel_steps: "1. Plug the network cable into the box Ethernet interface.\n2. Select Ethernet DHCP in the network settings."
+excel_expected: "1. The box successfully obtains an IP address.\n2. can use the serial port tool to view the IP address of the box"
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -31,6 +29,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: 将DUT IP设置模式切换为DHCP

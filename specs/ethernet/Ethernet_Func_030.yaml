@@ -3,9 +3,12 @@ id: Ethernet_Func_030
 auto_status: manual
 name: PPPOE User name text box empty
 testbed: ethernet_router_lan
+
 description: (概要)
-excel_preset: The box is connected to the PPPOE dialing function device.
-excel_steps: "1. Select PPPOE dialing in the network settings.\n2. Enter in the username text box. then clear the input."
-excel_expected: 1. Can the username be cleared or not
+excel_preset: "The box is connected to the PPPOE dialing function device."
+excel_steps: "1. Select PPPOE dialing in the network settings. 2. Enter in the username text box. then clear the input."
+excel_expected: "1. Can the username be cleared or not"
+
 preconditions: []
+
 procedure: []

@@ -3,13 +3,16 @@ id: Ethernet_Throughout_007
 auto_status: auto
 name: UDP 10M RX 吞吐量测试
 testbed: ethernet_router_lan
+
 description: DUT连接路由器下, DUT作为iperf server, 检测DUT接收吞吐 >= 9Mbits/sec
+
 setup_hooks: []
 teardown_hooks:
 - step_iperf_stop_all
 excel_preset: ''
 excel_steps: ''
 excel_expected: 9Mbits/sec
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -51,6 +54,7 @@ preconditions:
 - description: 获取 AUX 以太网 IP (iperf Tester)
   operation:
     api: step_discover_aux_eth_ip_to_router
+
 procedure:
 - operation:
     description: 启动 DUT iperf server
@@ -84,5 +88,6 @@ procedure:
     params:
       output: ${step_iperf_read_output.data.output}
       expected_rate: 9Mbits/sec
+
 _source:
   sheet: Performance

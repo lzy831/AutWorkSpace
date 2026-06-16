@@ -3,14 +3,16 @@ id: Ethernet_Func_040
 auto_status: auto
 name: 双栈网络(IPv4 + IPv6)地址获取
 testbed: ethernet_router_lan
+
 description: DUT连接IPv6路由器, 检测DUT获取IPv4和IPv6地址
-excel_preset: The box is connected to the IPV6 function router.
-excel_steps: 1.DUT connect with an router which support IPV6 by Ethernet
-excel_expected: 1.DUT  get the IPV4 and IPV6 IP address successful
+excel_preset: "The box is connected to the IPV6 function router."
+excel_steps: "1.DUT connect with an router which support IPV6 by Ethernet"
+excel_expected: "1.DUT  get the IPV4 and IPV6 IP address successful"
 
 setup_hooks: []
 teardown_hooks:
 - step_disable_router_ipv6
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -42,6 +44,7 @@ preconditions:
     api: check_ethernet_connected
     params:
       method: cmd
+
 procedure:
 - operation:
     description: 等待 SLAAC 分配 IPv6 地址
