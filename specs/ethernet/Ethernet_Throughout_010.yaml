@@ -75,7 +75,7 @@ procedure:
     description: 验证吞吐 >= 90Mbits/sec
     api: check_iperf_throughput
     params:
-      output: ${step_iperf_start.data.output}
+      output: ${step_iperf_start_1.data.output}
       expected_rate: 90Mbits/sec
 _source:
   sheet: Performance

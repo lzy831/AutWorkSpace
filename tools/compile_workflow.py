@@ -28,6 +28,46 @@ SPECS_DIR = Path(__file__).resolve().parent.parent / "specs"
 ENVIRONMENTS_DIR = Path(__file__).resolve().parent.parent / "environments"
 UNIQUE_APIS_PATH = PROJECT_ROOT / "scripts" / "python" / "atomic" / "tools" / "unique_apis.json"
 WORKFLOWS_BASE = PROJECT_ROOT / "scripts" / "python" / "atomic" / "workflows" / "auto_generate"
+FULLCASE_BASE = PROJECT_ROOT / "scripts" / "python" / "atomic" / "workflows" / "full_case"
+
+# Sheets that belong under full_case/ instead of auto_generate/
+_FULLCASE_SHEETS = {"Performance", "Stability", "Compatibility"}
+
+_MINIMAL_CASE_IDS = None
+
+
+def _load_minimal_case_ids():
+    """Load minimal test case IDs from testcases_minimal.json."""
+    global _MINIMAL_CASE_IDS
+    if _MINIMAL_CASE_IDS is not None:
+        return _MINIMAL_CASE_IDS
+    minimal_path = PROJECT_ROOT / "scripts" / "python" / "config" / "testcase_json" / "full" / "minimal" / "testcases_minimal.json"
+    try:
+        data = json.loads(minimal_path.read_text(encoding="utf-8"))
+        _MINIMAL_CASE_IDS = set()
+        for tc in data.get("testcases", []):
+            fn = Path(tc.get("path", "")).stem
+            if fn.startswith("Ethernet_"):
+                _MINIMAL_CASE_IDS.add(fn)
+    except Exception:
+        _MINIMAL_CASE_IDS = set()
+    return _MINIMAL_CASE_IDS
+
+
+def _is_minimal_case(case_id: str) -> bool:
+    """Check if a case ID is in the minimal set."""
+    return case_id in _load_minimal_case_ids()
+
+
+def _infer_submodule(case_id: str) -> str:
+    """Infer submodule from case ID prefix."""
+    if "Ethernet_Comp" in case_id:
+        return "Compatibility"
+    if "Ethernet_Stab" in case_id:
+        return "Stability"
+    if "Ethernet_Throughout" in case_id:
+        return "Performance"
+    return "Function"
 
 
 def load_spec(spec_path: str) -> dict[str, Any]:
@@ -150,6 +190,20 @@ def build_nodes(spec: dict[str, Any], unique_apis: dict[str, dict[str, Any]]) ->
                 })
                 x += 200
 
+                # check wait_after (precondition Format B)
+                chk_wait = chk.get("wait_after") or _get_auto(chk).get("wait_after")
+                if chk_wait and chk_wait > 0:
+                    wait_id = unique_id("step_wait_seconds")
+                    nodes.append({
+                        "id": wait_id, "type": "step", "label": wait_id,
+                        "description": f"等待 {chk_wait}s",
+                        "position": {"x": x, "y": 200},
+                        "params": {"seconds": chk_wait},
+                        "param_config": lookup_params("step_wait_seconds", unique_apis),
+                        "step_id": "step_wait_seconds",
+                    })
+                    x += 200
+
         else:
             # Format A: check-only
             auto = _get_auto(precond)
@@ -169,6 +223,20 @@ def build_nodes(spec: dict[str, Any], unique_apis: dict[str, dict[str, Any]]) ->
                 "check_id": api_name,
             })
             x += 200
+
+            # check wait_after (precondition Format A)
+            pa_wait = precond.get("wait_after") or auto.get("wait_after")
+            if pa_wait and pa_wait > 0:
+                wait_id = unique_id("step_wait_seconds")
+                nodes.append({
+                    "id": wait_id, "type": "step", "label": wait_id,
+                    "description": f"等待 {pa_wait}s",
+                    "position": {"x": x, "y": 200},
+                    "params": {"seconds": pa_wait},
+                    "param_config": lookup_params("step_wait_seconds", unique_apis),
+                    "step_id": "step_wait_seconds",
+                })
+                x += 200
 
     # Procedure items: supports step-only, check-only, and step+check pair
     for step_item in spec.get("procedure", spec.get("steps", [])):
@@ -232,6 +300,23 @@ def build_nodes(spec: dict[str, Any], unique_apis: dict[str, dict[str, Any]]) ->
             })
             x += 200
 
+            # Insert wait node if check has wait_after
+            check_wait = chk.get("wait_after") or _get_auto(chk).get("wait_after")
+            if check_wait and check_wait > 0:
+                wait_id = unique_id("step_wait_seconds")
+                wait_schema = lookup_params("step_wait_seconds", unique_apis)
+                nodes.append({
+                    "id": wait_id,
+                    "type": "step",
+                    "label": wait_id,
+                    "description": f"等待 {check_wait}s (after check)",
+                    "position": {"x": x, "y": 200},
+                    "params": {"seconds": check_wait},
+                    "param_config": wait_schema,
+                    "step_id": "step_wait_seconds",
+                })
+                x += 200
+
     return nodes
 
 
@@ -256,7 +341,7 @@ def build_edges(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
 # --- Output path ---
 
 _DOMAIN_DIR_MAP = {
-    "ethernet": "Ethernet_V1.3_test_case/Function",
+    "ethernet": "Ethernet_V1.3_test_case",
     "wifi": "wifi_BT_testcase_v1.1/Wifi_function",
 }
 
@@ -264,30 +349,39 @@ _DOMAIN_DIR_MAP = {
 def infer_output_path(spec: dict[str, Any]) -> Path:
     """
     Infer workflow JSON output path.
-    Priority: _source.file > domain mapping.
+    - Function sheet → auto_generate/<domain_dir>/Function/
+    - Performance/Stability/Compatibility → full_case/<domain_dir>/<sheet>/
     """
     case_id = spec["id"]
+    sheet = spec.get("_source", {}).get("sheet", "Function")
+
+    # Determine base
+    if sheet in _FULLCASE_SHEETS:
+        base = FULLCASE_BASE
+    elif _is_minimal_case(case_id):
+        base = WORKFLOWS_BASE
+    else:
+        base = FULLCASE_BASE
 
     # 1) _source.file → dir name
     source_file = spec.get("_source", {}).get("file", "")
     if source_file:
         dir_name = Path(source_file).stem
-        sheet = spec.get("_source", {}).get("sheet", "Function")
-        candidate = WORKFLOWS_BASE / dir_name / sheet
-        if (WORKFLOWS_BASE / dir_name).exists():
+        candidate = base / dir_name / sheet
+        if (base / dir_name).exists():
             return candidate / f"{case_id}.json"
         sanitized = dir_name.replace("&", "_")
-        if (WORKFLOWS_BASE / sanitized).exists():
-            return WORKFLOWS_BASE / sanitized / sheet / f"{case_id}.json"
+        if (base / sanitized).exists():
+            return base / sanitized / sheet / f"{case_id}.json"
 
     # 2) domain mapping
     domain = spec.get("domain", "")
     mapped = _DOMAIN_DIR_MAP.get(domain)
     if mapped:
-        return WORKFLOWS_BASE / mapped / f"{case_id}.json"
+        return base / mapped / sheet / f"{case_id}.json"
 
     # 3) Fallback
-    return WORKFLOWS_BASE / "Function" / f"{case_id}.json"
+    return base / "Function" / f"{case_id}.json"
 
 
 # --- Main compilation ---
@@ -359,16 +453,29 @@ def compile_workflow(spec_path: str) -> dict[str, Any]:
 
     mmd_file = env.get('topology_diagram', '')
 
+    output_path = Path(infer_output_path(spec))
+    # Determine base for id prefix
+    try:
+        rel = output_path.relative_to(FULLCASE_BASE)
+        id_prefix = "full_case"
+    except ValueError:
+        try:
+            rel = output_path.relative_to(WORKFLOWS_BASE)
+            id_prefix = "auto_generate"
+        except ValueError:
+            rel = output_path.relative_to(PROJECT_ROOT / "scripts" / "python" / "atomic" / "workflows")
+            id_prefix = ""
+
     workflow = {
-        "id": f"auto_generate/{Path(infer_output_path(spec)).relative_to(WORKFLOWS_BASE).as_posix().replace('.json', '')}",
+        "id": f"{id_prefix}/{rel.as_posix().replace('.json', '')}".lstrip("/"),
         "name": spec["id"],
         "display_name": spec["name"],
         "environment": f"../environments/{env_id}.yaml",
         "topology_diagram": f"../environments/{mmd_file}" if mmd_file else "",
         "description": spec.get("description", "").strip(),
-        "category": "network",
-        "module": "network",
-        "submodule": spec.get("domain", ""),
+        "category": "Peripheral",
+        "module": "Ethernet",
+        "submodule": _infer_submodule(spec["id"]),
         "priority": spec.get("priority", "P1"),
         "precondition": spec.get("excel_preset", "") or build_precondition_text(spec),
         "steps": spec.get("excel_steps", "") or build_steps_text(spec),

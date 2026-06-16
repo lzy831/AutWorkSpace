@@ -10,6 +10,7 @@ excel_expected: 1. After the standby. the box network is disconnected. After wak
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
@@ -64,13 +65,23 @@ preconditions:
     api: check_bt_device_connected
     params:
       bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+    wait_after: 5
+
 procedure:
 - operation:
-    description: DUT 进入深度睡眠
+    description: 操作 DUT 进入深度睡眠
     api: step_enter_deep_sleep
-    wait_after: 20
+    wait_after: 5
   check:
     description: 确认 DUT 已进入深度睡眠
+    api: check_dut_in_deep_sleep
+- operation:
+    description: 维持深睡眠一段
+    api: step_wait_seconds
+    params:
+      seconds: 20
+- check:
+    description: 时间再次确认 DUT 仍处于深度睡眠(未被系统事件唤醒)
     api: check_dut_in_deep_sleep
 - operation:
     description: 发送遥控器 Power 键唤醒 DUT
@@ -83,7 +94,7 @@ procedure:
     api: step_ensure_awake
     params:
       max_retries: 5
-    wait_after: 30
+    wait_after: 10
   check:
     description: 确认 DUT 唤醒后静态 IP 恢复
     api: check_ethernet_connected

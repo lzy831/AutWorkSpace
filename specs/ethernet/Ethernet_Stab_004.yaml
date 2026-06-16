@@ -5,10 +5,19 @@ testbed: ethernet_router_lan
 category: Stability
 auto_status: pending
 description: autosuspend+ping autosuspend+ping for 12 hours
-excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. DUT install autosuspend\n4. PC"
-excel_steps: "1. The box is connected to the route through the network cable.\n2. PC connect the same toute by Ethernet cable, PC install iperf tool\n3. DUT install autosuspend apk and run autosuspend+ping for 12hours"
-excel_expected: After test 12hours,DUT connect Ethernet normal
+excel_preset: '1. ASUS RT-AC1900P
 
+  2. network cable
+
+  3. DUT install autosuspend
+
+  4. PC'
+excel_steps: '1. The box is connected to the route through the network cable.
+
+  2. PC connect the same toute by Ethernet cable, PC install iperf tool
+
+  3. DUT install autosuspend apk and run autosuspend+ping for 12hours'
+excel_expected: After test 12hours,DUT connect Ethernet normal
 setup_hooks: []
 teardown_hooks: []
 preconditions:
@@ -17,3 +26,5 @@ procedure:
 - operation:
     description: TODO
     api: TODO
+_source:
+  sheet: Stability

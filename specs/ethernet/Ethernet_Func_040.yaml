@@ -17,6 +17,10 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+    params: {}
 - description: DUT以太网物理链路已连通
   operation:
     api: step_ensure_router_lan_up

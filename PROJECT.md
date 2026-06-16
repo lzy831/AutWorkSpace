@@ -74,18 +74,6 @@ scripts/python/
 | Router SSH | AX86U / New!123456 |
 
 
-## Workflow JSON 路径
-
-| 用例集 | 路径 |
-|--------|------|
-| Minimal (10个) |  |
-| Full (所有auto) |  |
-| Performance |  |
-
--  下按 domain 分子目录: , , , 
--  通过  推断子目录，无  时默认 
-- 新生成 workflow 时须确认输出到正确路径
-
 ## 运行 Workflow
 
 ```bash
@@ -111,3 +99,26 @@ python3 atomic/workflow_runner.py \
 - `composer.py` 不在维护范围
 - 环境参数通过 `--custom-params` 注入，不硬编码到 spec
 - Step/Check 新增修改 → 同步更新 `references/ethernet-step-check-inventory.md`
+
+## Workflow JSON paths
+
+Base dirs:
+- auto_generate/ = PROJECT_ROOT/scripts/python/atomic/workflows/auto_generate/
+- full_case/     = PROJECT_ROOT/scripts/python/atomic/workflows/full_case/
+
+Routing rules (compile_workflow.py: infer_output_path):
+
+| Condition | Output path |
+|-----------|-------------|
+| _source.sheet in (Performance, Stability, Compatibility) | full_case/Ethernet_V1.3_test_case/<sheet>/ |
+| _source.sheet=Function AND case in testcases_minimal.json | auto_generate/Ethernet_V1.3_test_case/Function/ |
+| _source.sheet=Function AND case NOT in minimal | full_case/Ethernet_V1.3_test_case/Function/ |
+
+_ID mapping (compile_workflow.py):
+- auto_generate paths get id prefix "auto_generate/"
+- full_case paths get id prefix "full_case/"
+
+testcases_full.json path reference:
+- full_case cases: "atomic/workflows/full_case/Ethernet_V1.3_test_case/<sheet>/<case>.json"
+- minimal cases: "atomic/workflows/auto_generate/Ethernet_V1.3_test_case/Function/<case>.json"
+

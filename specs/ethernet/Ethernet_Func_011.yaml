@@ -5,7 +5,11 @@ name: 静态IP模式下路由器重启后DUT恢复网络
 testbed: ethernet_router_lan
 description: Static IP模式下, 路由器断电重启, 检测DUT恢复Static IP地址和网络连接
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: "1. Set the DUT IP address to static\n2. Power off the route\n4. Power on the route"
+excel_steps: '1. Set the DUT IP address to static
+
+  2. Power off the route
+
+  4. Power on the route'
 excel_expected: 1. After route power on,DUT  can  get the IP address.
 
 setup_hooks: []
@@ -16,6 +20,10 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+    params: {}
 - description: 确保以太网物理链路连通
   operation:
     api: step_ensure_router_lan_up

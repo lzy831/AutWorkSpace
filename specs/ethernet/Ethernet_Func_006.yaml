@@ -10,12 +10,17 @@ excel_expected: After waking up. DUT can regain the IP address and access the In
 
 setup_hooks: []
 teardown_hooks: []
+
 preconditions:
 - description: 确保 DUT 处于唤醒状态再开始测试
   operation:
     api: step_ensure_awake
     params:
       max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+    params: {}
 - description: DUT以太网物理链路已连通
   operation:
     api: step_ensure_router_lan_up
@@ -50,13 +55,23 @@ preconditions:
     api: check_bt_device_connected
     params:
       bluetooth_device: ${step_create_rc_by_device_id.data.bluetooth_device}
+    wait_after: 5
+
 procedure:
 - operation:
-    description: DUT进入深度睡眠
+    description: 操作 DUT进入深度睡眠
     api: step_enter_deep_sleep
-    wait_after: 20
+    wait_after: 5
   check:
     description: 确认DUT已进入深度睡眠
+    api: check_dut_in_deep_sleep
+- operation:
+    description: 维持深睡眠一段时间 
+    api: step_wait_seconds
+    params:
+      seconds: 20
+- check:
+    description: 再次确认 DUT 仍处于深度睡眠(未被系统事件唤醒)
     api: check_dut_in_deep_sleep
 - operation:
     description: 发送遥控器Power键, DUT离开深睡眠
@@ -69,9 +84,7 @@ procedure:
     api: step_ensure_awake
     params:
       max_retries: 5
-    wait_after: 30
+    wait_after: 10
   check:
     description: 确认DUT唤醒后通过DHCP恢复网络连接
     api: check_ethernet_connected
-    params:
-      method: cmd

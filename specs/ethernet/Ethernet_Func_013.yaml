@@ -5,7 +5,9 @@ name: 输入无效静态IP时系统报错
 testbed: ethernet_router_lan
 description: Static IP模式下, DUT输入无效静态IP, 检测系统弹出IP settings not valid错误提示
 excel_preset: Platform connect  router
-excel_steps: "1. Enter set IP address interface\n2. the platform static IP address or DNS input error"
+excel_steps: '1. Enter set IP address interface
+
+  2. the platform static IP address or DNS input error'
 excel_expected: 1. failed to connect to the AP. and there are related error reminders
 
 setup_hooks: []
@@ -16,6 +18,10 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+    params: {}
 - description: DUT以太网物理链路已连通
   operation:
     api: step_ensure_router_lan_up

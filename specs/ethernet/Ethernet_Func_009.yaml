@@ -5,7 +5,11 @@ name: Static模式下DUT断电重启后IP保持不变
 testbed: ethernet_router_lan
 description: Static IP模式下, DUT断电重启, 检测DUT Static IP保持不变
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: "1. Set DUT IP address to static\n2. Power off the DUT\n3. Power on the DUT"
+excel_steps: '1. Set DUT IP address to static
+
+  2. Power off the DUT
+
+  3. Power on the DUT'
 excel_expected: 1. After DUT boot up,DUT can get the IP address and IP address not change
 
 setup_hooks: []
@@ -16,6 +20,10 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+    params: {}
 - description: DUT以太网物理链路已连通
   operation:
     api: step_ensure_router_lan_up

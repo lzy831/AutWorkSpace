@@ -5,7 +5,11 @@ name: IPv6双栈下DUT重启后IP恢复
 testbed: ethernet_router_lan
 description: DUT连接IPv6路由器并正常获取双栈IP地址下, DUT断电重启, 检测DUT重新获取IPv4和IPv6地址
 excel_preset: DUT connect with IPV6 route
-excel_steps: "1. DUT connect with route which support IPV6\n2.Power off the DUT\n3.Power on the DUT"
+excel_steps: '1. DUT connect with route which support IPV6
+
+  2.Power off the DUT
+
+  3.Power on the DUT'
 excel_expected: After DUT power on,DUT can get the IPV4 and IPV6 IP address
 
 setup_hooks: []
@@ -17,6 +21,10 @@ preconditions:
     api: step_ensure_awake
     params:
       max_retries: 3
+- description: 确保 eth0 接口处于 UP 状态
+  operation:
+    api: step_enable_ethernet
+    params: {}
 - description: DUT以太网物理链路已连通
   operation:
     api: step_ensure_router_lan_up
@@ -42,11 +50,9 @@ procedure:
     api: step_reboot_dut
     params:
       timeout: 180
-
 - operation:
     description: 确保 eth0 处于 UP 状态（重启后可能为 down）
     api: step_enable_ethernet
-
 - operation:
     description: 确保 DUT 以太网物理链路恢复
     api: step_ensure_router_lan_up
@@ -54,12 +60,10 @@ procedure:
       api: check_ethernet_connected
       params:
         method: cmd
-
 - operation:
     description: 重发 RA 使 DUT 通过 SLAAC 获取 IPv6
     api: step_enable_router_ipv6
     wait_after: 10
-
 - operation:
     description: 等待 DUT SLAAC 完成 IPv6 地址配置
     api: step_wait_seconds
