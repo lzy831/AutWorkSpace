@@ -5,18 +5,8 @@ name: TCP 10M 稳定性测试 12h
 testbed: ethernet_router_lan
 
 description: DUT连接路由器下, DUT作为iperf server, 持续12h检测DUT接收吞吐 >= 90Mbits/sec
-excel_preset: '1. ASUS RT-AC1900P
-
-  2. network cable
-
-  3. iperf tool
-
-  4. PC'
-excel_steps: '1. The box is connected to the route through the network cable.
-
-  2. PC connect the same toute by Ethernet cable, PC install iperf tool
-
-  3. test the throughput for 12hours by iPerf  tool'
+excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. iperf tool\n4. PC"
+excel_steps: "1. The box is connected to the route through the network cable.\n2. PC connect the same toute by Ethernet cable, PC install iperf tool\n3. test the throughput for 12hours by iPerf  tool"
 excel_expected: 'RX not less than 90Mbits/sec:'
 
 setup_hooks: []

@@ -6,13 +6,10 @@ testbed: ethernet_router_lan
 
 description: (概要)
 excel_preset: The box has successfully obtained the PPPOE IP address and can access the Internet.
-excel_steps: '1. the box has an IP address. can access the Internet
-
-  2. unplug the box end network cable
-
-  3. the box IP address disappears
-
-  4. plug in the Internet cable. the box can automatically dial automatically. get the PPPOE IP address. normal Internet access'
+excel_steps: "1. the box has an IP address. can access the Internet
+2. unplug the box end network cable
+3. the box IP address disappears
+4. plug in the Internet cable. the box can automatically dial automatically. get the PPPOE IP address. normal Internet access"
 excel_expected: 1. the box can automatically dial automatically. get the PPPOE IP address. and can access the Internet
 
 preconditions: []

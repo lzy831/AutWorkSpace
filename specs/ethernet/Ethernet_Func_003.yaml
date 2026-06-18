@@ -6,11 +6,9 @@ testbed: ethernet_router_lan
 
 description: DHCP模式下, DUT断电重启, 检测DUT通过DHCP重新获取IP
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. the box has an IP address. can access the Internet
-
-  2. Power off the  DUT
-
-  3. Power on the  DUT.DUT  can get the IP address normally and can access the Internet.'
+excel_steps: "1. the box has an IP address. can access the Internet
+2. Power off the  DUT
+3. Power on the  DUT.DUT  can get the IP address normally and can access the Internet."
 excel_expected: 1. After the box is powered off and restarted. it can normally obtain IP and can access the Internet.
 
 setup_hooks: []

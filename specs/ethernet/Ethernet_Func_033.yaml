@@ -6,9 +6,8 @@ testbed: ethernet_router_lan
 
 description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
-excel_steps: '1. Select PPPOE dialing in the network settings.
-
-  2. Enter the correct username and password to dial'
+excel_steps: "1. Select PPPOE dialing in the network settings.
+2. Enter the correct username and password to dial"
 excel_expected: Within 15s dialing successful
 
 preconditions: []

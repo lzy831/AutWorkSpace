@@ -6,9 +6,8 @@ testbed: ethernet_router_lan
 
 description: Network cable compatibility Serial port ping external network
 excel_preset: 1、Super seven line - win for CAT.7 SSTP CABLE 28AWG/4PAIRS VERIFIED TO TIA/EIA 568B.2
-excel_steps: '1. After the network cable to be tested is connected to the network device, you can ping the external network normally (it is recommended to ping for about 1 minute)
-
-  3. Can I work normally after plugging and unplugging the network cable?'
+excel_steps: "1. After the network cable to be tested is connected to the network device, you can ping the external network normally (it is recommended to ping for about 1 minute)
+3. Can I work normally after plugging and unplugging the network cable?"
 excel_expected: Can ping the external network
 
 preconditions: []

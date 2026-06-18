@@ -6,9 +6,8 @@ testbed: ethernet_router_lan
 
 description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
-excel_steps: '1. Select PPPOE dialing in the network settings.
-
-  2. enter the user name is wrong. the password is correct. dial'
+excel_steps: "1. Select PPPOE dialing in the network settings.
+2. enter the user name is wrong. the password is correct. dial"
 excel_expected: 1. Error code and error prompt. whether the prompt is displayed correctly (error code 691)
 
 preconditions: []

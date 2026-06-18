@@ -6,11 +6,9 @@ testbed: ethernet_router_lan
 
 description: DUT连接IPv6路由器并正常获取双栈IP地址下, DUT断电重启, 检测DUT重新获取IPv4和IPv6地址
 excel_preset: DUT connect with IPV6 route
-excel_steps: '1. DUT connect with route which support IPV6
-
-  2.Power off the DUT
-
-  3.Power on the DUT'
+excel_steps: "1. DUT connect with route which support IPV6
+2.Power off the DUT
+3.Power on the DUT"
 excel_expected: After DUT power on,DUT can get the IPV4 and IPV6 IP address
 
 setup_hooks: []

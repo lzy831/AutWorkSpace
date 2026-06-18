@@ -6,9 +6,8 @@ testbed: ethernet_router_lan
 
 description: DHCP模式下, DUT深度睡眠, 通过蓝牙遥控器唤醒DUT, 检测DUT获取IPv4地址并恢复网络连接
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. the box has an IP address. can access the Internet
-
-  2. the box is completely standby and wake up'
+excel_steps: "1. the box has an IP address. can access the Internet
+2. the box is completely standby and wake up"
 excel_expected: After waking up. DUT can regain the IP address and access the Internet.
 
 setup_hooks: []

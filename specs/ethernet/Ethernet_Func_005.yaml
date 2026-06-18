@@ -6,13 +6,10 @@ testbed: ethernet_router_lan
 
 description: DHCP模式下, 路由器断电重启, 检测DUT通过DHCP重新获取IP
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. the box has an IP address. can access the Internet
-
-  2. disconnect the router power
-
-  3. the box IP address disappears
-
-  4. the router is powered back on. the box can regain the IP address. and the Internet is normal.'
+excel_steps: "1. the box has an IP address. can access the Internet
+2. disconnect the router power
+3. the box IP address disappears
+4. the router is powered back on. the box can regain the IP address. and the Internet is normal."
 excel_expected: Disconnect the IP address of the power box of the router and disappear. After power-on. the box can regain the IP address.
 
 setup_hooks: []

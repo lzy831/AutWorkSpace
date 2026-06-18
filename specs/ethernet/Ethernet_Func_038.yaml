@@ -6,9 +6,8 @@ testbed: ethernet_router_lan
 
 description: (概要)
 excel_preset: DUT connect with route which support PPPOE function
-excel_steps: '1.DUT PPPOE dial-up success
-
-  2.Hot-plug Ethernet cable for several times'
+excel_steps: "1.DUT PPPOE dial-up success
+2.Hot-plug Ethernet cable for several times"
 excel_expected: 1. The network is connected normally. the IP address is normal. and the netcfg display is correct.
 
 preconditions: []

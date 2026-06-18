@@ -6,11 +6,9 @@ testbed: ethernet_router_lan
 
 description: Static IP模式下, DUT断电重启, 检测DUT Static IP保持不变
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. Set DUT IP address to static
-
-  2. Power off the DUT
-
-  3. Power on the DUT'
+excel_steps: "1. Set DUT IP address to static
+2. Power off the DUT
+3. Power on the DUT"
 excel_expected: 1. After DUT boot up,DUT can get the IP address and IP address not change
 
 setup_hooks: []

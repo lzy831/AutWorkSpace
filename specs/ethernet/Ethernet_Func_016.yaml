@@ -6,12 +6,10 @@ testbed: ethernet_router_lan
 
 description: (概要)
 excel_preset: The box is connected to the DHCP function device.
-excel_steps: '1. Select Ethernet static IP in the network settings. enter a static IP address. and obtain an IP address successfully.
-
-  2. then switch to DHCP'
-excel_expected: '1. The static IP setting is successful. and the IP address can be obtained.
-
-  2. you can get the DHCP IP address'
+excel_steps: "1. Select Ethernet static IP in the network settings. enter a static IP address. and obtain an IP address successfully.
+2. then switch to DHCP"
+excel_expected: "1. The static IP setting is successful. and the IP address can be obtained.
+2. you can get the DHCP IP address"
 
 preconditions: []
 

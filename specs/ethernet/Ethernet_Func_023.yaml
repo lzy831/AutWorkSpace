@@ -6,9 +6,8 @@ testbed: ethernet_router_lan
 
 description: (概要)
 excel_preset: The box is connected to the PPPOE dialing function device.
-excel_steps: '1. Select PPPOE dialing in the network settings.
-
-  2. the username and password are empty. dial'
+excel_steps: "1. Select PPPOE dialing in the network settings.
+2. the username and password are empty. dial"
 excel_expected: 1. Prompt "Username or password cannot be empty"
 
 preconditions: []

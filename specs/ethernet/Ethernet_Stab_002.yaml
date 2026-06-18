@@ -1,26 +1,85 @@
 domain: ethernet
 id: Ethernet_Stab_002
-name: 10M HUB testing Playback video online for 12hours
+auto_status: auto
+name: YouTube 在线视频播放稳定性测试 12h
 testbed: ethernet_router_lan
-category: Stability
-auto_status: pending
 
-description: 10M HUB testing Playback video online for 12hours
-excel_preset: '1. ASUS RT-AC1900P
-
-  2. network cable
-
-  3. PC'
-excel_steps: "1. DUT connect with route by Ethernet  cable \n2.Open YouTube  to playback video online for 12 hours"
-excel_expected: Vdeo playback normal
+description: 以太网连接下, 打开YouTube并登录, 播放在线视频, 持续12h, 检测视频播放是否正常
+excel_preset: "1. ASUS RT-AC1900P\n2. network cable\n3. PC"
+excel_steps: "1. DUT connect with route by Ethernet cable\n2. Open YouTube to playback video online for 12 hours"
+excel_expected: Video playback normal
 
 setup_hooks: []
 teardown_hooks: []
 
 preconditions:
-- description: TODO
+  - description: 确保 DUT 处于唤醒状态再开始测试
+    operation:
+      api: step_ensure_awake
+      params:
+        max_retries: 3
+
+  - description: 确保 eth0 接口处于 UP 状态
+    operation:
+      api: step_enable_ethernet
+
+  - description: DUT 以太网物理链路已连通
+    operation:
+      api: step_ensure_router_lan_up
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
+
+  - description: DUT 已通过 DHCP 获取 IPv4 地址
+    operation:
+      api: step_set_ip_settings_to_dhcp
+    check:
+      api: check_ethernet_connected
+      params:
+        method: cmd
 
 procedure:
-- operation:
-    description: TODO
-    api: TODO
+  - operation:
+      description: 启动 YouTube 并清空应用数据初始化
+      api: step_start_and_init_app
+      params:
+        app: com.google.android.youtube.tv
+
+  - operation:
+      description: 登录 YouTube 账号
+      api: step_app_login
+      params:
+        app: com.google.android.youtube.tv
+
+  - operation:
+      description: 播放测试视频
+      api: step_play_app_video
+      params:
+        app: com.google.android.youtube.tv
+        video_name: ${custom_params.playback_video_name}
+    check:
+      description: 首次检测视频播放是否正常
+      api: check_video_playback_normal
+      params:
+        wait_time: 30
+
+  - operation:
+      description: 等待视频持续播放 (默认12h, 通过 playback_duration 控制)
+      api: step_wait_playback_duration
+      params: {}
+
+  - check:
+      description: 最终检测视频播放是否正常(主要检测点)
+      api: check_video_playback_normal
+      params:
+        wait_time: 30
+
+  - operation:
+      description: 停止 YouTube 应用
+      api: step_stop_app
+      params:
+        package_name: com.google.android.youtube.tv
+
+_source:
+  sheet: Stability

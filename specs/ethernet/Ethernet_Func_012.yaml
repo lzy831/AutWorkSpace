@@ -6,11 +6,9 @@ testbed: ethernet_router_lan
 
 description: Static IP模式下, DUT深度睡眠, 通过蓝牙遥控器唤醒DUT, 检测DUT Static IP自动恢复
 excel_preset: The box has successfully obtained an IP address and can access the Internet.
-excel_steps: '1. Set the DUT IP address to static
-
-  2. Press power key on remote
-
-  3. After DUT  enter deep sleep status,press power key to wake up the DUT'
+excel_steps: "1. Set the DUT IP address to static
+2. Press power key on remote
+3. After DUT  enter deep sleep status,press power key to wake up the DUT"
 excel_expected: 1. After the standby. the box network is disconnected. After waking up. you can regain the IP address and access the Internet.
 
 setup_hooks: []

@@ -6,12 +6,10 @@ testbed: ethernet_router_lan
 
 description: Static IP模式下, DUT配置静态IP, 检测DUT IP mode为Static且网络连通
 excel_preset: The box is connected to the DHCP function device.
-excel_steps: '1. Plug the network cable into the box Ethernet interface.
-
-  2. Set the IP address to static.'
-excel_expected: '1. The box static IP is set successfully
-
-  2.Static IP address succeful'
+excel_steps: "1. Plug the network cable into the box Ethernet interface.
+2. Set the IP address to static."
+excel_expected: "1. The box static IP is set successfully
+2.Static IP address succeful"
 
 setup_hooks: []
 teardown_hooks: []
