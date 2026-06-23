@@ -86,6 +86,7 @@ procedure:
     api: step_ensure_awake
     params:
       max_retries: 5
+      adbrecheck_max: 12
     wait_after: 10
   check:
     description: 确认DUT唤醒后通过DHCP恢复网络连接

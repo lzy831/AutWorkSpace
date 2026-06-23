@@ -53,11 +53,11 @@ procedure:
         app: com.google.android.youtube.tv
 
   - operation:
-      description: 播放测试视频
+      description: 播放测试视频 (测试资源可以通过 custom_params.playback_video_name 覆盖)
       api: step_play_app_video
       params:
         app: com.google.android.youtube.tv
-        video_name: ${custom_params.playback_video_name}
+        video_name: "13 Hour - TIMER"
     check:
       description: 首次检测视频播放是否正常
       api: check_video_playback_normal

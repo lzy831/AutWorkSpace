@@ -26,7 +26,6 @@
 | `step_connect_ethernet` | 路由器 SSH → 对 DUT LAN 口 PHY 上电 | 2 | SSH (RouterManager) | — |
 | `step_reboot_router` | SSH reboot + wait_down + wait_online | 1 | SSH (RouterManager) | — |
 | `step_set_static_ip_invalid` | Settings UI → 输入无效 IP，触发系统校验 | 1 | UI | — |
-| `step_ping_gateway` | DUT 上 ping 网关验证连通性 | 1 | CMD | — |
 | `step_connect_ethernet_dhcp` | `ip link up eth0` + DHCP 获取 IP | 1 | CMD (EthernetManager) | — |
 | `step_enable_ethernet` | `ip link set eth0 up` | 0 | CMD (EthernetManager) | — |
 | `step_disable_ethernet` | `ip link set eth0 down` | 0 | CMD (EthernetManager) | — |
